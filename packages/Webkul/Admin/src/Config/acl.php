@@ -209,6 +209,66 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Vendors
+    |--------------------------------------------------------------------------
+    |
+    | All ACLs related to vendors will be placed here.
+    |
+    */
+    [
+        'key'   => 'vendors',
+        'name'  => 'إدارة التجار',
+        'route' => 'admin.vendors.index',
+        'sort'  => 4.5,
+    ], [
+        'key'   => 'vendors.view',
+        'name'  => 'عرض التجار',
+        'route' => 'admin.vendors.index',
+        'sort'  => 1,
+    ], [
+        'key'   => 'vendors.create',
+        'name'  => 'إضافة تاجر',
+        'route' => 'admin.vendors.create',
+        'sort'  => 2,
+    ], [
+        'key'   => 'vendors.edit',
+        'name'  => 'تعديل التاجر',
+        'route' => 'admin.vendors.edit',
+        'sort'  => 3,
+    ], [
+        'key'   => 'vendors.delete',
+        'name'  => 'حذف التاجر',
+        'route' => 'admin.vendors.destroy',
+        'sort'  => 4,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Jobs
+    |--------------------------------------------------------------------------
+    |
+    | All ACLs related to jobs will be placed here.
+    |
+    */
+    [
+        'key'   => 'jobs',
+        'name'  => 'الوظائف',
+        'route' => 'admin.jobs.index',
+        'sort'  => 5.5,
+    ], [
+        'key'   => 'jobs.view',
+        'name'  => 'عرض الوظائف',
+        'route' => 'admin.jobs.index',
+        'sort'  => 1,
+    ], [
+        'key'   => 'jobs.categories',
+        'name'  => 'تصنيفات الوظائف',
+        'route' => 'admin.jobs.categories',
+        'sort'  => 2,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Customers
     |--------------------------------------------------------------------------
     |

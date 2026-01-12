@@ -45,6 +45,11 @@ return [
             'driver'   => 'session',
             'provider' => 'admins',
         ],
+
+        'vendor' => [
+            'driver'   => 'session',
+            'provider' => 'vendors',
+        ],
     ],
 
     /*
@@ -73,6 +78,11 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model'  => Webkul\User\Models\Admin::class,
+        ],
+
+        'vendors' => [
+            'driver' => 'eloquent',
+            'model'  => App\Vendor::class,
         ],
     ],
 

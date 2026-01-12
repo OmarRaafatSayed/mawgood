@@ -95,6 +95,17 @@ return [
     ],
 
     /**
+     * Vendors.
+     */
+    [
+        'key'        => 'vendors',
+        'name'       => 'إدارة التجار',
+        'route'      => 'admin.vendors.index',
+        'sort'       => 4.5,
+        'icon'       => 'icon-customer-2',
+    ],
+
+    /**
      * Customers.
      */
     [
@@ -172,7 +183,6 @@ return [
         'route'      => 'admin.marketing.promotions.catalog_rules.index',
         'sort'       => 6,
         'icon'       => 'icon-promotion',
-        'icon-class' => 'promotion-icon',
     ], [
         'key'        => 'marketing.promotions',
         'name'       => 'admin::app.components.layouts.sidebar.promotions',
@@ -245,42 +255,6 @@ return [
         'route'      => 'admin.marketing.search_seo.search_synonyms.index',
         'sort'       => 3,
         'icon'       => '',
-    ], [
-        'key'        => 'marketing.search_seo.sitemaps',
-        'name'       => 'admin::app.components.layouts.sidebar.sitemaps',
-        'route'      => 'admin.marketing.search_seo.sitemaps.index',
-        'sort'       => 4,
-        'icon'       => '',
-    ],
-
-    /**
-     * Reporting.
-     */
-    [
-        'key'        => 'reporting',
-        'name'       => 'admin::app.components.layouts.sidebar.reporting',
-        'route'      => 'admin.reporting.sales.index',
-        'sort'       => 7,
-        'icon'       => 'icon-report',
-        'icon-class' => 'report-icon',
-    ], [
-        'key'        => 'reporting.sales',
-        'name'       => 'admin::app.components.layouts.sidebar.sales',
-        'route'      => 'admin.reporting.sales.index',
-        'sort'       => 1,
-        'icon'       => '',
-    ], [
-        'key'        => 'reporting.customers',
-        'name'       => 'admin::app.components.layouts.sidebar.customers',
-        'route'      => 'admin.reporting.customers.index',
-        'sort'       => 2,
-        'icon'       => '',
-    ], [
-        'key'        => 'reporting.products',
-        'name'       => 'admin::app.components.layouts.sidebar.products',
-        'route'      => 'admin.reporting.products.index',
-        'sort'       => 3,
-        'icon'       => '',
     ],
 
     /**
@@ -290,9 +264,8 @@ return [
         'key'        => 'settings',
         'name'       => 'admin::app.components.layouts.sidebar.settings',
         'route'      => 'admin.settings.locales.index',
-        'sort'       => 8,
+        'sort'       => 7,
         'icon'       => 'icon-settings',
-        'icon-class' => 'settings-icon',
     ], [
         'key'        => 'settings.locales',
         'name'       => 'admin::app.components.layouts.sidebar.locales',
@@ -359,28 +332,5 @@ return [
         'route'      => 'admin.settings.taxes.rates.index',
         'sort'       => 2,
         'icon'       => '',
-    ], [
-        'key'        => 'settings.data_transfer',
-        'name'       => 'admin::app.components.layouts.sidebar.data-transfer',
-        'route'      => 'admin.settings.data_transfer.imports.index',
-        'sort'       => 10,
-        'icon'       => '',
-    ], [
-        'key'        => 'settings.data_transfer.imports',
-        'name'       => 'admin::app.components.layouts.sidebar.imports',
-        'route'      => 'admin.settings.data_transfer.imports.index',
-        'sort'       => 1,
-        'icon'       => '',
-    ],
-
-    /**
-     * Configuration.
-     */
-    [
-        'key'        => 'configuration',
-        'name'       => 'admin::app.components.layouts.sidebar.configure',
-        'route'      => 'admin.configuration.index',
-        'sort'       => 9,
-        'icon'       => 'icon-configuration',
     ],
 ];

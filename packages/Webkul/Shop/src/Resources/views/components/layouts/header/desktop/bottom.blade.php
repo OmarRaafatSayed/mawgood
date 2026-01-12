@@ -6,7 +6,7 @@
         additional levels are required, users can customize them according to their needs.
     -->
     <!-- Left Nagivation Section -->
-    <div class="flex items-center gap-x-10 max-[1180px]:gap-x-5">
+    <div class="flex items-center gap-x-5 max-[1180px]:gap-x-3">
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.logo.before') !!}
 
         <a
@@ -46,19 +46,43 @@
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.category.after') !!}
         
-        <!-- Jobs Link -->
-        <div class="flex items-center">
+        <!-- Jobs Link removed to prevent RouteNotFoundException (route 'jobs.index' does not exist) -->
+        <!-- Removed Jobs Link as per fix request -->
+
+        <!-- CMS Pages Links -->
+        <div class="flex items-center gap-2">
             <a
-                href="{{ route('jobs.index') }}"
-                class="flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue px-5 uppercase text-sm font-medium"
+                href="{{ route('shop.cms.page', 'about-us') }}"
+                class="flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue px-2 text-sm font-medium"
             >
-                {{ app()->getLocale() === 'ar' ? 'الوظائف' : 'Jobs' }}
+                معلومات عنا
+            </a>
+            
+            <a
+                href="{{ route('shop.cms.page', 'contact-us') }}"
+                class="flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue px-2 text-sm font-medium"
+            >
+                اتصل بنا
+            </a>
+            
+            <a
+                href="{{ route('shop.cms.page', 'customer-service') }}"
+                class="flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue px-2 text-sm font-medium"
+            >
+                خدمة العملاء
+            </a>
+            
+            <a
+                href="{{ route('shop.cms.page', 'privacy-policy') }}"
+                class="flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue px-2 text-sm font-medium"
+            >
+                سياسة الخصوصية
             </a>
         </div>
     </div>
 
     <!-- Right Nagivation Section -->
-    <div class="flex items-center gap-x-9 max-[1100px]:gap-x-6 max-lg:gap-x-8">
+    <div class="flex items-center gap-x-6 max-[1100px]:gap-x-4 max-lg:gap-x-6">
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.search_bar.before') !!}
 
@@ -66,7 +90,7 @@
         <div class="relative w-full">
             <form
                 action="{{ route('shop.search.index') }}"
-                class="flex max-w-[445px] items-center"
+                class="flex max-w-[350px] items-center"
                 role="search"
             >
                 <label
@@ -76,13 +100,13 @@
                     @lang('shop::app.components.layouts.header.desktop.bottom.search')
                 </label>
 
-                <div class="icon-search pointer-events-none absolute top-2.5 flex items-center text-xl ltr:left-3 rtl:right-3"></div>
+                <div class="icon-search pointer-events-none absolute top-2 flex items-center text-xl ltr:left-3 rtl:right-3"></div>
 
                 <input
                     type="text"
                     name="query"
                     value="{{ request('query') }}"
-                    class="block w-full py-3 text-xs font-medium text-gray-900 transition-all border border-transparent rounded-lg bg-zinc-100 px-11 hover:border-gray-400 focus:border-gray-400"
+                    class="block w-full py-2.5 text-xs font-medium text-gray-900 transition-all border border-transparent rounded-lg bg-zinc-100 px-10 hover:border-gray-400 focus:border-gray-400"
                     minlength="{{ core()->getConfigData('catalog.products.search.min_query_length') }}"
                     maxlength="{{ core()->getConfigData('catalog.products.search.max_query_length') }}"
                     placeholder="@lang('shop::app.components.layouts.header.desktop.bottom.search-text')"

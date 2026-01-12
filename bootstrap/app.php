@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\SellerMiddleware;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Cookie\Middleware\EncryptCookies as BaseEncryptCookies;
 use Illuminate\Foundation\Application;
@@ -40,6 +41,14 @@ return Application::configure(basePath: dirname(__DIR__))
          * Add the overridden middleware at the end of the list.
          */
         $middleware->replaceInGroup('web', BaseEncryptCookies::class, EncryptCookies::class);
+
+        /**
+         * Register custom middleware aliases
+         */
+        $middleware->alias([
+            'seller' => SellerMiddleware::class,
+            'isSeller' => \App\Http\Middleware\IsSeller::class,
+        ]);
 
         $middleware->trustProxies('*');
     })
