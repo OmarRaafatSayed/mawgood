@@ -49,16 +49,45 @@ class JobController extends Controller
     public function show($slug)
     {
         $job = Job::with(['category', 'customer'])->where('slug', $slug)->where('status', 1)->firstOrFail();
+
+        $relatedJobs = Job::where('job_category_id', $job->job_category_id)
+            ->where('id', '!=', $job->id)
+            ->where('status', 1)
+            ->latest()
+            ->limit(4)
+            ->get();
         
-        return view('jobs.show', compact('job'));
+        return view('jobs.show', compact('job', 'relatedJobs'));
     }
 
-    public function apply(Request $request, $id)
+    public function submitApplication(Request $request, $slug)
     {
-        // Handle job application
-        $job = Job::findOrFail($id);
-        
-        // Redirect to external application URL
-        return redirect($job->application_url);
+        $job = Job::where('slug', $slug)->where('status', 1)->firstOrFail();
+
+        $data = $request->validate([
+            'applicant_name' => 'required|string|max:255',
+            'applicant_email' => 'required|email|max:255',
+            'applicant_phone' => 'nullable|string|max:50',
+            'cover_letter' => 'nullable|string',
+            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
+        ]);
+
+        $resumePath = null;
+        if ($request->hasFile('resume')) {
+            $resumePath = $request->file('resume')->store('resumes', 'public');
+        }
+
+        $application = \App\JobApplication::create([
+            'job_listing_id' => $job->id,
+            'customer_id' => auth()->check() ? auth()->id() : null,
+            'applicant_name' => $data['applicant_name'],
+            'applicant_email' => $data['applicant_email'],
+            'applicant_phone' => $data['applicant_phone'] ?? null,
+            'cover_letter' => $data['cover_letter'] ?? null,
+            'resume_path' => $resumePath,
+            'status' => 'pending'
+        ]);
+
+        return redirect()->route('jobs.apply.success', ['slug' => $job->slug]);
     }
 }

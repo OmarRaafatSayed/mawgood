@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Webkul\Product\Repositories\ProductRepository;
 use Webkul\Sales\Repositories\OrderRepository;
 use Webkul\Sales\Repositories\OrderItemRepository;
@@ -49,8 +50,8 @@ class DashboardController extends Controller
                 return redirect()->route('shop.home.index')->with('error', 'غير مصرح لك بالوصول لهذه الصفحة');
             }
 
-            // Get dashboard statistics
-            $stats = $this->getDashboardStats();
+            // Get dashboard statistics directly
+            $stats = $this->calculateStats($vendor);
 
             return view('vendor.dashboard.index', compact('stats', 'vendor'));
             
@@ -64,7 +65,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Get dashboard statistics
+     * Get dashboard statistics (API)
      */
     public function getDashboardStats()
     {
@@ -96,30 +97,53 @@ class DashboardController extends Controller
      */
     private function calculateStats($vendor)
     {
-        // Products count
-        $totalProducts = DB::table('products')
-            ->where('vendor_id', $vendor->id)
-            ->count();
+        // Basic product counts
+        $totalProducts = DB::table('products')->where('vendor_id', $vendor->id)->count();
+        $activeProducts = DB::table('products')->where('vendor_id', $vendor->id)->where('status', 1)->count();
+        $inactiveProducts = $totalProducts - $activeProducts;
 
-        $activeProducts = DB::table('products')
-            ->where('vendor_id', $vendor->id)
-            ->where('status', 1)
-            ->count();
+        // Inventory details (best-effort; gracefully handle missing inventory schema)
+        $outOfStock = 0;
+        $lowStock = 0;
+        $lowStockThreshold = 5;
 
-        // Orders statistics
-        $totalOrders = DB::table('vendor_orders')
-            ->where('vendor_id', $vendor->id)
-            ->count();
+        try {
+            // If there is a dedicated inventory table
+            if (Schema::hasTable('product_inventories')) {
+                $productIds = DB::table('products')->where('vendor_id', $vendor->id)->pluck('id');
 
-        $pendingOrders = DB::table('vendor_orders')
-            ->where('vendor_id', $vendor->id)
-            ->where('status', 'pending')
-            ->count();
+                if ($productIds->count()) {
+                    $outOfStock = DB::table('product_inventories')
+                        ->whereIn('product_id', $productIds)
+                        ->where('qty', '<=', 0)
+                        ->count();
 
-        $completedOrders = DB::table('vendor_orders')
-            ->where('vendor_id', $vendor->id)
-            ->where('status', 'completed')
-            ->count();
+                    $lowStock = DB::table('product_inventories')
+                        ->whereIn('product_id', $productIds)
+                        ->whereBetween('qty', [1, $lowStockThreshold])
+                        ->count();
+                }
+            } elseif (Schema::hasColumn('products', 'quantity')) {
+                $outOfStock = DB::table('products')
+                    ->where('vendor_id', $vendor->id)
+                    ->where('quantity', '<=', 0)
+                    ->count();
+
+                $lowStock = DB::table('products')
+                    ->where('vendor_id', $vendor->id)
+                    ->whereBetween('quantity', [1, $lowStockThreshold])
+                    ->count();
+            }
+        } catch (\Exception $e) {
+            \Log::warning('Inventory stats not available: ' . $e->getMessage());
+        }
+
+        // Orders statistics (mapped to Amazon-style tabs)
+        $pending = DB::table('vendor_orders')->where('vendor_id', $vendor->id)->where('status', 'pending')->count();
+        $unshipped = DB::table('vendor_orders')->where('vendor_id', $vendor->id)->where('status', 'processing')->count();
+        $shipped = DB::table('vendor_orders')->where('vendor_id', $vendor->id)->where('status', 'shipped')->count();
+        $cancelled = DB::table('vendor_orders')->where('vendor_id', $vendor->id)->where('status', 'cancelled')->count();
+        $totalOrders = $pending + $unshipped + $shipped + $cancelled;
 
         // Revenue calculations
         $totalRevenue = DB::table('vendor_orders')
@@ -134,18 +158,17 @@ class DashboardController extends Controller
             ->whereYear('created_at', Carbon::now()->year)
             ->sum('total_amount');
 
-        // Wallet balance
-        $walletBalance = DB::table('vendor_payouts')
-            ->where('vendor_id', $vendor->id)
-            ->where('status', 'completed')
-            ->sum('amount');
+        // Wallet breakdown
+        $available = (float) ($vendor->available_balance ?? $vendor->wallet_balance ?? 0);
+        $unavailable = (float) ($vendor->unavailable_balance ?? 0);
 
+        // Pending payout amounts
         $pendingPayouts = DB::table('vendor_payouts')
             ->where('vendor_id', $vendor->id)
             ->where('status', 'pending')
             ->sum('amount');
 
-        // Recent orders
+        // Recent orders (same as before)
         $recentOrders = DB::table('vendor_orders')
             ->join('orders', 'vendor_orders.order_id', '=', 'orders.id')
             ->join('customers', 'orders.customer_id', '=', 'customers.id')
@@ -160,7 +183,33 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // Top selling products
+        // Sales analytics: daily sales for last 30 days + total units sold
+        $salesChart = [];
+        $unitsSold = 0;
+        for ($i = 29; $i >= 0; $i--) {
+            $day = Carbon::now()->subDays($i);
+            $sales = (float) DB::table('vendor_orders')
+                ->where('vendor_id', $vendor->id)
+                ->where('status', 'completed')
+                ->whereDate('created_at', $day->toDateString())
+                ->sum('total_amount');
+
+            $units = (int) DB::table('vendor_order_items')
+                ->join('vendor_orders', 'vendor_order_items.vendor_order_id', '=', 'vendor_orders.id')
+                ->where('vendor_orders.vendor_id', $vendor->id)
+                ->whereDate('vendor_order_items.created_at', $day->toDateString())
+                ->sum('qty');
+
+            $unitsSold += $units;
+
+            $salesChart[] = [
+                'date' => $day->format('Y-m-d'),
+                'sales' => $sales,
+                'units' => $units,
+            ];
+        }
+
+        // Top selling products (same query)
         $topProducts = DB::table('products')
             ->leftJoin('order_items', 'products.id', '=', 'order_items.product_id')
             ->where('products.vendor_id', $vendor->id)
@@ -175,34 +224,20 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // Monthly sales chart data
-        $monthlySales = [];
-        for ($i = 11; $i >= 0; $i--) {
-            $month = Carbon::now()->subMonths($i);
-            $sales = DB::table('vendor_orders')
-                ->where('vendor_id', $vendor->id)
-                ->where('status', 'completed')
-                ->whereMonth('created_at', $month->month)
-                ->whereYear('created_at', $month->year)
-                ->sum('total_amount');
-            
-            $monthlySales[] = [
-                'month' => $month->format('M Y'),
-                'sales' => (float) $sales
-            ];
-        }
-
         return [
             'products' => [
                 'total' => $totalProducts,
                 'active' => $activeProducts,
-                'inactive' => $totalProducts - $activeProducts
+                'inactive' => $inactiveProducts,
+                'out_of_stock' => $outOfStock,
+                'low_stock' => $lowStock
             ],
             'orders' => [
                 'total' => $totalOrders,
-                'pending' => $pendingOrders,
-                'completed' => $completedOrders,
-                'processing' => $totalOrders - $pendingOrders - $completedOrders
+                'pending' => $pending,
+                'unshipped' => $unshipped,
+                'shipped' => $shipped,
+                'cancelled' => $cancelled
             ],
             'revenue' => [
                 'total' => (float) $totalRevenue,
@@ -210,13 +245,15 @@ class DashboardController extends Controller
                 'currency' => core()->getCurrentCurrencyCode()
             ],
             'wallet' => [
-                'balance' => (float) $walletBalance,
-                'pending' => (float) $pendingPayouts,
-                'currency' => core()->getCurrentCurrencyCode()
+                'available' => $available,
+                'unavailable' => $unavailable,
+                'pending_payouts' => (float) $pendingPayouts,
+                'request_payout_url' => route('vendor.wallet.withdrawal')
             ],
             'recent_orders' => $recentOrders,
             'top_products' => $topProducts,
-            'monthly_sales' => $monthlySales
+            'sales_chart' => $salesChart,
+            'units_sold' => $unitsSold
         ];
     }
 

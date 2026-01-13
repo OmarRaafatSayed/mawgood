@@ -39,3 +39,20 @@ Route::get('/test-db', function() {
         ], 500);
     }
 });
+
+// Jobs listing via controller (keeps main layout and real data)
+Route::get('/jobs', [App\Http\Controllers\JobController::class, 'index'])->name('jobs.index');
+
+// Job detail page handled by controller
+Route::get('/jobs/{slug}', [App\Http\Controllers\JobController::class, 'show'])->name('jobs.show');
+
+// Job application submission (form POST)
+Route::post('/jobs/{slug}/apply', [App\Http\Controllers\JobController::class, 'submitApplication'])->name('jobs.apply');
+
+// Application success page
+Route::get('/jobs/{slug}/apply/success', function ($slug) {
+    return view('jobs.apply-success', compact('slug'));
+})->name('jobs.apply.success');
+
+
+

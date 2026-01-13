@@ -35,6 +35,12 @@
             </a>
 
             {!! view_render_event('bagisto.shop.components.layouts.header.mobile.logo.after') !!}
+
+            {{-- Mawgood quick links (mobile) --}}
+            <div class="flex items-center gap-3 ltr:ml-3 rtl:mr-3">
+                <a href="{{ route('shop.home.index') }}" class="px-4 py-2 rounded-md bg-navyBlue text-white text-sm font-medium shadow-sm hover:shadow-md transition">Mawgood Shop</a>
+                <a href="{{ route('jobs.index') }}" class="px-4 py-2 rounded-md bg-emerald-700 text-white text-sm font-medium shadow-sm hover:shadow-md transition">Mawgood Jobs</a>
+            </div>
         </div>
 
         <!-- Right Navigation -->

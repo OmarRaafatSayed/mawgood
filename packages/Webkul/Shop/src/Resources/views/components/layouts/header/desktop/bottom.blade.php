@@ -45,9 +45,23 @@
         </v-desktop-category>
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.category.after') !!}
-        
-        <!-- Jobs Link removed to prevent RouteNotFoundException (route 'jobs.index' does not exist) -->
-        <!-- Removed Jobs Link as per fix request -->
+
+        {{-- Mawgood quick links (Shop & Jobs) --}}
+        <div class="flex items-center gap-3 ltr:ml-6 rtl:mr-6">
+            <a
+                href="{{ route('shop.home.index') }}"
+                class="inline-flex items-center justify-center h-[40px] px-5 rounded-2xl bg-navyBlue text-white text-sm font-medium shadow-sm hover:shadow-md focus:outline-none transform transition duration-150 ease-in-out hover:-translate-y-0.5"
+            >
+                Mawgood Shop
+            </a>
+
+            <a
+                href="{{ route('jobs.index') }}"
+                class="inline-flex items-center justify-center h-[40px] px-5 rounded-2xl bg-emerald-700 text-white text-sm font-medium shadow-sm hover:shadow-md focus:outline-none transform transition duration-150 ease-in-out hover:-translate-y-0.5"
+            >
+                Mawgood Jobs
+            </a>
+        </div>
 
         <!-- CMS Pages Links -->
         <div class="flex items-center gap-2">
