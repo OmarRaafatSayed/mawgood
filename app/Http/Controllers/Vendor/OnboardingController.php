@@ -47,27 +47,46 @@ class OnboardingController extends Controller
             'store_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
+        $customer = Auth::guard('customer')->user();
+
+        // Prevent duplicate application
+        if (Vendor::where('customer_id', $customer->id)->exists()) {
+            return redirect()->route('shop.customers.account.profile.index')
+                ->with('error', app()->getLocale() === 'ar' ? 'لديك بالفعل طلب أو متجر.' : 'You already have an application or store.');
+        }
+
         // Handle logo upload
         $logoPath = null;
         if ($request->hasFile('store_logo')) {
             $logoPath = $request->file('store_logo')->store('vendor/logos', 'public');
         }
 
-        // Get category name for display
-        $category = Category::find($request->category_id);
-        
-        // Store application data in session
-        session([
-            'vendor_application' => [
-                'store_name' => $request->store_name,
-                'store_description' => $request->store_description,
-                'category_id' => $request->category_id,
-                'category_name' => $category->name,
-                'store_logo' => $logoPath,
-            ]
+        // Generate unique slug from store name
+        $baseSlug = 
+            
+            \Illuminate\Support\Str::slug($request->store_name);
+        $slug = $baseSlug;
+        $counter = 1;
+        while (Vendor::where('store_slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        // Create vendor application immediately (status: pending)
+        $vendor = Vendor::create([
+            'customer_id' => $customer->id,
+            'store_name' => $request->store_name,
+            'store_slug' => $slug,
+            'store_description' => $request->store_description,
+            'category_id' => $request->category_id,
+            'store_logo' => $logoPath,
+            'status' => 'pending',
+            'commission_rate' => config('multivendor.default_commission_rate', 10.00),
         ]);
 
-        return redirect()->route('vendor.onboarding.confirmation');
+        // Redirect immediately to under-review with success message
+        return redirect()->route('vendor.under-review')
+            ->with('success', app()->getLocale() === 'ar' ? 'تم إرسال طلب الانضمام بنجاح!' : 'Your application has been submitted successfully!');
     }
 
     /**
