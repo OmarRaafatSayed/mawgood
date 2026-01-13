@@ -2,7 +2,30 @@
     <div class="journal-scroll h-[calc(100vh-100px)] overflow-auto group-[.sidebar-collapsed]/container:overflow-visible">
         <nav class="grid w-full gap-2">
             <!-- Navigation Menu -->
-            @foreach (menu()->getItems('admin') as $menuItem)
+            @php
+                $menuItems = menu()->getItems('admin');
+
+                // If we're in the vendor admin area, restrict the sidebar to vendor-allowed items only
+                if (request()->is('vendor/admin*')) {
+                    $allowedKeys = ['dashboard', 'catalog', 'catalog.products', 'sales', 'sales.orders'];
+
+                    $menuItems = $menuItems->filter(function ($item) use ($allowedKeys) {
+                        // Allow top-level items if key is allowed
+                        if (in_array($item->key, $allowedKeys)) {
+                            return true;
+                        }
+
+                        // Allow item if any child keys are allowed
+                        if ($item->haveChildren()) {
+                            return $item->getChildren()->filter(fn($child) => in_array($child->getKey(), $allowedKeys))->count() > 0;
+                        }
+
+                        return false;
+                    })->values();
+                }
+            @endphp
+
+            @foreach ($menuItems as $menuItem)
                 <div
                     class="px-4 group/item {{ $menuItem->isActive() ? 'active' : 'inactive' }}"
                     onmouseenter="adjustSubMenuPosition(event)"
