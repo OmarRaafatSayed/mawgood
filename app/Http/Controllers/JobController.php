@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Job;
 use App\JobCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -79,7 +81,7 @@ class JobController extends Controller
 
         $application = \App\JobApplication::create([
             'job_listing_id' => $job->id,
-            'customer_id' => auth()->check() ? auth()->id() : null,
+            'customer_id' => Auth::check() ? Auth::user()->id : null,
             'applicant_name' => $data['applicant_name'],
             'applicant_email' => $data['applicant_email'],
             'applicant_phone' => $data['applicant_phone'] ?? null,

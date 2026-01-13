@@ -39,7 +39,7 @@
                 <div class="grid rounded-md border border-b border-l-[1px] border-r border-t-0 border-zinc-200 max-md:border-none">
                     @foreach ($menuItem->getChildren() as $subMenuItem)
                         @if($subMenuItem->getKey() === 'account.jobs')
-                            @if(auth('customer')->check() && in_array(auth('customer')->user()->user_type ?? 'customer', ['company', 'vendor']))
+                            @if(auth('customer')->check() && auth('customer')->user()->user_type === 'company')
                                 <a href="{{ $subMenuItem->getUrl() }}">
                                     <div class="flex justify-between px-6 py-5 border-t border-zinc-200 hover:bg-zinc-100 cursor-pointer max-md:p-4 max-md:border-0 max-md:py-3 max-md:px-0 {{ $subMenuItem->isActive() ? 'bg-zinc-100' : '' }}">
                                         <p class="flex items-center text-lg font-medium gap-x-4 max-sm:text-base">
@@ -66,6 +66,57 @@
                             </a>
                         @endif
                     @endforeach
+                    
+                    <!-- Dynamic Vendor Status Button -->
+                    @php
+                        $vendor = \App\Models\Vendor::where('customer_id', auth('customer')->id())->first();
+                    @endphp
+                    
+                    @if(!$vendor)
+                        <!-- Become a Seller -->
+                        <a href="{{ route('vendor.onboarding.form') }}">
+                            <div class="flex justify-between px-6 py-5 border-t border-zinc-200 hover:bg-emerald-50 cursor-pointer max-md:p-4 max-md:border-0 max-md:py-3 max-md:px-0 bg-gradient-to-r from-emerald-50 to-green-50">
+                                <p class="flex items-center text-lg font-medium gap-x-4 max-sm:text-base text-emerald-700">
+                                    <span class="icon-store text-2xl"></span>
+                                    {{ app()->getLocale() === 'ar' ? 'افتتح متجرك الآن' : 'Open Your Store Now' }}
+                                </p>
+                                <span class="text-2xl icon-arrow-right rtl:icon-arrow-left text-emerald-600"></span>
+                            </div>
+                        </a>
+                    @elseif($vendor->status === 'pending')
+                        <!-- Under Review -->
+                        <a href="{{ route('vendor.under-review') }}">
+                            <div class="flex justify-between px-6 py-5 border-t border-zinc-200 hover:bg-blue-50 cursor-pointer max-md:p-4 max-md:border-0 max-md:py-3 max-md:px-0 bg-gradient-to-r from-blue-50 to-indigo-50">
+                                <p class="flex items-center text-lg font-medium gap-x-4 max-sm:text-base text-blue-700">
+                                    <span class="icon-clock text-2xl"></span>
+                                    {{ app()->getLocale() === 'ar' ? 'طلبك تحت المراجعة' : 'Under Review' }}
+                                </p>
+                                <span class="text-2xl icon-arrow-right rtl:icon-arrow-left text-blue-600"></span>
+                            </div>
+                        </a>
+                    @elseif($vendor->status === 'approved')
+                        <!-- Vendor Dashboard -->
+                        <a href="{{ route('vendor.dashboard') }}">
+                            <div class="flex justify-between px-6 py-5 border-t border-zinc-200 hover:bg-purple-50 cursor-pointer max-md:p-4 max-md:border-0 max-md:py-3 max-md:px-0 bg-gradient-to-r from-purple-50 to-indigo-50">
+                                <p class="flex items-center text-lg font-medium gap-x-4 max-sm:text-base text-purple-700">
+                                    <span class="icon-dashboard text-2xl"></span>
+                                    {{ app()->getLocale() === 'ar' ? 'لوحة تحكم التاجر' : 'Vendor Dashboard' }}
+                                </p>
+                                <span class="text-2xl icon-arrow-right rtl:icon-arrow-left text-purple-600"></span>
+                            </div>
+                        </a>
+                    @elseif($vendor->status === 'rejected')
+                        <!-- Reapply -->
+                        <a href="{{ route('vendor.onboarding.form') }}">
+                            <div class="flex justify-between px-6 py-5 border-t border-zinc-200 hover:bg-orange-50 cursor-pointer max-md:p-4 max-md:border-0 max-md:py-3 max-md:px-0 bg-gradient-to-r from-orange-50 to-red-50">
+                                <p class="flex items-center text-lg font-medium gap-x-4 max-sm:text-base text-orange-700">
+                                    <span class="icon-refresh text-2xl"></span>
+                                    {{ app()->getLocale() === 'ar' ? 'إعادة التقديم' : 'Reapply' }}
+                                </p>
+                                <span class="text-2xl icon-arrow-right rtl:icon-arrow-left text-orange-600"></span>
+                            </div>
+                        </a>
+                    @endif
                 </div>
             @endif
         </div>

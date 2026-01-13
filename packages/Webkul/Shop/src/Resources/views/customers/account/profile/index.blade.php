@@ -33,12 +33,56 @@
 
             {!! view_render_event('bagisto.shop.customers.account.profile.edit_button.before') !!}
 
-            <a
-                href="{{ route('shop.customers.account.profile.edit') }}"
-                class="secondary-button border-zinc-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
-            >
-                @lang('shop::app.customers.account.profile.index.edit')
-            </a>
+            <div class="flex items-center gap-3">
+                @php
+                    $vendor = \App\Models\Vendor::where('customer_id', $customer->id)->first();
+                @endphp
+                
+                @if(!$vendor)
+                    <!-- Become a Seller Button -->
+                    <a
+                        href="{{ route('vendor.onboarding.form') }}"
+                        class="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-green-600 text-white px-6 py-3 rounded-2xl font-medium shadow-lg hover:shadow-xl hover:from-emerald-700 hover:to-green-700 transition-all duration-200 max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
+                    >
+                        <i class="fas fa-store text-sm"></i>
+                        {{ app()->getLocale() === 'ar' ? 'افتح متجرك' : 'Open Your Store' }}
+                    </a>
+                @elseif($vendor->status === 'pending')
+                    <!-- Under Review Status -->
+                    <a
+                        href="{{ route('vendor.under-review') }}"
+                        class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-2xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
+                    >
+                        <i class="fas fa-clock text-sm"></i>
+                        {{ app()->getLocale() === 'ar' ? 'قيد المراجعة' : 'Under Review' }}
+                    </a>
+                @elseif($vendor->status === 'approved')
+                    <!-- Go to Dashboard -->
+                    <a
+                        href="{{ route('vendor.dashboard') }}"
+                        class="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-2xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
+                    >
+                        <i class="fas fa-tachometer-alt text-sm"></i>
+                        {{ app()->getLocale() === 'ar' ? 'لوحة التحكم' : 'Seller Dashboard' }}
+                    </a>
+                @elseif($vendor->status === 'rejected')
+                    <!-- Reapply Button -->
+                    <a
+                        href="{{ route('vendor.onboarding.form') }}"
+                        class="flex items-center gap-2 bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-3 rounded-2xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
+                    >
+                        <i class="fas fa-redo text-sm"></i>
+                        {{ app()->getLocale() === 'ar' ? 'إعادة التقديم' : 'Reapply' }}
+                    </a>
+                @endif
+
+                <a
+                    href="{{ route('shop.customers.account.profile.edit') }}"
+                    class="secondary-button border-zinc-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
+                >
+                    @lang('shop::app.customers.account.profile.index.edit')
+                </a>
+            </div>
 
             {!! view_render_event('bagisto.shop.customers.account.profile.edit_button.after') !!}
         </div>

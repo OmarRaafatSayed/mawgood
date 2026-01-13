@@ -96,3 +96,21 @@ Breadcrumbs::for('product', function (BreadcrumbTrail $trail, $entity) {
     $trail->parent('home');
     $trail->push($entity->name ?? '', route('shop.product_or_category.index', $entity->url_key));
 });
+
+// Home > Jobs
+Breadcrumbs::for('jobs', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push(app()->getLocale() === 'ar' ? 'الوظائف' : 'Jobs', route('jobs.index'));
+});
+
+// Home > Jobs > Job Title
+Breadcrumbs::for('job', function (BreadcrumbTrail $trail, $job) {
+    $trail->parent('jobs');
+    $trail->push($job->title, route('jobs.show', $job->slug));
+});
+
+// Home > Jobs > Application Success
+Breadcrumbs::for('job-application-success', function (BreadcrumbTrail $trail) {
+    $trail->parent('jobs');
+    $trail->push(app()->getLocale() === 'ar' ? 'تم الإرسال بنجاح' : 'Application Submitted', '#');
+});

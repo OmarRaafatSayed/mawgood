@@ -11,10 +11,6 @@ class IsSeller
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
     {
@@ -32,18 +28,25 @@ class IsSeller
         $vendor = Vendor::where('customer_id', $customer->id)->first();
         
         if (!$vendor) {
-            if ($request->expectsJson()) {
-                return response()->json(['error' => 'Access denied. Vendor account required.'], 403);
-            }
-            return redirect()->route('shop.home.index')->with('error', 'غير مصرح لك بالوصول لهذه الصفحة');
+            // Redirect to become a seller form
+            return redirect()->route('vendor.onboarding.form')
+                ->with('info', app()->getLocale() === 'ar' ? 'يجب عليك التسجيل كبائع أولاً' : 'You need to register as a seller first');
         }
 
-        // Check if vendor is approved
+        // Check vendor status
+        if ($vendor->status === 'pending') {
+            return redirect()->route('vendor.under-review')
+                ->with('info', app()->getLocale() === 'ar' ? 'طلبك قيد المراجعة' : 'Your application is under review');
+        }
+
+        if ($vendor->status === 'rejected') {
+            return redirect()->route('vendor.onboarding.form')
+                ->with('error', app()->getLocale() === 'ar' ? 'تم رفض طلبك. يمكنك التقديم مرة أخرى' : 'Your application was rejected. You can apply again');
+        }
+
         if ($vendor->status !== 'approved') {
-            if ($request->expectsJson()) {
-                return response()->json(['error' => 'Vendor account not approved'], 403);
-            }
-            return redirect()->route('shop.home.index')->with('error', 'حسابك كتاجر لم يتم الموافقة عليه بعد');
+            return redirect()->route('shop.customers.account.profile.index')
+                ->with('error', app()->getLocale() === 'ar' ? 'حسابك كبائع غير نشط' : 'Your seller account is not active');
         }
 
         return $next($request);

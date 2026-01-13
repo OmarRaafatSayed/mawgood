@@ -13,7 +13,9 @@ class Vendor extends Model
     protected $fillable = [
         'customer_id',
         'store_name',
+        'store_slug',
         'store_description',
+        'category_id',
         'store_logo',
         'store_banner',
         'commission_rate',
@@ -29,6 +31,14 @@ class Vendor extends Model
         'current_balance' => 'decimal:2',
         'bank_details' => 'array'
     ];
+
+    /**
+     * Get the category that the vendor belongs to
+     */
+    public function category()
+    {
+        return $this->belongsTo(\Webkul\Category\Models\Category::class);
+    }
 
     /**
      * Get the customer that owns the vendor

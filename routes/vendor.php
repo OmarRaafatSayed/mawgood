@@ -6,6 +6,7 @@ use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\OrderController;
 use App\Http\Controllers\Vendor\WalletController;
 use App\Http\Controllers\Vendor\SettingsController;
+use App\Http\Controllers\Vendor\OnboardingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,29 @@ use App\Http\Controllers\Vendor\SettingsController;
 | All routes are protected by auth:customer and isSeller middleware
 |
 */
+
+// Vendor Onboarding Routes (accessible to authenticated customers)
+Route::group([
+    'prefix' => 'vendor',
+    'middleware' => ['customer'],
+    'as' => 'vendor.onboarding.'
+], function () {
+    Route::get('/apply', [OnboardingController::class, 'showForm'])->name('form');
+    Route::post('/apply', [OnboardingController::class, 'submitApplication'])->name('submit');
+    Route::get('/confirmation', [OnboardingController::class, 'showConfirmation'])->name('confirmation');
+    Route::post('/final-submit', [OnboardingController::class, 'finalSubmit'])->name('final-submit');
+    Route::get('/under-review', [OnboardingController::class, 'underReview'])->name('under-review');
+    
+    // AJAX routes for real-time validation
+    Route::post('/check-name', [OnboardingController::class, 'checkStoreName'])->name('check-name');
+    Route::post('/check-slug', [OnboardingController::class, 'checkStoreSlug'])->name('check-slug');
+    Route::post('/generate-slug', [OnboardingController::class, 'generateSlug'])->name('generate-slug');
+});
+
+// Under Review Route (separate from onboarding group)
+Route::get('/vendor/under-review', [OnboardingController::class, 'underReview'])
+    ->middleware(['customer'])
+    ->name('vendor.under-review');
 
 Route::group([
     'prefix' => 'vendor',

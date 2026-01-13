@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 // Include vendor routes
 require __DIR__.'/vendor.php';
@@ -13,6 +14,13 @@ Route::group(['prefix' => config('app.admin_url', 'admin'), 'middleware' => ['we
     Route::post('vendors/{id}/reject', [App\Http\Controllers\Admin\VendorController::class, 'reject'])->name('admin.vendors.reject');
     Route::post('vendors/{id}/suspend', [App\Http\Controllers\Admin\VendorController::class, 'suspend'])->name('admin.vendors.suspend');
     Route::post('vendors/{id}/commission', [App\Http\Controllers\Admin\VendorController::class, 'updateCommission'])->name('admin.vendors.commission');
+    
+    // Vendor Management Routes
+    Route::get('vendor-management', [App\Http\Controllers\Admin\VendorManagementController::class, 'index'])->name('admin.vendor-management.index');
+    Route::get('vendor-management/{id}', [App\Http\Controllers\Admin\VendorManagementController::class, 'show'])->name('admin.vendor-management.show');
+    Route::post('vendor-management/{id}/approve', [App\Http\Controllers\Admin\VendorManagementController::class, 'approve'])->name('admin.vendor-management.approve');
+    Route::post('vendor-management/{id}/reject', [App\Http\Controllers\Admin\VendorManagementController::class, 'reject'])->name('admin.vendor-management.reject');
+    Route::post('vendor-management/{id}/suspend', [App\Http\Controllers\Admin\VendorManagementController::class, 'suspend'])->name('admin.vendor-management.suspend');
 });
 
 // Test routes

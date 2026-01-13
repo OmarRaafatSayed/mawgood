@@ -56,7 +56,7 @@ class DashboardController extends Controller
             return view('vendor.dashboard.index', compact('stats', 'vendor'));
             
         } catch (\Exception $e) {
-            \Log::error('Vendor Dashboard Error: ' . $e->getMessage());
+            Log::error('Vendor Dashboard Error: ' . $e->getMessage());
             return view('vendor.dashboard.index', [
                 'stats' => $this->getDefaultStats(),
                 'vendor' => null
@@ -87,7 +87,7 @@ class DashboardController extends Controller
             return response()->json($stats);
             
         } catch (\Exception $e) {
-            \Log::error('Dashboard Stats Error: ' . $e->getMessage());
+            Log::error('Dashboard Stats Error: ' . $e->getMessage());
             return response()->json($this->getDefaultStats());
         }
     }
@@ -135,7 +135,7 @@ class DashboardController extends Controller
                     ->count();
             }
         } catch (\Exception $e) {
-            \Log::warning('Inventory stats not available: ' . $e->getMessage());
+            Log::warning('Inventory stats not available: ' . $e->getMessage());
         }
 
         // Orders statistics (mapped to Amazon-style tabs)

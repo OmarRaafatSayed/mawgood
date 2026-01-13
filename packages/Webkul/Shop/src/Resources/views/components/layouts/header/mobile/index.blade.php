@@ -37,9 +37,9 @@
             {!! view_render_event('bagisto.shop.components.layouts.header.mobile.logo.after') !!}
 
             {{-- Mawgood quick links (mobile) --}}
-            <div class="flex items-center gap-3 ltr:ml-3 rtl:mr-3">
-                <a href="{{ route('shop.home.index') }}" class="px-4 py-2 rounded-md bg-navyBlue text-white text-sm font-medium shadow-sm hover:shadow-md transition">Mawgood Shop</a>
-                <a href="{{ route('jobs.index') }}" class="px-4 py-2 rounded-md bg-emerald-700 text-white text-sm font-medium shadow-sm hover:shadow-md transition">Mawgood Jobs</a>
+            <div class="flex items-center gap-2 ltr:ml-3 rtl:mr-3">
+                <a href="{{ route('shop.search.index') }}" class="px-3 py-1.5 rounded-md bg-navyBlue text-white text-xs font-medium shadow-sm hover:shadow-md transition">Shop</a>
+                <a href="{{ route('jobs.index') }}" class="px-3 py-1.5 rounded-md bg-emerald-700 text-white text-xs font-medium shadow-sm hover:shadow-md transition">Jobs</a>
             </div>
         </div>
 
@@ -304,7 +304,7 @@
 
             <x-slot:footer>
                 <!-- Localization & Currency Section -->
-                @if(core()->getCurrentChannel()->locales()->count() > 1 || core()->getCurrentChannel()->currencies()->count() > 1 )
+                @if((core()->getCurrentChannel()->locales ?? collect())->count() > 1 || (core()->getCurrentChannel()->currencies ?? collect())->count() > 1 )
                     <div class="fixed bottom-0 z-10 grid w-full max-w-full grid-cols-[1fr_auto_1fr] items-center justify-items-center border-t border-zinc-200 bg-white px-5 ltr:left-0 rtl:right-0">
                         <!-- Filter Drawer -->
                         <x-shop::drawer
@@ -356,17 +356,14 @@
                                     role="button"
                                 >
                                     <img
-                                        src="{{ ! empty(core()->getCurrentLocale()->logo_url)
-                                                ? core()->getCurrentLocale()->logo_url
-                                                : bagisto_asset('images/default-language.svg')
-                                            }}"
+                                        src="{{ optional(core()->getCurrentLocale())->logo_url ?? bagisto_asset('images/default-language.svg') }}"
                                         class="h-full"
                                         alt="Default locale"
                                         width="24"
                                         height="16"
                                     />
 
-                                    {{ core()->getCurrentChannel()->locales()->orderBy('name')->where('code', app()->getLocale())->value('name') }}
+                                    {{ core()->getCurrentLocale()->name ?? '' }}
                                 </div>
                             </x-slot>
 

@@ -113,10 +113,7 @@
                         @click="localeToggler = ! localeToggler"
                     >
                         <img
-                            src="{{ ! empty(core()->getCurrentLocale()->logo_url)
-                                    ? core()->getCurrentLocale()->logo_url
-                                    : bagisto_asset('images/default-language.svg')
-                                }}"
+                            src="{{ optional(core()->getCurrentLocale())->logo_url ?? bagisto_asset('images/default-language.svg') }}"
                             class="h-full"
                             alt="@lang('shop::app.components.layouts.header.desktop.top.default-locale')"
                             width="24"
@@ -124,7 +121,7 @@
                         />
                         
                         <span>
-                            {{ core()->getCurrentChannel()->locales()->orderBy('name')->where('code', app()->getLocale())->value('name') }}
+                            {{ core()->getCurrentLocale()->name ?? '' }}
                         </span>
 
                         <span
@@ -221,7 +218,7 @@
 
             data() {
                 return {
-                    locales: @json(core()->getCurrentChannel()->locales()->orderBy('name')->get()),
+                    locales: @json(core()->getCurrentChannel()->locales ?? []),
                 };
             },
 

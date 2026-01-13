@@ -49,7 +49,7 @@
         {{-- Mawgood quick links (Shop & Jobs) --}}
         <div class="flex items-center gap-3 ltr:ml-6 rtl:mr-6">
             <a
-                href="{{ route('shop.home.index') }}"
+                href="{{ route('shop.search.index') }}"
                 class="inline-flex items-center justify-center h-[40px] px-5 rounded-2xl bg-navyBlue text-white text-sm font-medium shadow-sm hover:shadow-md focus:outline-none transform transition duration-150 ease-in-out hover:-translate-y-0.5"
             >
                 Mawgood Shop

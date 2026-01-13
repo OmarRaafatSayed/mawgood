@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 return new class extends Migration
 {
@@ -26,7 +27,7 @@ return new class extends Migration
             }
         } catch (\Exception $e) {
             // Ignore if operation fails on older DBs
-            \Log::warning('Vendor balance backfill failed: ' . $e->getMessage());
+            Log::warning('Vendor balance backfill failed: ' . $e->getMessage());
         }
     }
 
