@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 
+@php
+    /** @var \Webkul\Core\Models\Locale $locale */
+    $locale = core()->getCurrentLocale();
+
+    /** @var \Webkul\Core\Models\Currency $baseCurrency */
+    $baseCurrency = core()->getBaseCurrency();
+@endphp
+
 <html
     class="{{ request()->cookie('dark_mode') ?? 0 ? 'dark' : '' }}"
     lang="{{ app()->getLocale() }}"
-    dir="{{ core()->getCurrentLocale()->direction }}"
+    dir="{{ $locale->direction }}"
 >
 
 <head>
@@ -12,6 +20,7 @@
     <title>{{ $title ?? '' }}</title>
 
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta
         http-equiv="X-UA-Compatible"
@@ -31,7 +40,7 @@
     >
     <meta
         name="currency"
-        content="{{ core()->getBaseCurrency()->toJson() }}"
+        content="{{ json_encode($baseCurrency) }}"
     >
 
 

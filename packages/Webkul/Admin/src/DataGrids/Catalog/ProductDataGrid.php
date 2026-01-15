@@ -40,6 +40,7 @@ class ProductDataGrid extends DataGrid
          */
         $queryBuilder = DB::table('product_flat')
             ->distinct()
+            ->leftJoin('products', 'product_flat.product_id', '=', 'products.id')
             ->leftJoin('attribute_families as af', 'product_flat.attribute_family_id', '=', 'af.id')
             ->leftJoin('product_inventories', 'product_flat.product_id', '=', 'product_inventories.product_id')
             ->leftJoin('product_images', 'product_flat.product_id', '=', 'product_images.product_id')
@@ -76,6 +77,8 @@ class ProductDataGrid extends DataGrid
         $this->addFilter('type', 'product_flat.type');
         $this->addFilter('status', 'product_flat.status');
         $this->addFilter('attribute_family', 'af.id');
+
+        $this->addFilter('vendor_id', 'products.vendor_id');
 
         return $queryBuilder;
     }

@@ -48,6 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'seller' => SellerMiddleware::class,
             'isSeller' => \App\Http\Middleware\IsSeller::class,
+            'vendor.admin.access' => \App\Http\Middleware\VendorAdminAccess::class,
         ]);
 
         $middleware->trustProxies('*');

@@ -6,10 +6,22 @@ use Illuminate\Support\Facades\DB;
 // Include vendor routes
 require __DIR__.'/vendor.php';
 
+// Account Type Selection Routes
+Route::middleware(['customer'])->group(function () {
+    Route::get('/account-type', [App\Http\Controllers\AccountTypeController::class, 'show'])->name('account-type.show');
+    Route::post('/account-type', [App\Http\Controllers\AccountTypeController::class, 'store'])->name('account-type.store');
+});
+
 // Admin vendor management routes
 Route::group(['prefix' => config('app.admin_url', 'admin'), 'middleware' => ['web']], function () {
     Route::get('vendors', [App\Http\Controllers\Admin\VendorController::class, 'index'])->name('admin.vendors.index');
+    Route::get('vendors/create', [App\Http\Controllers\Admin\VendorController::class, 'create'])->name('admin.vendors.create');
+    Route::post('vendors', [App\Http\Controllers\Admin\VendorController::class, 'store'])->name('admin.vendors.store');
     Route::get('vendors/{id}', [App\Http\Controllers\Admin\VendorController::class, 'show'])->name('admin.vendors.show');
+    Route::get('vendors/{id}/edit', [App\Http\Controllers\Admin\VendorController::class, 'edit'])->name('admin.vendors.edit');
+    Route::put('vendors/{id}', [App\Http\Controllers\Admin\VendorController::class, 'update'])->name('admin.vendors.update');
+    Route::delete('vendors/{id}', [App\Http\Controllers\Admin\VendorController::class, 'destroy'])->name('admin.vendors.destroy');
+    Route::post('vendors/mass-delete', [App\Http\Controllers\Admin\VendorController::class, 'massDestroy'])->name('admin.vendors.mass_delete');
     Route::post('vendors/{id}/approve', [App\Http\Controllers\Admin\VendorController::class, 'approve'])->name('admin.vendors.approve');
     Route::post('vendors/{id}/reject', [App\Http\Controllers\Admin\VendorController::class, 'reject'])->name('admin.vendors.reject');
     Route::post('vendors/{id}/suspend', [App\Http\Controllers\Admin\VendorController::class, 'suspend'])->name('admin.vendors.suspend');

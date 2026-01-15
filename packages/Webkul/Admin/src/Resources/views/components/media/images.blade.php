@@ -435,7 +435,14 @@
                     placeholders: [
                         {
                             label: "@lang('admin::app.components.media.images.placeholders.front')",
-                            image: "{{ bagisto_asset('images/product-placeholders/front.svg') }}"
+@php
+                                try {
+                                    $frontPlaceholder = bagisto_asset('images/product-placeholders/front.svg');
+                                } catch (\Exception $e) {
+                                    $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
+                                }
+                            @endphp
+                            image: "{{ $frontPlaceholder }}"
                         }, {
                             label: "@lang('admin::app.components.media.images.placeholders.next')",
                             image: "{{ bagisto_asset('images/product-placeholders/next-1.svg') }}"

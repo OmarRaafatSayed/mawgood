@@ -1,24 +1,29 @@
-@extends('admin::layouts.master')
+<x-admin::layouts>
+    <x-slot:title>
+        إدارة التجار
+    </x-slot>
 
-@section('page_title')
-    إدارة التجار
-@stop
-
-@section('content-wrapper')
-    <div class="content full-page">
-        <div class="page-header">
-            <div class="page-title">
-                <h1>إدارة التجار</h1>
-            </div>
-            <div class="page-action">
-                <a href="{{ route('admin.vendors.create') }}" class="btn btn-primary">
-                    إضافة تاجر جديد
-                </a>
-            </div>
+    <div class="flex items-center justify-between gap-4 mb-5 max-sm:flex-wrap">
+        <div class="grid gap-1.5">
+            <p class="text-xl font-bold !leading-normal text-gray-800 dark:text-white">
+                إدارة التجار
+            </p>
+            <p class="!leading-normal text-gray-600 dark:text-gray-300">
+                إدارة وعرض جميع التجار المسجلين في النظام
+            </p>
         </div>
-
-        <div class="page-content">
-            <x-admin::datagrid :src="route('admin.vendors.index')" />
+        
+        <div class="flex gap-x-2.5 items-center">
+            <a 
+                href="{{ route('admin.vendors.create') }}" 
+                class="primary-button"
+            >
+                إضافة تاجر جديد
+            </a>
         </div>
     </div>
-@stop
+
+    <div class="bg-white rounded box-shadow dark:bg-gray-900">
+        <x-admin::datagrid :src="route('admin.vendors.index')" />
+    </div>
+</x-admin::layouts>

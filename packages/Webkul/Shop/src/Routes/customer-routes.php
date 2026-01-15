@@ -61,6 +61,17 @@ Route::prefix('customer')->group(function () {
     });
 
     /**
+     * Account Type selection for social signups
+     */
+    Route::get('select-account-type', [CustomerController::class, 'showAccountTypeForm'])
+        ->middleware(['customer'])
+        ->name('shop.customers.select-account-type');
+
+    Route::post('select-account-type', [CustomerController::class, 'storeAccountType'])
+        ->middleware(['customer'])
+        ->name('shop.customers.store-account-type');
+
+    /**
      * Customer authenticated routes. All the below routes only be accessible
      * if customer is authenticated.
      */

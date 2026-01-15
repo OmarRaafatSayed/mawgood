@@ -1,5 +1,6 @@
 @php
     $customer = auth()->guard('customer')->user();
+    $vendor = \App\Models\Vendor::where('customer_id', auth('customer')->id())->first();
 @endphp
 
 <div class="panel-side journal-scroll grid max-h-[1320px] min-w-[342px] max-w-[380px] grid-cols-[1fr] gap-8 overflow-y-auto overflow-x-hidden max-xl:min-w-[270px] max-md:max-w-full max-md:gap-5">
@@ -39,7 +40,7 @@
                 <div class="grid rounded-md border border-b border-l-[1px] border-r border-t-0 border-zinc-200 max-md:border-none">
                     @foreach ($menuItem->getChildren() as $subMenuItem)
                         @if($subMenuItem->getKey() === 'account.jobs')
-                            @if(auth('customer')->check() && auth('customer')->user()->user_type === 'company')
+                            @if(auth('customer')->check() && auth('customer')->user()->user_type === 'company' && !$vendor)
                                 <a href="{{ $subMenuItem->getUrl() }}">
                                     <div class="flex justify-between px-6 py-5 border-t border-zinc-200 hover:bg-zinc-100 cursor-pointer max-md:p-4 max-md:border-0 max-md:py-3 max-md:px-0 {{ $subMenuItem->isActive() ? 'bg-zinc-100' : '' }}">
                                         <p class="flex items-center text-lg font-medium gap-x-4 max-sm:text-base">
@@ -96,7 +97,7 @@
                         </a>
                     @elseif($vendor->status === 'approved')
                         <!-- Vendor Dashboard -->
-                        <a href="{{ route('vendor.dashboard') }}">
+                        <a href="{{ route('vendor.admin.dashboard.index') }}">
                             <div class="flex justify-between px-6 py-5 border-t border-zinc-200 hover:bg-purple-50 cursor-pointer max-md:p-4 max-md:border-0 max-md:py-3 max-md:px-0 bg-gradient-to-r from-purple-50 to-indigo-50">
                                 <p class="flex items-center text-lg font-medium gap-x-4 max-sm:text-base text-purple-700">
                                     <span class="icon-dashboard text-2xl"></span>

@@ -31,38 +31,46 @@ class CustomerSocialAccountRepository extends Repository
     }
 
     /**
-     * @param  array  $providerUser
+     * @param  \Laravel\Socialite\Contracts\User  $providerUser
      * @param  string  $provider
-     * @return void
+     * @return \Webkul\Customer\Models\Customer|null
      */
-    public function findOrCreateCustomer($providerUser, $provider)
+    public function findOrCreateCustomer(\Laravel\Socialite\Contracts\User $providerUser, string $provider): ?\Webkul\Customer\Models\Customer
     {
+        // Defensive extraction: provider user can be an object (Socialite User) or an array-like structure
+        $providerId = is_object($providerUser) && method_exists($providerUser, 'getId') ? $providerUser->getId() : data_get($providerUser, 'id');
+        $email = is_object($providerUser) && method_exists($providerUser, 'getEmail') ? $providerUser->getEmail() : data_get($providerUser, 'email');
+        $name = is_object($providerUser) && method_exists($providerUser, 'getName') ? $providerUser->getName() : data_get($providerUser, 'name');
+
         $account = $this->findOneWhere([
             'provider_name' => $provider,
-            'provider_id'   => $providerUser->getId(),
+            'provider_id'   => $providerId,
         ]);
 
         if ($account) {
             return $account->customer;
         } else {
-            $customer = $providerUser->getEmail() ? $this->customerRepository->findOneByField('email', $providerUser->getEmail()) : null;
+            $customer = $email ? $this->customerRepository->findOneByField('email', $email) : null;
 
             if (! $customer) {
-                $names = $this->getFirstLastName($providerUser->getName());
+                $names = $this->getFirstLastName($name);
 
                 $customer = $this->customerRepository->create([
-                    'email'             => $providerUser->getEmail(),
+                    'email'             => $email,
                     'first_name'        => $names['first_name'],
                     'last_name'         => $names['last_name'],
                     'status'            => 1,
                     'is_verified'       => ! core()->getConfigData('customer.settings.email.verification'),
                     'customer_group_id' => $this->customerGroupRepository->findOneWhere(['code' => 'general'])->id,
                 ]);
+
+                // Mark that a social signup occurred so the app can prompt for additional data
+                session(['social_signup' => true]);
             }
 
             $this->create([
                 'customer_id'   => $customer->id,
-                'provider_id'   => $providerUser->getId(),
+                'provider_id'   => $providerId,
                 'provider_name' => $provider,
             ]);
 
@@ -74,9 +82,9 @@ class CustomerSocialAccountRepository extends Repository
      * Returns first and last name from name
      *
      * @param  string  $name
-     * @return string
+     * @return array{first_name:string,last_name:string}
      */
-    public function getFirstLastName($name)
+    public function getFirstLastName(string $name): array
     {
         $name = trim($name);
 

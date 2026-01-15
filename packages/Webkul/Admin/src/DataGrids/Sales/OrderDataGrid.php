@@ -17,6 +17,7 @@ class OrderDataGrid extends DataGrid
      */
     public function prepareQueryBuilder()
     {
+        // Join vendor_orders so we can scope datagrid to a specific vendor later via a filter on `vendor_id`.
         $queryBuilder = DB::table('orders')
             ->leftJoin('addresses as order_address_shipping', function ($leftJoin) {
                 $leftJoin->on('order_address_shipping.order_id', '=', 'orders.id')
@@ -27,6 +28,8 @@ class OrderDataGrid extends DataGrid
                     ->where('order_address_billing.address_type', OrderAddress::ADDRESS_TYPE_BILLING);
             })
             ->leftJoin('order_payment', 'orders.id', '=', 'order_payment.order_id')
+            // join vendor_orders to make vendor scoping possible
+            ->leftJoin('vendor_orders', 'vendor_orders.order_id', '=', 'orders.id')
             ->select(
                 'orders.id',
                 DB::raw('GROUP_CONCAT('.DB::getTablePrefix().'order_payment.method SEPARATOR "|") as method'),
@@ -39,9 +42,14 @@ class OrderDataGrid extends DataGrid
                 'customer_email',
                 'orders.cart_id as items',
                 DB::raw('CONCAT('.DB::getTablePrefix().'orders.customer_first_name, " ", '.DB::getTablePrefix().'orders.customer_last_name) as full_name'),
-                DB::raw('CONCAT('.DB::getTablePrefix().'order_address_billing.city, ", ", '.DB::getTablePrefix().'order_address_billing.state,", ", '.DB::getTablePrefix().'order_address_billing.country) as location')
+                DB::raw('CONCAT('.DB::getTablePrefix().'order_address_billing.city, ", ", '.DB::getTablePrefix().'order_address_billing.state,", ", '.DB::getTablePrefix().'order_address_billing.country) as location'),
+                // minimal aggregate in case multiple vendor_orders rows exist for same order
+                DB::raw('MIN('.DB::getTablePrefix().'vendor_orders.vendor_id) as vendor_id')
             )
             ->groupBy('orders.id');
+
+        // map a filter key so vendor controllers can call addFilter('vendor_id', <column>)
+        $this->addFilter('vendor_id', DB::raw('MIN('.DB::getTablePrefix().'vendor_orders.vendor_id)'));
 
         $this->addFilter('full_name', DB::raw('CONCAT('.DB::getTablePrefix().'orders.customer_first_name, " ", '.DB::getTablePrefix().'orders.customer_last_name)'));
         $this->addFilter('created_at', 'orders.created_at');
@@ -148,6 +156,17 @@ class OrderDataGrid extends DataGrid
                     ->unique()
                     ->join(', ');
             },
+        ]);
+
+        // Hidden vendor_id column to allow server-side vendor scoping via filters (not shown in UI ideally)
+        $this->addColumn([
+            'index'      => 'vendor_id',
+            'label'      => 'Vendor ID',
+            'type'       => 'number',
+            'filterable' => true,
+            'sortable'   => false,
+            'searchable' => false,
+            // we won't provide front-end filter options for this column
         ]);
 
         $this->addColumn([

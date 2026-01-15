@@ -83,7 +83,14 @@
                                 :class="{'border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert': ! product.images.length}"
                             >
                                 <template v-if="! product.images.length">
-                                    <img src="{{ bagisto_asset('images/product-placeholders/front.svg') }}">
+@php
+    try {
+        $frontPlaceholder = bagisto_asset_safe('images/product-placeholders/front.svg');
+    } catch (\Exception $e) {
+        $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
+    }
+@endphp
+                                    <img src="{{ $frontPlaceholder }}">
                                 
                                     <p class="absolute bottom-1.5 w-full text-center text-[6px] font-semibold text-gray-400">
                                         @lang('admin::app.components.products.search.product-image')

@@ -7,6 +7,9 @@ use App\Http\Controllers\Vendor\OrderController;
 use App\Http\Controllers\Vendor\WalletController;
 use App\Http\Controllers\Vendor\SettingsController;
 use App\Http\Controllers\Vendor\OnboardingController;
+use App\Http\Controllers\Vendor\AdminController;
+use App\Http\Controllers\Vendor\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Vendor\Admin\OrderController as AdminOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,5 +106,33 @@ Route::group([
         Route::get('/dashboard-stats', [DashboardController::class, 'getDashboardStats'])->name('dashboard.stats');
         Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
         Route::get('/orders/search', [OrderController::class, 'search'])->name('orders.search');
+    });
+});
+
+// Vendor Admin Dashboard Routes (Scoped Admin UI)
+Route::group([
+    'prefix' => 'vendor/admin',
+    'middleware' => ['customer', 'vendor.admin.access'],
+    'as' => 'vendor.admin.'
+], function () {
+    
+    // Dashboard
+    Route::get('/', [AdminController::class, 'index'])->name('dashboard.index');
+    Route::get('/stats', [AdminController::class, 'stats'])->name('dashboard.stats');
+    
+    // Products (Scoped to vendor)
+    Route::prefix('catalog/products')->name('catalog.products.')->group(function () {
+        Route::get('/', [AdminProductController::class, 'index'])->name('index');
+        Route::get('/create', [AdminProductController::class, 'create'])->name('create');
+        Route::post('/', [AdminProductController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AdminProductController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AdminProductController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdminProductController::class, 'destroy'])->name('destroy');
+    });
+    
+    // Orders (Scoped to vendor)
+    Route::prefix('sales/orders')->name('sales.orders.')->group(function () {
+        Route::get('/', [AdminOrderController::class, 'index'])->name('index');
+        Route::get('/{id}', [AdminOrderController::class, 'view'])->name('view');
     });
 });

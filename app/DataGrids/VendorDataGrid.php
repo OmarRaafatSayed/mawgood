@@ -10,16 +10,17 @@ class VendorDataGrid extends DataGrid
     public function prepareQueryBuilder()
     {
         $queryBuilder = DB::table('vendors')
-            ->leftJoin('admins', 'vendors.user_id', '=', 'admins.id')
             ->select(
                 'vendors.id',
                 'vendors.name',
                 'vendors.email',
                 'vendors.phone',
+                'vendors.shop_name',
                 'vendors.status',
                 'vendors.commission_rate',
-                'vendors.created_at',
-                'admins.name as user_name'
+                'vendors.available_balance',
+                'vendors.unavailable_balance',
+                'vendors.created_at'
             );
 
         return $queryBuilder;
@@ -39,6 +40,15 @@ class VendorDataGrid extends DataGrid
         $this->addColumn([
             'index'      => 'name',
             'label'      => 'اسم التاجر',
+            'type'       => 'string',
+            'searchable' => true,
+            'sortable'   => true,
+            'filterable' => true,
+        ]);
+
+        $this->addColumn([
+            'index'      => 'shop_name',
+            'label'      => 'اسم المتجر',
             'type'       => 'string',
             'searchable' => true,
             'sortable'   => true,
@@ -93,52 +103,44 @@ class VendorDataGrid extends DataGrid
 
     public function prepareActions()
     {
-        if (bouncer()->hasPermission('vendors.view')) {
-            $this->addAction([
-                'index'  => 'view',
-                'icon'   => 'icon-view',
-                'title'  => 'عرض',
-                'method' => 'GET',
-                'url'    => function ($row) {
-                    return route('admin.vendors.show', $row->id);
-                },
-            ]);
-        }
+        $this->addAction([
+            'index'  => 'view',
+            'icon'   => 'icon-view',
+            'title'  => 'عرض',
+            'method' => 'GET',
+            'url'    => function ($row) {
+                return route('admin.vendors.show', $row->id);
+            },
+        ]);
 
-        if (bouncer()->hasPermission('vendors.edit')) {
-            $this->addAction([
-                'index'  => 'edit',
-                'icon'   => 'icon-edit',
-                'title'  => 'تعديل',
-                'method' => 'GET',
-                'url'    => function ($row) {
-                    return route('admin.vendors.edit', $row->id);
-                },
-            ]);
-        }
+        $this->addAction([
+            'index'  => 'edit',
+            'icon'   => 'icon-edit',
+            'title'  => 'تعديل',
+            'method' => 'GET',
+            'url'    => function ($row) {
+                return route('admin.vendors.edit', $row->id);
+            },
+        ]);
 
-        if (bouncer()->hasPermission('vendors.delete')) {
-            $this->addAction([
-                'index'  => 'delete',
-                'icon'   => 'icon-delete',
-                'title'  => 'حذف',
-                'method' => 'DELETE',
-                'url'    => function ($row) {
-                    return route('admin.vendors.destroy', $row->id);
-                },
-            ]);
-        }
+        $this->addAction([
+            'index'  => 'delete',
+            'icon'   => 'icon-delete',
+            'title'  => 'حذف',
+            'method' => 'DELETE',
+            'url'    => function ($row) {
+                return route('admin.vendors.destroy', $row->id);
+            },
+        ]);
     }
 
     public function prepareMassActions()
     {
-        if (bouncer()->hasPermission('vendors.delete')) {
-            $this->addMassAction([
-                'icon'   => 'icon-delete',
-                'title'  => 'حذف',
-                'method' => 'POST',
-                'url'    => route('admin.vendors.mass_delete'),
-            ]);
-        }
+        $this->addMassAction([
+            'icon'   => 'icon-delete',
+            'title'  => 'حذف',
+            'method' => 'POST',
+            'url'    => route('admin.vendors.mass_delete'),
+        ]);
     }
 }

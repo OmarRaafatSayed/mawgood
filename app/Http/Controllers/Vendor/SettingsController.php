@@ -9,6 +9,7 @@ use Webkul\Core\Repositories\CurrencyRepository;
 use Webkul\Inventory\Repositories\InventorySourceRepository;
 use App\Repositories\VendorRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SettingsController extends Controller
 {

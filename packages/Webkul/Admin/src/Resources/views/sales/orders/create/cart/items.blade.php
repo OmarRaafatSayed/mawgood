@@ -268,7 +268,14 @@
                                     <template v-if="! product.images.length">
                                         <img
                                             class="relative h-[60px] max-h-[60px] w-full max-w-[60px] rounded" 
-                                            src="{{ bagisto_asset('images/product-placeholders/front.svg') }}"
+                                            @php
+                                                try {
+                                                    $frontPlaceholder = bagisto_asset_safe('images/product-placeholders/front.svg');
+                                                } catch (\Exception $e) {
+                                                    $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
+                                                }
+                                            @endphp
+                                            src="{{ $frontPlaceholder }}"
                                         >
                                     
                                         <p class="absolute bottom-1.5 w-full text-center text-[6px] font-semibold text-gray-400">

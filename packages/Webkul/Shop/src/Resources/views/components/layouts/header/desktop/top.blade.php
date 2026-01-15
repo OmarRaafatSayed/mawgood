@@ -1,3 +1,12 @@
+@php
+    /** @var \Webkul\Core\Models\Locale $locale */
+    $locale = core()->getCurrentLocale();
+    /** @var \Webkul\Core\Models\Currency $currentCurrency */
+    $currentCurrency = core()->getCurrentCurrency();
+    /** @var \Webkul\Core\Models\Channel $currentChannel */
+    $currentChannel = core()->getCurrentChannel();
+@endphp
+
 {!! view_render_event('bagisto.shop.components.layouts.header.desktop.top.before') !!}
 
 <v-topbar>
@@ -59,7 +68,7 @@
             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.top.currency_switcher.before') !!}
 
             <!-- Currency Switcher -->
-            <x-shop::dropdown position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'left' : 'right' }}">
+            <x-shop::dropdown position="bottom-{{ $locale->direction === 'ltr' ? 'left' : 'right' }}">
                 <!-- Dropdown Toggler -->
                 <x-slot:toggle>
                     <div
@@ -69,7 +78,7 @@
                         @click="currencyToggler = ! currencyToggler"
                     >
                         <span>
-                            {{ core()->getCurrentCurrency()->symbol . ' ' . core()->getCurrentCurrencyCode() }}
+                            {{ $currentCurrency->symbol . ' ' . core()->getCurrentCurrencyCode() }}
                         </span>
 
                         <span
@@ -103,7 +112,7 @@
             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.top.locale_switcher.before') !!}
 
             <!-- Locales Switcher -->
-            <x-shop::dropdown position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left' }}">
+            <x-shop::dropdown position="bottom-{{ $locale->direction === 'ltr' ? 'right' : 'left' }}">
                 <x-slot:toggle>
                     <!-- Dropdown Toggler -->
                     <div
@@ -198,9 +207,7 @@
 
             data() {
                 return {
-                    currencies: @json(core()->getCurrentChannel()->currencies),
-                };
-            },
+                    currencies: @json($currentChannel->currencies),
 
             methods: {
                 change(currency) {

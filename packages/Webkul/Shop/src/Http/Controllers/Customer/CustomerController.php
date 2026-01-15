@@ -52,7 +52,7 @@ class CustomerController extends Controller
     /**
      * Edit function for editing customer profile.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(ProfileRequest $profileRequest)
     {
@@ -98,10 +98,13 @@ class CustomerController extends Controller
                         'is_subscribed' => 1,
                     ], $subscription->id);
                 } else {
+                    /** @var \Webkul\Core\Models\Channel $channel */
+                    $channel = core()->getCurrentChannel();
+
                     $this->subscriptionRepository->create([
                         'email'         => $data['email'],
                         'customer_id'   => $customer->id,
-                        'channel_id'    => core()->getCurrentChannel()->id,
+                        'channel_id'    => $channel->getKey(),
                         'is_subscribed' => 1,
                         'token'         => $token = uniqid(),
                     ]);
@@ -138,14 +141,14 @@ class CustomerController extends Controller
 
         session()->flash('success', trans('shop::app.customer.account.profile.edit-fail'));
 
-        return redirect()->back('shop.customers.account.profile.edit');
+        return redirect()->route('shop.customers.account.profile.edit');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy()
     {
@@ -200,5 +203,33 @@ class CustomerController extends Controller
     public function account()
     {
         return view('shop::customers.account.index');
+    }
+
+    /**
+     * Show account type selection form (used after social login for classification)
+     */
+    public function showAccountTypeForm()
+    {
+        $customer = auth()->guard('customer')->user();
+
+        return view('shop::customers.select-account-type', compact('customer'));
+    }
+
+    /**
+     * Store account type selection
+     */
+    public function storeAccountType(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'user_type' => 'required|in:customer,vendor,company',
+        ]);
+
+        $customer = $this->customerRepository->update([
+            'user_type' => $request->user_type
+        ], auth()->guard('customer')->user()->id);
+
+        session()->flash('success', __('Your account type has been set.'));
+
+        return redirect()->route('shop.customers.account.index');
     }
 }

@@ -140,7 +140,14 @@
                                         >
                                     @else
                                         <div class="relative h-[60px] max-h-[60px] w-full max-w-[60px] rounded border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert">
-                                            <img src="{{ bagisto_asset('images/product-placeholders/front.svg') }}">
+@php
+                                                try {
+                                                    $frontPlaceholder = bagisto_asset_safe('images/product-placeholders/front.svg');
+                                                } catch (\Exception $e) {
+                                                    $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
+                                                }
+                                            @endphp
+                                            <img src="{{ $frontPlaceholder }}">
 
                                             <p class="absolute bottom-1.5 w-full text-center text-[6px] font-semibold text-gray-400">
                                                 @lang('admin::app.sales.invoices.view.product-image')

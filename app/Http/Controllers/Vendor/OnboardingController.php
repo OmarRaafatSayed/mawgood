@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Webkul\Category\Models\Category;
@@ -26,11 +27,9 @@ class OnboardingController extends Controller
                 return redirect()->route('vendor.under-review');
             }
             if ($vendor->status === 'approved') {
-                return redirect()->route('vendor.dashboard');
+                return redirect()->route('vendor.admin.dashboard.index');
             }
         }
-
-        $categories = Category::where('status', 1)->get();
         
         return view('vendor.onboarding.form', compact('categories'));
     }
@@ -41,10 +40,17 @@ class OnboardingController extends Controller
     public function submitApplication(Request $request)
     {
         $request->validate([
-            'store_name' => 'required|string|max:255|unique:sellers,store_name',
+            'store_name' => 'required|string|max:255|unique:vendors,store_name',
             'store_description' => 'required|string|max:1000',
             'category_id' => 'required|exists:categories,id',
             'store_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'business_name' => 'nullable|string|max:255',
+            'tax_id' => 'nullable|string|max:50',
+            'business_email' => 'required|email|max:255',
+            'business_phone' => 'required|string|max:20',
+            'business_address' => 'required|string|max:500',
+            'facebook_url' => 'nullable|url|max:255',
+            'instagram_url' => 'nullable|url|max:255',
         ]);
 
         $customer = Auth::guard('customer')->user();
@@ -62,9 +68,7 @@ class OnboardingController extends Controller
         }
 
         // Generate unique slug from store name
-        $baseSlug = 
-            
-            \Illuminate\Support\Str::slug($request->store_name);
+        $baseSlug = \Illuminate\Support\Str::slug($request->store_name);
         $slug = $baseSlug;
         $counter = 1;
         while (Vendor::where('store_slug', $slug)->exists()) {
@@ -80,6 +84,13 @@ class OnboardingController extends Controller
             'store_description' => $request->store_description,
             'category_id' => $request->category_id,
             'store_logo' => $logoPath,
+            'business_name' => $request->business_name,
+            'tax_id' => $request->tax_id,
+            'business_email' => $request->business_email,
+            'business_phone' => $request->business_phone,
+            'business_address' => $request->business_address,
+            'facebook_url' => $request->facebook_url,
+            'instagram_url' => $request->instagram_url,
             'status' => 'pending',
             'commission_rate' => config('multivendor.default_commission_rate', 10.00),
         ]);
@@ -127,6 +138,7 @@ class OnboardingController extends Controller
         // Create vendor application
         Vendor::create([
             'customer_id' => $customer->id,
+            'email' => $customer->email,
             'store_name' => $applicationData['store_name'],
             'store_slug' => $slug,
             'store_description' => $applicationData['store_description'],

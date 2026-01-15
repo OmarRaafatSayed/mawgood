@@ -8,44 +8,71 @@ use Webkul\Product\Models\Product;
 
 class Vendor extends Model
 {
-    protected $table = 'sellers';
+    protected $table = 'vendors';
 
     protected $fillable = [
         'customer_id',
+        'name',
+        'email',
+        'password',
         'store_name',
         'store_slug',
         'store_description',
-        'category_id',
         'store_logo',
-        'store_banner',
+        'category_id',
+        'phone',
+        'address',
+        'commercial_register',
         'commission_rate',
+        'wallet_balance',
+        'available_balance',
+        'unavailable_balance',
         'status',
-        'total_earnings',
-        'current_balance',
-        'bank_details'
+        'rejection_reason',
+        'business_name',
+        'tax_id',
+        'business_email',
+        'business_phone',
+        'business_address',
+        'facebook_url',
+        'instagram_url'
     ];
 
     protected $casts = [
         'commission_rate' => 'decimal:2',
-        'total_earnings' => 'decimal:2',
-        'current_balance' => 'decimal:2',
-        'bank_details' => 'array'
+        'wallet_balance' => 'decimal:2',
+        'available_balance' => 'decimal:4',
+        'unavailable_balance' => 'decimal:4',
+        'email_verified_at' => 'timestamp'
     ];
 
-    /**
-     * Get the category that the vendor belongs to
-     */
-    public function category()
-    {
-        return $this->belongsTo(\Webkul\Category\Models\Category::class);
-    }
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
     /**
      * Get the customer that owns the vendor
      */
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    /**
+     * Get the category for the vendor
+     */
+    public function category()
+    {
+        return $this->belongsTo(\Webkul\Category\Models\Category::class, 'category_id');
+    }
+
+    /**
+     * Get vendor orders
+     */
+    public function vendorOrders()
+    {
+        return $this->hasMany(\App\VendorOrder::class, 'vendor_id');
     }
 
     /**
@@ -53,7 +80,7 @@ class Vendor extends Model
      */
     public function products()
     {
-        return $this->hasMany(Product::class, 'seller_id');
+        return $this->hasMany(Product::class, 'vendor_id');
     }
 
     /**
@@ -94,5 +121,13 @@ class Vendor extends Model
     public function getEarningAmount($saleAmount)
     {
         return $saleAmount - $this->getCommissionAmount($saleAmount);
+    }
+
+    /**
+     * Get total balance (available + unavailable)
+     */
+    public function getTotalBalanceAttribute()
+    {
+        return ($this->available_balance ?? 0) + ($this->unavailable_balance ?? 0);
     }
 }

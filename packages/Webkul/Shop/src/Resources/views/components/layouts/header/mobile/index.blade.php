@@ -3,6 +3,9 @@
     template as much as possible.
 -->
 @php
+    /** @var \Webkul\Core\Models\Locale $locale */
+    $locale = core()->getCurrentLocale();
+
     $showCompare = (bool) core()->getConfigData('catalog.products.settings.compare_option');
 
     $showWishlist = (bool) core()->getConfigData('customer.settings.wishlist.wishlist_option');
@@ -39,7 +42,7 @@
             {{-- Mawgood quick links (mobile) --}}
             <div class="flex items-center gap-2 ltr:ml-3 rtl:mr-3">
                 <a href="{{ route('shop.search.index') }}" class="px-3 py-1.5 rounded-md bg-navyBlue text-white text-xs font-medium shadow-sm hover:shadow-md transition">Shop</a>
-                <a href="{{ route('jobs.index') }}" class="px-3 py-1.5 rounded-md bg-emerald-700 text-white text-xs font-medium shadow-sm hover:shadow-md transition">Jobs</a>
+                <a href="{{ route('jobs.index') }}" class="px-3 py-1.5 rounded-md bg-navyBlue text-white text-xs font-bold shadow-sm hover:shadow-md transition">Jobs</a>
             </div>
         </div>
 
@@ -69,7 +72,7 @@
 
                 <!-- For Large screens -->
                 <div class="max-md:hidden">
-                    <x-shop::dropdown position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left' }}">
+                    <x-shop::dropdown position="bottom-{{ $locale->direction === 'ltr' ? 'right' : 'left' }}">
                         <x-slot:toggle>
                             <span class="text-2xl cursor-pointer icon-users"></span>
                         </x-slot>
@@ -317,7 +320,7 @@
                                     class="flex cursor-pointer items-center gap-x-2.5 px-2.5 py-3.5 text-lg font-medium uppercase max-md:py-3 max-sm:text-base"
                                     role="button"
                                 >
-                                    {{ core()->getCurrentCurrency()->symbol . ' ' . core()->getCurrentCurrencyCode() }}
+                                    {{ (data_get(core()->getCurrentCurrency(), 'symbol') ?? '') . ' ' . core()->getCurrentCurrencyCode() }}
                                 </div>
                             </x-slot>
 

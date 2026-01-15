@@ -57,7 +57,7 @@
 
             <a
                 href="{{ route('jobs.index') }}"
-                class="inline-flex items-center justify-center h-[40px] px-5 rounded-2xl bg-emerald-700 text-white text-sm font-medium shadow-sm hover:shadow-md focus:outline-none transform transition duration-150 ease-in-out hover:-translate-y-0.5"
+                class="inline-flex items-center justify-center h-[40px] px-5 rounded-2xl bg-navyBlue text-white text-sm font-bold shadow-sm hover:shadow-md focus:outline-none transform transition duration-150 ease-in-out hover:-translate-y-0.5"
             >
                 Mawgood Jobs
             </a>
@@ -177,7 +177,7 @@
             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.profile.before') !!}
 
             <!-- user profile -->
-            <x-shop::dropdown position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left' }}">
+            <x-shop::dropdown position="bottom-{{ data_get(core()->getCurrentLocale(), 'direction') === 'ltr' ? 'right' : 'left' }}">
                 <x-slot:toggle>
                     <span
                         class="inline-block text-2xl cursor-pointer icon-users"

@@ -167,7 +167,14 @@
 
                                     <template v-else>
                                         <div class="relative h-12 w-12 rounded border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert sm:h-16 sm:w-16">
-                                            <img src="{{ bagisto_asset('images/product-placeholders/front.svg')}}" class="h-full w-full object-cover">
+@php
+                                                try {
+                                                    $frontPlaceholder = bagisto_asset('images/product-placeholders/front.svg');
+                                                } catch (\Exception $e) {
+                                                    $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
+                                                }
+                                            @endphp
+                                            <img src="{{ $frontPlaceholder }}" class="h-full w-full object-cover">
 
                                             <p class="absolute bottom-0 w-full text-center text-[6px] font-semibold text-gray-400">
                                                 @lang('admin::app.catalog.products.index.datagrid.product-image')
@@ -303,7 +310,14 @@
 
                                 <template v-else>
                                     <div class="relative h-[60px] max-h-[60px] w-full max-w-[60px] rounded border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert">
-                                        <img src="{{ bagisto_asset('images/product-placeholders/front.svg')}}">
+@php
+                                            try {
+                                                $frontPlaceholder = bagisto_asset('images/product-placeholders/front.svg');
+                                            } catch (\Exception $e) {
+                                                $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
+                                            }
+                                        @endphp
+                                        <img src="{{ $frontPlaceholder }}">
 
                                         <p class="absolute bottom-1.5 w-full text-center text-[6px] font-semibold text-gray-400">
                                             @lang('admin::app.catalog.products.index.datagrid.product-image')

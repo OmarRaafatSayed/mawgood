@@ -45,8 +45,20 @@ class VendorManagementController extends Controller
         
         $vendor->update(['status' => 'approved']);
         
+        // Log for debugging
+        \Illuminate\Support\Facades\Log::info("Admin (vendor-management) approved vendor: {$id} by user: " . \Illuminate\Support\Facades\Auth::id());
+        
         // Clear user cache to unlock dashboard immediately
         Cache::forget('vendor_status_' . $vendor->customer_id);
+
+        // Notify vendor (email + database)
+        try {
+            if ($vendor->customer) {
+                $vendor->customer->notify(new \App\Notifications\VendorApprovedNotification($vendor));
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::warning('Vendor approval notification failed: ' . $e->getMessage());
+        }
         
         return response()->json([
             'success' => true,

@@ -318,6 +318,34 @@
                         </div>
                     </div>
 
+                    {{-- Social Login Buttons (Google / Facebook) --}}
+                    <div class="mt-4 text-center">
+                        <p class="text-sm text-zinc-500">{{ app()->getLocale() === 'ar' ? 'أو التسجيل عبر' : 'Or sign up using' }}</p>
+                        <div class="mt-3 flex justify-center gap-3">
+                            @if(core()->getConfigData('customer.settings.social_login.enable_google'))
+                                <a
+                                    href="{{ route('customer.social-login.index', 'google') }}"
+                                    class="inline-flex items-center gap-3 px-5 py-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:shadow-md transition"
+                                    aria-label="Google"
+                                >
+                                    @include('social_login::icons.google')
+                                    <span class="text-sm font-medium">Google</span>
+                                </a>
+                            @endif
+
+                            @if(core()->getConfigData('customer.settings.social_login.enable_facebook'))
+                                <a
+                                    href="{{ route('customer.social-login.index', 'facebook') }}"
+                                    class="inline-flex items-center gap-3 px-5 py-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:shadow-md transition"
+                                    aria-label="Facebook"
+                                >
+                                    @include('social_login::icons.facebook')
+                                    <span class="text-sm font-medium">Facebook</span>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+
                     {!! view_render_event('bagisto.shop.customers.signup_form_controls.after') !!}
 
                 </x-shop::form>

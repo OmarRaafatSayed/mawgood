@@ -20,8 +20,15 @@
                     alt="{{ config('app.name') }}"
                 />
             @else
+                @php
+                    try {
+                        $logoPath = request()->cookie('dark_mode') ? bagisto_asset('images/dark-logo.svg') : bagisto_asset('images/logo.svg');
+                    } catch (\Exception $e) {
+                        $logoPath = url('cache/logo/bagisto.png');
+                    }
+                @endphp
                 <img
-                    src="{{ request()->cookie('dark_mode') ? bagisto_asset('images/dark-logo.svg') : bagisto_asset('images/logo.svg') }}"
+                    src="{{ $logoPath }}"
                     class="h-8 w-auto sm:h-10"
                     id="logo-image"
                     alt="{{ config('app.name') }}"
@@ -77,24 +84,44 @@
             </span>
         </v-notifications>
 
-        <!-- Admin profile -->
+        <!-- Admin / Vendor profile -->
+        @php
+            // If admin guard isn't present (vendor customer), try to find vendor profile
+            $customer = auth()->guard('customer')->user();
+            $vendorForCustomer = null;
+            if (!$admin && $customer) {
+                $vendorForCustomer = \App\Models\Vendor::where('customer_id', $customer->id)->first();
+            }
+
+            // Profile fallback: prefer admin, then vendor, then customer
+            $profile = $admin ?? $vendorForCustomer ?? $customer;
+        @endphp
+
         <x-admin::dropdown position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left' }}">
             <x-slot:toggle>
-                @if ($admin->image)
+                @if (isset($admin) && $admin && $admin->image)
                     <button class="flex h-8 w-8 cursor-pointer overflow-hidden rounded-full hover:opacity-80 focus:opacity-80 sm:h-9 sm:w-9">
                         <img
                             src="{{ $admin->image_url }}"
                             class="h-full w-full object-cover"
                         />
                     </button>
+                @elseif (isset($vendorForCustomer) && $vendorForCustomer && $vendorForCustomer->store_logo)
+                    <button class="flex h-8 w-8 cursor-pointer overflow-hidden rounded-full hover:opacity-80 focus:opacity-80 sm:h-9 sm:w-9">
+                        <img
+                            src="{{ Storage::url($vendorForCustomer->store_logo) }}"
+                            class="h-full w-full object-cover"
+                            alt="{{ $vendorForCustomer->store_name }}"
+                        />
+                    </button>
                 @else
                     <button class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-blue-400 text-xs font-semibold leading-6 text-white transition-all hover:bg-blue-500 focus:bg-blue-500 sm:h-9 sm:w-9 sm:text-sm">
-                        {{ substr($admin->name, 0, 1) }}
+                        {{ isset($admin) && $admin ? substr($admin->name, 0, 1) : (isset($vendorForCustomer) && $vendorForCustomer ? substr($vendorForCustomer->store_name, 0, 1) : (isset($customer) && $customer ? substr($customer->first_name ?? $customer->name ?? $customer->email, 0, 1) : '?')) }}
                     </button>
                 @endif
             </x-slot>
 
-            <!-- Admin Dropdown -->
+            <!-- Profile Dropdown -->
             <x-slot:content class="!p-0">
                 <div class="flex items-center gap-1.5 border border-b-gray-300 px-4 py-2 dark:border-gray-800 sm:px-5 sm:py-2.5">
                     <img
@@ -111,28 +138,75 @@
                 </div>
 
                 <div class="grid gap-1 pb-2.5">
-                    <a
-                        class="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-950 sm:px-5 sm:text-base"
-                        href="{{ route('admin.account.edit') }}"
-                    >
-                        @lang('admin::app.components.layouts.header.my-account')
-                    </a>
+                    @if (isset($admin) && $admin)
+                        <a
+                            class="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-950 sm:px-5 sm:text-base"
+                            href="{{ route('admin.account.edit') }}"
+                        >
+                            @lang('admin::app.components.layouts.header.my-account')
+                        </a>
 
-                    <!--Admin logout-->
-                    <x-admin::form
-                        method="DELETE"
-                        action="{{ route('admin.session.destroy') }}"
-                        id="adminLogout"
-                    >
-                    </x-admin::form>
+                        <!-- Admin logout -->
+                        <x-admin::form
+                            method="DELETE"
+                            action="{{ route('admin.session.destroy') }}"
+                            id="adminLogout"
+                        >
+                        </x-admin::form>
 
-                    <a
-                        class="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-950 sm:px-5 sm:text-base"
-                        href="{{ route('admin.session.destroy') }}"
-                        onclick="event.preventDefault(); document.getElementById('adminLogout').submit();"
-                    >
-                        @lang('admin::app.components.layouts.header.logout')
-                    </a>
+                        <a
+                            class="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-950 sm:px-5 sm:text-base"
+                            href="{{ route('admin.session.destroy') }}"
+                            onclick="event.preventDefault(); document.getElementById('adminLogout').submit();"
+                        >
+                            @lang('admin::app.components.layouts.header.logout')
+                        </a>
+                    @elseif (isset($vendorForCustomer) && $vendorForCustomer)
+                        <a
+                            class="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-950 sm:px-5 sm:text-base"
+                            href="{{ route('vendor.settings.index') }}"
+                        >
+                            {{ app()->getLocale() === 'ar' ? 'حساب التاجر' : 'Merchant Account' }}
+                        </a>
+
+                        <!-- Customer logout (vendor logged-in as customer) -->
+                        <x-admin::form
+                            method="DELETE"
+                            action="{{ route('shop.customer.session.destroy') }}"
+                            id="customerLogout"
+                        >
+                        </x-admin::form>
+
+                        <a
+                            class="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-950 sm:px-5 sm:text-base"
+                            href="{{ route('shop.customer.session.destroy') }}"
+                            onclick="event.preventDefault(); document.getElementById('customerLogout').submit();"
+                        >
+                            {{ app()->getLocale() === 'ar' ? 'تسجيل خروج' : 'Logout' }}
+                        </a>
+                    @else
+                        <a
+                            class="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-950 sm:px-5 sm:text-base"
+                            href="{{ route('shop.customers.account.profile.index') }}"
+                        >
+                            {{ app()->getLocale() === 'ar' ? 'حسابي' : 'My Account' }}
+                        </a>
+
+                        <x-admin::form
+                            method="DELETE"
+                            action="{{ route('shop.customer.session.destroy') }}"
+                            id="customerLogout"
+                        >
+                        </x-admin::form>
+
+                        <a
+                            class="cursor-pointer px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-950 sm:px-5 sm:text-base"
+                            href="{{ route('shop.customer.session.destroy') }}"
+                            onclick="event.preventDefault(); document.getElementById('customerLogout').submit();"
+                        >
+                            {{ app()->getLocale() === 'ar' ? 'تسجيل خروج' : 'Logout' }}
+                        </a>
+                    @endif
                 </div>
             </x-slot>
         </x-admin::dropdown>
@@ -155,8 +229,15 @@
                     alt="{{ config('app.name') }}"
                 />
             @else
+                @php
+                    try {
+                        $logoPath = request()->cookie('dark_mode') ? bagisto_asset('images/dark-logo.svg') : bagisto_asset('images/logo.svg');
+                    } catch (\Exception $e) {
+                        $logoPath = url('cache/logo/bagisto.png');
+                    }
+                @endphp
                 <img
-                    src="{{ request()->cookie('dark_mode') ? bagisto_asset('images/dark-logo.svg') : bagisto_asset('images/logo.svg') }}"
+                    src="{{ $logoPath }}"
                     class="h-8 w-auto sm:h-10"
                     id="logo-image"
                     alt="{{ config('app.name') }}"
@@ -257,7 +338,7 @@
                                         :class="{'overflow-hidden rounded border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert': ! product.images.length}"
                                     >
                                         <template v-if="! product.images.length">
-                                            <img src="{{ bagisto_asset('images/product-placeholders/front.svg') }}" class="h-full w-full object-cover">
+                                            <img src="{{ bagisto_asset_safe('images/product-placeholders/front.svg') }}" class="h-full w-full object-cover">
                                         
                                             <p class="absolute bottom-0.5 w-full text-center text-[4px] font-semibold text-gray-400 sm:bottom-1.5 sm:text-[6px]">
                                                 @lang('admin::app.catalog.products.edit.types.grouped.image-placeholder')
@@ -741,9 +822,18 @@
                 return {
                     isDarkMode: {{ request()->cookie('dark_mode') ?? 0 }},
 
-                    logo: "{{ bagisto_asset('images/logo.svg') }}",
+                                    @php
+                                        try {
+                                            $logoAsset = bagisto_asset_safe('images/logo.svg');
+                                            $darkLogoAsset = bagisto_asset_safe('images/dark-logo.svg');
+                                        } catch (\Throwable $e) {
+                                            $logoAsset = url('cache/logo/bagisto.png');
+                                            $darkLogoAsset = url('cache/logo/bagisto.png');
+                                        }
+                                    @endphp
+                    logo: "{{ $logoAsset }}",
 
-                    dark_logo: "{{ bagisto_asset('images/dark-logo.svg') }}",
+                    dark_logo: "{{ $darkLogoAsset }}",
                 };
             },
 

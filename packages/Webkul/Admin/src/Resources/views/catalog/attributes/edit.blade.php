@@ -259,7 +259,7 @@
                                                         <!-- Swatch Image -->
                                                         <div v-if="swatchType == 'image'">
                                                             <img
-                                                                :src="element.swatch_value_url || '{{ bagisto_asset('images/product-placeholders/front.svg') }}'"
+                                                                :src="element.swatch_value_url || '{{ bagisto_asset_safe('images/product-placeholders/front.svg') }}'"
                                                                 :ref="'image_' + element.id"
                                                                 class="h-[50px] w-[50px]"
                                                             >

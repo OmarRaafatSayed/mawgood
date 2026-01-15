@@ -18,6 +18,11 @@
 
     @php
         $method = strtoupper($method);
+
+        // Ensure $errors is available when rendering views outside of HTTP context (e.g., CLI view render tests)
+        if (! isset($errors) || ! $errors) {
+            $errors = new \Illuminate\Support\ViewErrorBag();
+        }
     @endphp
 
     <v-form

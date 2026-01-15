@@ -114,3 +114,9 @@ Breadcrumbs::for('job-application-success', function (BreadcrumbTrail $trail) {
     $trail->parent('jobs');
     $trail->push(app()->getLocale() === 'ar' ? 'تم الإرسال بنجاح' : 'Application Submitted', '#');
 });
+
+// Vendor Admin Dashboard
+Breadcrumbs::for('vendor.admin.dashboard.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push(app()->getLocale() === 'ar' ? 'لوحة تحكم التاجر' : 'Vendor Dashboard', route('vendor.admin.dashboard.index'));
+});

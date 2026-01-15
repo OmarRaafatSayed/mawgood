@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -30,7 +31,7 @@ class AuthController extends Controller
                 return back()->withErrors(['email' => 'حسابك لم يتم الموافقة عليه بعد']);
             }
 
-            return redirect()->route('vendor.dashboard');
+            return redirect()->route('vendor.admin.dashboard.index');
         }
 
         return back()->withErrors(['email' => 'بيانات الدخول غير صحيحة']);

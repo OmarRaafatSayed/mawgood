@@ -39,7 +39,14 @@
 
                             <template v-else>
                                 <div class="relative h-[65px] max-h-[65px] w-full max-w-[65px] overflow-hidden rounded border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert">
-                                    <img src="{{ bagisto_asset('images/product-placeholders/front.svg')}}">
+@php
+    try {
+        $frontPlaceholder = bagisto_asset('images/product-placeholders/front.svg');
+    } catch (\Exception $e) {
+        $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
+    }
+@endphp
+                                    <img src="{{ $frontPlaceholder }}">
 
                                     <p class="absolute bottom-1.5 w-full text-center text-[6px] font-semibold text-gray-400">
                                         @lang('admin::app.dashboard.index.product-image')

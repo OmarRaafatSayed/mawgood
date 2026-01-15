@@ -35,7 +35,10 @@
 
             <div class="flex items-center gap-3">
                 @php
-                    $vendor = \App\Models\Vendor::where('customer_id', $customer->id)->first();
+                    $vendor = null;
+                    if (isset($customer) && $customer->id) {
+                        $vendor = \App\Models\Vendor::where('customer_id', $customer->id)->first();
+                    }
                 @endphp
                 
                 @if(!$vendor)
@@ -57,13 +60,13 @@
                         {{ app()->getLocale() === 'ar' ? 'قيد المراجعة' : 'Under Review' }}
                     </a>
                 @elseif($vendor->status === 'approved')
-                    <!-- Go to Dashboard -->
+                    <!-- Go to Admin Dashboard -->
                     <a
-                        href="{{ route('vendor.dashboard') }}"
+                        href="{{ route('vendor.admin.dashboard.index') }}"
                         class="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-2xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
                     >
                         <i class="fas fa-tachometer-alt text-sm"></i>
-                        {{ app()->getLocale() === 'ar' ? 'لوحة التحكم' : 'Seller Dashboard' }}
+                        {{ app()->getLocale() === 'ar' ? 'لوحة تحكم التاجر' : 'Vendor Dashboard' }}
                     </a>
                 @elseif($vendor->status === 'rejected')
                     <!-- Reapply Button -->
@@ -166,17 +169,21 @@
                 </p>
 
                 <p class="text-sm font-medium text-zinc-500">
-                    @if($customer->user_type === 'company')
-                        {{ app()->getLocale() === 'ar' ? 'شركة' : 'Company' }}
-                    @elseif($customer->user_type === 'vendor')
-                        {{ app()->getLocale() === 'ar' ? 'بائع متجر' : 'Store Vendor' }}
+                    @if(isset($customer->user_type))
+                        @if($customer->user_type === 'company')
+                            {{ app()->getLocale() === 'ar' ? 'شركة' : 'Company' }}
+                        @elseif($customer->user_type === 'vendor')
+                            {{ app()->getLocale() === 'ar' ? 'بائع متجر' : 'Store Vendor' }}
+                        @else
+                            {{ app()->getLocale() === 'ar' ? 'عميل عادي' : 'Regular Customer' }}
+                        @endif
                     @else
                         {{ app()->getLocale() === 'ar' ? 'عميل عادي' : 'Regular Customer' }}
                     @endif
                 </p>
             </div>
 
-            @if($customer->company_name)
+            @if(isset($customer->company_name) && $customer->company_name)
                 <!-- Company Name -->
                 <div class="grid w-full grid-cols-[2fr_3fr] border-b border-zinc-200 px-8 py-3 max-md:px-0">
                     <p class="text-sm font-medium">
@@ -189,7 +196,7 @@
                 </div>
             @endif
 
-            @if($customer->company_description)
+            @if(isset($customer->company_description) && $customer->company_description)
                 <!-- Company Description -->
                 <div class="grid w-full grid-cols-[2fr_3fr] border-b border-zinc-200 px-8 py-3 max-md:px-0">
                     <p class="text-sm font-medium">
