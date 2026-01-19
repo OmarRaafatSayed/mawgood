@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Webkul\Admin\Http\Controllers\Controller;
-use App\Repositories\VendorRepository;
 use App\DataGrids\VendorDataGrid;
+use App\Repositories\VendorRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Webkul\Admin\Http\Controllers\Controller;
+use Webkul\Product\Models\Product;
 
 class VendorController extends Controller
 {
@@ -140,5 +142,24 @@ class VendorController extends Controller
         $this->vendorRepository->update(['status' => 'suspended'], $id);
         
         return response()->json(['success' => true, 'message' => 'Vendor suspended successfully']);
+    }
+
+    public function debugProducts()
+    {
+        $products = Product::query()->latest()->take(10)->get();
+
+        $productFlats = DB::table('product_flat')
+            ->whereIn('product_id', $products->pluck('id'))
+            ->get()
+            ->groupBy('product_id');
+
+        $results = $products->map(function ($product) use ($productFlats) {
+            return [
+                'product' => $product->toArray(),
+                'flat' => $productFlats->get($product->id),
+            ];
+        });
+
+        return response()->json($results);
     }
 }

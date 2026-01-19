@@ -18,6 +18,7 @@ use Webkul\Product\Models\ProductReviewProxy;
 use Webkul\Sales\Models\InvoiceProxy;
 use Webkul\Sales\Models\OrderProxy;
 use Webkul\Shop\Mail\Customer\ResetPasswordNotification;
+use App\Models\Vendor; // Add this line
 
 class Customer extends Authenticatable implements CustomerContract
 {
@@ -292,6 +293,16 @@ class Customer extends Authenticatable implements CustomerContract
     public function channel()
     {
         return $this->belongsTo(ChannelProxy::modelClass(), 'channel_id');
+    }
+
+    /**
+     * Get the customer's vendor.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function vendor()
+    {
+        return $this->hasOne(Vendor::class, 'customer_id');
     }
 
     /**

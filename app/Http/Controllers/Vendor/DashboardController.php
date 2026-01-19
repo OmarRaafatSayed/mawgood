@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Log; // تم إضافة هذا السطر
 use Webkul\Product\Repositories\ProductRepository;
 use Webkul\Sales\Repositories\OrderRepository;
 use Webkul\Sales\Repositories\OrderItemRepository;
@@ -14,6 +15,7 @@ use App\Models\Vendor;
 use App\Models\VendorOrder;
 use App\Models\VendorPayout;
 use Carbon\Carbon;
+// use Illuminate\Support\Facades\Log; // إضافة استيراد واجهة Log - هذا السطر سيتم حذفه
 
 class DashboardController extends Controller
 {
@@ -21,6 +23,8 @@ class DashboardController extends Controller
     protected $orderRepository;
     protected $orderItemRepository;
 
+    // use Illuminate\Support\Facades\Log; // إضافة استيراد واجهة Log - هذا السطر سيتم حذفه
+    
     public function __construct(
         ProductRepository $productRepository,
         OrderRepository $orderRepository,
@@ -31,9 +35,6 @@ class DashboardController extends Controller
         $this->orderItemRepository = $orderItemRepository;
     }
 
-    /**
-     * Display vendor dashboard
-     */
     public function index()
     {
         try {
@@ -57,16 +58,19 @@ class DashboardController extends Controller
             
         } catch (\Exception $e) {
             Log::error('Vendor Dashboard Error: ' . $e->getMessage());
+            // تعريف بيانات بائع افتراضية بدلًا من القيمة الفارغة
+            $defaultVendor = (object)[
+                'id' => null,
+                'store_name' => 'غير متاح',
+                'status' => 'inactive'
+            ];
             return view('vendor.dashboard.index', [
                 'stats' => $this->getDefaultStats(),
-                'vendor' => null
+                'vendor' => $defaultVendor
             ]);
         }
     }
 
-    /**
-     * Get dashboard statistics (API)
-     */
     public function getDashboardStats()
     {
         try {
@@ -92,9 +96,6 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * Calculate vendor statistics
-     */
     private function calculateStats($vendor)
     {
         // Basic product counts

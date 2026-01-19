@@ -292,9 +292,20 @@
                                 {!! view_render_event('bagisto.shop.products.name.before', ['product' => $product]) !!}
 
                                 <div class="flex justify-between gap-4">
-                                    <h1 class="text-3xl font-medium break-words max-sm:text-xl" v-pre>
-                                        {{ $product->name }}
-                                    </h1>
+                                    <div class="flex-1">
+                                        <h1 class="text-3xl font-medium break-words max-sm:text-xl" v-pre>
+                                            {{ $product->name }}
+                                        </h1>
+                                        
+                                        @if ($product->vendor)
+                                            <p class="text-sm text-gray-600 mt-2">
+                                                @lang('shop::app.products.view.sold-by'): 
+                                                <a href="{{ route('shop.product_or_category.index') }}" class="text-blue-600 hover:underline">
+                                                    {{ $product->vendor->store_name ?? $product->vendor->name }}
+                                                </a>
+                                            </p>
+                                        @endif
+                                    </div>
 
                                     @if (core()->getConfigData('customer.settings.wishlist.wishlist_option'))
                                         <div
@@ -307,6 +318,7 @@
                                         >
                                         </div>
                                     @endif
+                                </div>
                                 </div>
 
                                 {!! view_render_event('bagisto.shop.products.name.after', ['product' => $product]) !!}

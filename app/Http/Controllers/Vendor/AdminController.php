@@ -33,17 +33,25 @@ class AdminController extends Controller
 
         // Get vendor statistics
         $stats = [
-            'total_products' => $vendor->products()->count() ?? 0,
-            'total_orders' => $vendor->vendorOrders()->count() ?? 0,
-            'total_revenue' => $vendor->vendorOrders()->where('status', 'delivered')->sum('vendor_amount') ?? 0,
-            'pending_orders' => $vendor->vendorOrders()->where('status', 'pending')->count() ?? 0,
+            'total_products' => $vendor->products()->count(),
+            'total_orders' => $vendor->vendorOrders()->count(),
+            'total_revenue' => $vendor->vendorOrders()->where('status', 'delivered')->sum('vendor_amount'),
+            'pending_orders' => $vendor->vendorOrders()->where('status', 'pending')->count(),
         ];
 
         // Get recent orders (last 5)
-        $recentOrders = $vendor->vendorOrders()->latest()->take(5)->get() ?? collect();
+        $recentOrders = $vendor->vendorOrders()
+            ->with('order')
+            ->latest()
+            ->take(5)
+            ->get();
 
         // Get recent products (last 8)
-        $recentProducts = $vendor->products()->latest()->take(8)->get() ?? collect();
+        $recentProducts = $vendor->products()
+            ->with(['attribute_family', 'images'])
+            ->latest()
+            ->take(8)
+            ->get();
 
         return view('vendor.admin.dashboard.index', [
             'vendor' => $vendor,
@@ -99,7 +107,7 @@ class AdminController extends Controller
         return [
             'total_products' => $vendor->products()->count(),
             'total_orders' => $vendor->vendorOrders()->count(),
-            'total_revenue' => $vendor->vendorOrders()->where('status', 'completed')->sum('total_amount'),
+            'total_revenue' => $vendor->vendorOrders()->where('status', 'delivered')->sum('vendor_amount'),
             'pending_orders' => $vendor->vendorOrders()->where('status', 'pending')->count(),
         ];
     }
@@ -109,7 +117,7 @@ class AdminController extends Controller
         $today = now()->toDateString();
         return [
             'orders_today' => $vendor->vendorOrders()->whereDate('created_at', $today)->count(),
-            'revenue_today' => $vendor->vendorOrders()->whereDate('created_at', $today)->sum('total_amount'),
+            'revenue_today' => $vendor->vendorOrders()->whereDate('created_at', $today)->sum('vendor_amount'),
         ];
     }
 
@@ -120,7 +128,7 @@ class AdminController extends Controller
             $date = now()->subDays($i)->toDateString();
             $sales = $vendor->vendorOrders()
                 ->whereDate('created_at', $date)
-                ->sum('total_amount');
+                ->sum('vendor_amount');
             $salesData[] = ['date' => $date, 'sales' => $sales];
         }
         return $salesData;

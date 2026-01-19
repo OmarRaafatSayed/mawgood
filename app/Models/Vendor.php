@@ -80,9 +80,13 @@ class Vendor extends Model
      */
     public function products()
     {
-        return $this->hasMany(Product::class, 'vendor_id');
+        return $this->hasMany(\Webkul\Product\Models\Product::class, 'vendor_id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(\Webkul\Sales\Models\Order::class, 'vendor_id');
+    }
     /**
      * Check if vendor is approved
      */

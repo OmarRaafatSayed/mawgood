@@ -23,6 +23,8 @@ it('creates a vendor record when a customer applies and sets status to pending',
     /** @var \Webkul\Customer\Models\Customer $customer */
     $customer = Customer::factory()->create();
 
+    dd($customer); // Add this line for debugging
+
     actingAs($customer, 'customer')
          ->post('/vendor/apply', [
              'store_name' => 'Test Store',

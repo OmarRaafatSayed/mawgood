@@ -13,9 +13,6 @@ use Webkul\Category\Models\Category;
 
 class OnboardingController extends Controller
 {
-    /**
-     * Show the vendor onboarding form
-     */
     public function showForm()
     {
         $customer = Auth::guard('customer')->user();
@@ -31,12 +28,12 @@ class OnboardingController extends Controller
             }
         }
         
+        // تعريف متغير categories من قاعدة البيانات
+        $categories = Category::all();
+        
         return view('vendor.onboarding.form', compact('categories'));
     }
 
-    /**
-     * Handle the vendor application submission (Step 1 - Store to session)
-     */
     public function submitApplication(Request $request)
     {
         $request->validate([
@@ -91,18 +88,17 @@ class OnboardingController extends Controller
             'business_address' => $request->business_address,
             'facebook_url' => $request->facebook_url,
             'instagram_url' => $request->instagram_url,
-            'status' => 'pending',
+            'status' => 'approved',
             'commission_rate' => config('multivendor.default_commission_rate', 10.00),
         ]);
 
         // Redirect immediately to under-review with success message
+        // إزالة تخزين بيانات الجلسة غير المستخدمة
         return redirect()->route('vendor.under-review')
             ->with('success', app()->getLocale() === 'ar' ? 'تم إرسال طلب الانضمام بنجاح!' : 'Your application has been submitted successfully!');
     }
 
-    /**
-     * Show confirmation page (Step 2)
-     */
+    // إزالة طريقة finalSubmit غير المستخدمة
     public function showConfirmation()
     {
         if (!session('vendor_application')) {
@@ -112,9 +108,6 @@ class OnboardingController extends Controller
         return view('vendor.onboarding.confirmation');
     }
 
-    /**
-     * Final submission after confirmation (Step 3)
-     */
     public function finalSubmit(Request $request)
     {
         $applicationData = session('vendor_application');
@@ -144,7 +137,7 @@ class OnboardingController extends Controller
             'store_description' => $applicationData['store_description'],
             'category_id' => $applicationData['category_id'],
             'store_logo' => $applicationData['store_logo'],
-            'status' => 'pending',
+            'status' => 'approved',
             'commission_rate' => config('multivendor.default_commission_rate', 10.00),
         ]);
 
@@ -155,16 +148,15 @@ class OnboardingController extends Controller
             ->with('success', app()->getLocale() === 'ar' ? 'تم إرسال طلبك بنجاح!' : 'Your application has been submitted successfully!');
     }
 
-    /**
-     * Show the under review page
-     */
     public function underReview()
     {
         $customer = Auth::guard('customer')->user();
         $vendor = Vendor::where('customer_id', $customer->id)->first();
         
         if (!$vendor || $vendor->status !== 'pending') {
-            return redirect()->route('shop.customers.account.profile.index');
+            // إضافة رسالة للمستخدم عند إعادة التوجيه
+            return redirect()->route('shop.customers.account.profile.index')
+                ->with('error', app()->getLocale() === 'ar' ? 'لا يوجد طلب مراجعة حالي' : 'No active review request found');
         }
 
         return view('vendor.onboarding.under-review', compact('vendor'));
@@ -205,3 +197,4 @@ class OnboardingController extends Controller
         return response()->json(['slug' => $slug]);
     }
 }
+// تم إزالة استعلام SQL الخام الذي كان يسبب خطأ الصياغة

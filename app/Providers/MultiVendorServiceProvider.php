@@ -10,6 +10,7 @@ use App\Models\Seller;
 use App\Models\SellerOrder;
 use App\Services\OrderSplittingService;
 use App\Services\WalletService;
+use Illuminate\Support\Facades\Route;
 
 class MultiVendorServiceProvider extends ServiceProvider
 {
@@ -46,6 +47,19 @@ class MultiVendorServiceProvider extends ServiceProvider
         Event::listen('sales.shipment.save.after', function ($shipment) {
             $this->handleShipmentCreated($shipment);
         });
+        // تسجيل مسارات التاجر
+        Route::prefix('vendor/admin')
+            ->middleware(['web', 'auth', 'vendor.admin.access'])
+            ->namespace('App\Http\Controllers\Vendor\Admin')
+            ->group(function () {
+                Route::get('dashboard', 'VendorDashboardController@index')->name('vendor.admin.dashboard');
+                Route::resource('products', 'ProductController');
+                Route::resource('orders', 'OrderController');
+                Route::get('settings/profile', 'SettingController@profile')->name('vendor.admin.settings.profile');
+                Route::put('settings/profile', 'SettingController@updateProfile')->name('vendor.admin.settings.profile.update');
+                Route::get('settings/payout', 'SettingController@payout')->name('vendor.admin.settings.payout');
+                Route::put('settings/payout', 'SettingController@updatePayout')->name('vendor.admin.settings.payout.update');
+            });
     }
 
     /**

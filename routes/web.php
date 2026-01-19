@@ -33,6 +33,8 @@ Route::group(['prefix' => config('app.admin_url', 'admin'), 'middleware' => ['we
     Route::post('vendor-management/{id}/approve', [App\Http\Controllers\Admin\VendorManagementController::class, 'approve'])->name('admin.vendor-management.approve');
     Route::post('vendor-management/{id}/reject', [App\Http\Controllers\Admin\VendorManagementController::class, 'reject'])->name('admin.vendor-management.reject');
     Route::post('vendor-management/{id}/suspend', [App\Http\Controllers\Admin\VendorManagementController::class, 'suspend'])->name('admin.vendor-management.suspend');
+
+    Route::get('debug-products', [App\Http\Controllers\Admin\VendorController::class, 'debugProducts'])->name('admin.debug.products');
 });
 
 // Test routes
@@ -73,6 +75,3 @@ Route::post('/jobs/{slug}/apply', [App\Http\Controllers\JobController::class, 's
 Route::get('/jobs/{slug}/apply/success', function ($slug) {
     return view('jobs.apply-success', compact('slug'));
 })->name('jobs.apply.success');
-
-
-

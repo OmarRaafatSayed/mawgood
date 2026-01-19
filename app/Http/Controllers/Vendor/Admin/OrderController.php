@@ -3,66 +3,42 @@
 namespace App\Http\Controllers\Vendor\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use App\Models\Vendor;
 use Webkul\Sales\Repositories\OrderRepository;
-use Webkul\Admin\Http\Controllers\Sales\OrderController as BaseOrderController;
+use Webkul\Sales\Repositories\OrderCommentRepository;
+use Webkul\Checkout\Repositories\CartRepository;
+use Webkul\Customer\Repositories\CustomerGroupRepository;
+use Illuminate\Support\Facades\Auth;
+use App\VendorOrder; // تم التعديل هنا من App\Models\VendorOrder إلى App\VendorOrder
 
-class OrderController extends BaseOrderController
+class OrderController extends Controller
 {
-    protected $vendor;
-
-    public function __construct(OrderRepository $orderRepository)
-    {
-        parent::__construct($orderRepository);
-        
-        $customer = Auth::guard('customer')->user();
-        $this->vendor = Vendor::where('customer_id', $customer->id)->where('status', 'approved')->first();
-        
-        if (!$this->vendor) {
-            abort(403, 'Unauthorized access');
-        }
-    }
-
     /**
-     * Display vendor's orders only
+     * Create a new controller instance.
+     *
+     * @return void
      */
+    public function __construct(
+        protected OrderRepository $orderRepository,
+        protected OrderCommentRepository $orderCommentRepository,
+        protected CartRepository $cartRepository,
+        protected CustomerGroupRepository $customerGroupRepository
+    ) {
+        // تم حذف سطر parent::__construct() بناءً على تقرير الإصلاح
+    }
     public function index()
     {
-        if (request()->ajax()) {
-            // Inject vendor filter into request so the DataGrid will scope results to this vendor
-            $req = request();
-            $filters = $req->input('filters', []);
-            $filters['vendor_id'] = [$this->vendor->id];
-            $req->merge(['filters' => $filters]);
-
-            return app(\Webkul\Admin\DataGrids\Sales\OrderDataGrid::class)
-                ->toJson();
-        }
-
-        return view('vendor.admin.sales.orders.index', [
-            'vendor' => $this->vendor
-        ]);
-    }
-
-    /**
-     * Show the specified order
-     */
-    public function view($id)
-    {
-        $order = $this->orderRepository->findOrFail($id);
+        // تصفية الطلبات حسب معرف التاجر المسجل
+        $vendorId = Auth::user()->vendor_id;
+        $orders = VendorOrder::where('vendor_id', $vendorId)->get();
         
-        // Ensure vendor can only view their own orders
-        $vendorOrder = $this->vendor->vendorOrders()->where('order_id', $id)->first();
-        if (!$vendorOrder) {
-            abort(403, 'Unauthorized access to this order');
-        }
-
-        return view('vendor.admin.sales.orders.view', [
-            'order' => $order,
-            'vendor' => $this->vendor
-        ]);
+        return view('vendor.admin.orders.index', compact('orders'));
+    }
+    public function show($id)
+    {
+        $vendorId = Auth::user()->vendor_id;
+        // التحقق من أن الطلب ينتمي إلى التاجر
+        $order = VendorOrder::where('id', $id)->where('vendor_id', $vendorId)->firstOrFail();
+        
+        return view('vendor.admin.orders.show', compact('order'));
     }
 }
