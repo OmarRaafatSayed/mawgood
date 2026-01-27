@@ -2,6 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\RoleSelectionController;
+use App\Http\Controllers\JobApplicationController;
+
+// Test route for homepage
+Route::get('/test-home', function() {
+    return '<h1>Homepage Test - Working!</h1><p>Database: ' . (DB::connection()->getPdo() ? 'Connected' : 'Not Connected') . '</p>';
+});
+
+// Role Selection
+Route::middleware(['customer'])->group(function () {
+    Route::get('/select-role', [RoleSelectionController::class, 'index'])->name('role.select');
+    Route::post('/select-role', [RoleSelectionController::class, 'select'])->name('role.select.submit');
+});
 
 // Include vendor routes
 require __DIR__.'/vendor.php';
@@ -27,7 +40,6 @@ Route::group(['prefix' => config('app.admin_url', 'admin'), 'middleware' => ['we
     Route::post('vendors/{id}/suspend', [App\Http\Controllers\Admin\VendorController::class, 'suspend'])->name('admin.vendors.suspend');
     Route::post('vendors/{id}/commission', [App\Http\Controllers\Admin\VendorController::class, 'updateCommission'])->name('admin.vendors.commission');
     
-    // Vendor Management Routes
     Route::get('vendor-management', [App\Http\Controllers\Admin\VendorManagementController::class, 'index'])->name('admin.vendor-management.index');
     Route::get('vendor-management/{id}', [App\Http\Controllers\Admin\VendorManagementController::class, 'show'])->name('admin.vendor-management.show');
     Route::post('vendor-management/{id}/approve', [App\Http\Controllers\Admin\VendorManagementController::class, 'approve'])->name('admin.vendor-management.approve');
@@ -35,6 +47,27 @@ Route::group(['prefix' => config('app.admin_url', 'admin'), 'middleware' => ['we
     Route::post('vendor-management/{id}/suspend', [App\Http\Controllers\Admin\VendorManagementController::class, 'suspend'])->name('admin.vendor-management.suspend');
 
     Route::get('debug-products', [App\Http\Controllers\Admin\VendorController::class, 'debugProducts'])->name('admin.debug.products');
+});
+
+// Jobs Routes
+Route::get('/jobs', [App\Http\Controllers\JobController::class, 'index'])->name('jobs.index');
+Route::get('/jobs/{slug}', [App\Http\Controllers\JobController::class, 'show'])->name('jobs.show');
+Route::post('/jobs/{id}/apply', [JobApplicationController::class, 'store'])->middleware('customer')->name('jobs.apply');
+Route::get('/jobs/{slug}/apply/success', function ($slug) {
+    return view('jobs.apply-success', compact('slug'));
+})->name('jobs.apply.success');
+
+// Company Routes
+Route::group([
+    'prefix' => 'company',
+    'middleware' => ['web', 'customer', 'role:company'],
+    'as' => 'company.'
+], function () {
+    Route::get('/dashboard', [App\Http\Controllers\Company\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/jobs', [App\Http\Controllers\Company\JobController::class, 'index'])->name('jobs.index');
+    Route::get('/jobs/create', [App\Http\Controllers\Company\JobController::class, 'create'])->name('jobs.create');
+    Route::post('/jobs', [App\Http\Controllers\Company\JobController::class, 'store'])->name('jobs.store');
+    Route::get('/applications', [App\Http\Controllers\Company\ApplicationController::class, 'index'])->name('applications.index');
 });
 
 // Test routes
@@ -61,17 +94,3 @@ Route::get('/test-db', function() {
         ], 500);
     }
 });
-
-// Jobs listing via controller (keeps main layout and real data)
-Route::get('/jobs', [App\Http\Controllers\JobController::class, 'index'])->name('jobs.index');
-
-// Job detail page handled by controller
-Route::get('/jobs/{slug}', [App\Http\Controllers\JobController::class, 'show'])->name('jobs.show');
-
-// Job application submission (form POST)
-Route::post('/jobs/{slug}/apply', [App\Http\Controllers\JobController::class, 'submitApplication'])->name('jobs.apply');
-
-// Application success page
-Route::get('/jobs/{slug}/apply/success', function ($slug) {
-    return view('jobs.apply-success', compact('slug'));
-})->name('jobs.apply.success');

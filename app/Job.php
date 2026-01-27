@@ -29,6 +29,8 @@ class Job extends Model
         'application_url',
         'job_category_id',
         'customer_id',
+        'company_id',
+        'type',
         'status',
         'expires_at'
     ];
@@ -37,6 +39,11 @@ class Job extends Model
         'status' => 'boolean',
         'expires_at' => 'date'
     ];
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'company_id');
+    }
 
     public function category(): BelongsTo
     {

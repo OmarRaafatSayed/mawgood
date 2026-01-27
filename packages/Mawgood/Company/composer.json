@@ -1,0 +1,14 @@
+{
+    "name": "mawgood/company",
+    "description": "Mawgood Company Package - Job posting and application management",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Mawgood\\Company\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "mawgood/core": "*"
+    }
+}

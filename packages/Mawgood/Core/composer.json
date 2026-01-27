@@ -1,0 +1,13 @@
+{
+    "name": "mawgood/core",
+    "description": "Mawgood Core Package - Shared utilities and contracts",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Mawgood\\Core\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.2"
+    }
+}

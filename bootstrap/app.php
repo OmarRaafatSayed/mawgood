@@ -47,8 +47,12 @@ return Application::configure(basePath: dirname(__DIR__))
          */
         $middleware->alias([
             'seller' => SellerMiddleware::class,
-            'isSeller' => \App\Http\Middleware\IsSeller::class,
+            'isSeller' => \Mawgood\Vendor\Http\Middleware\EnsureVendorAccess::class,
             'vendor.admin.access' => \App\Http\Middleware\VendorAdminAccess::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'active_role' => \App\Http\Middleware\EnsureActiveRole::class,
+            'vendor.onboarding' => \App\Http\Middleware\VendorOnboardingMiddleware::class,
+            'vendor.approved' => \App\Http\Middleware\VendorApprovedMiddleware::class,
         ]);
 
         $middleware->trustProxies('*');

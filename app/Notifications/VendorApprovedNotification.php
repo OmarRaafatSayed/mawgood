@@ -24,7 +24,7 @@ class VendorApprovedNotification extends Notification
 
     public function toMail($notifiable)
     {
-        $url = route('vendor.admin.dashboard.index');
+        $url = route('vendor.dashboard');
 
         return (new MailMessage)
                     ->subject(__('Your store has been approved'))
@@ -40,7 +40,7 @@ class VendorApprovedNotification extends Notification
             'title' => __('Store Approved'),
             'message' => __('Your store :store is approved and ready. You can now add products and manage your merchant control panel.', ['store' => $this->vendor->store_name]),
             'vendor_id' => $this->vendor->id,
-            'action_url' => route('vendor.admin.dashboard.index')
+            'action_url' => route('vendor.dashboard')
         ];
     }
 }

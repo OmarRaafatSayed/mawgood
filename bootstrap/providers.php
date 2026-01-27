@@ -6,6 +6,15 @@ return [
      */
     App\Providers\AppServiceProvider::class,
     App\Providers\VendorServiceProvider::class,
+    App\Providers\ThemeServiceProvider::class,
+
+    /**
+     * Mawgood's service providers.
+     */
+    Mawgood\Core\Providers\CoreServiceProvider::class,
+    Mawgood\Vendor\Providers\VendorServiceProvider::class,
+    Mawgood\Company\Providers\CompanyServiceProvider::class,
+    Mawgood\Shop\Providers\ShopServiceProvider::class,
 
     /**
      * Webkul's service providers.

@@ -1,0 +1,14 @@
+{
+    "name": "mawgood/vendor",
+    "description": "Mawgood Vendor Package - Multi-vendor functionality",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Mawgood\\Vendor\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "mawgood/core": "*"
+    }
+}

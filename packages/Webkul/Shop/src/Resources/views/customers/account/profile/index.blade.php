@@ -62,7 +62,7 @@
                 @elseif($vendor->status === 'approved')
                     <!-- Go to Admin Dashboard -->
                     <a
-                        href="{{ route('vendor.admin.dashboard.index') }}"
+                        href="{{ route('vendor.dashboard') }}"
                         class="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-2xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
                     >
                         <i class="fas fa-tachometer-alt text-sm"></i>

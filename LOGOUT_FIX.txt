@@ -1,0 +1,10 @@
+                <a href="{{ route('shop.customer.session.destroy') }}" 
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
+                   class="nav-link text-white d-flex align-items-center">
+                    <i class="fas fa-sign-out-alt me-3"></i>
+                    <span>تسجيل الخروج</span>
+                </a>
+                <form id="logout-form" action="{{ route('shop.customer.session.destroy') }}" method="POST" class="d-none">
+                    @csrf
+                    @method('DELETE')
+                </form>

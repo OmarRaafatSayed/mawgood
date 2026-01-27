@@ -1,0 +1,199 @@
+🧱 المرحلة 0 — Stabilization Phase
+
+🎯 الهدف:
+نفصل Bagisto Core عن شغلك تماماً، ونمنع أي Bug مفاجئ أو كسر تحديث
+
+1️⃣ Folder Structure (الهيكل الصح)
+❌ الغلط الشائع
+
+تعديل في:
+
+packages/Webkul/Shop
+packages/Webkul/Admin
+
+
+Override عشوائي في Blade
+
+✅ الهيكل الصح (اللي هنمشي عليه)
+packages/
+└── Mawgood/
+    ├── Core/
+    │   ├── src/
+    │   │   ├── Providers/
+    │   │   ├── Traits/
+    │   │   ├── Contracts/
+    │   │   └── Helpers/
+    │   └── composer.json
+    │
+    ├── Vendor/
+    │   ├── src/
+    │   │   ├── Models/
+    │   │   ├── Http/
+    │   │   │   ├── Controllers/
+    │   │   │   ├── Middleware/
+    │   │   │   └── Requests/
+    │   │   ├── Routes/
+    │   │   ├── Services/
+    │   │   └── Providers/
+    │   └── composer.json
+    │
+    └── Shop/
+        ├── src/
+        │   ├── Http/
+        │   │   ├── Controllers/
+        │   │   └── Requests/
+        │   ├── Resources/
+        │   │   └── views/
+        │   ├── Routes/
+        │   └── Providers/
+        └── composer.json
+
+ليه التقسيمة دي؟
+
+Core → أي Logic مش تابع ليوزر
+
+Vendor → كل ما يخص البائع
+
+Shop → الواجهة العامة
+
+📌 كده Bagisto يفضل untouched 100%
+
+2️⃣ DB Design (المرحلة دي minimal)
+
+مش هنزود Tables جديدة كتير
+بس نضيف طبقة أمان وتنظيم
+
+جدول مهم (لو مش موجود)
+system_modules
+- id
+- module_name
+- status (enabled / disabled)
+- version
+- last_checked_at
+
+ليه؟
+
+تعرف ايه شغال
+
+تفصل Features بدون ما تكسر النظام
+
+📌 اختياري بس ذكي للمستقبل
+
+3️⃣ Controllers Architecture (مين مسؤول عن ايه)
+❌ الغلط
+
+Controller تخين:
+
+Query
+
+Business Logic
+
+Validation
+
+Response
+
+✅ الصح (اللي هنثبته)
+Controller
+  ↓
+Request (Validation)
+  ↓
+Service (Business Logic)
+  ↓
+Repository (DB)
+
+مثال Vendor:
+Vendor/
+└── Http/
+    ├── Controllers/
+    │   └── VendorProductController.php
+    ├── Requests/
+    │   └── StoreVendorProductRequest.php
+    └── Services/
+        └── VendorProductService.php
+
+
+📌 أي Controller يخالف ده → Refactor
+
+4️⃣ Override Bagisto صح (من غير وجع دماغ)
+Views
+
+بدل:
+
+packages/Webkul/Shop/src/Resources/views/home/index.blade.php
+
+
+استخدم:
+
+resources/views/vendor/mawgood/shop/home/index.blade.php
+
+
+مع:
+
+View::addNamespace(
+  'shop',
+  resource_path('views/vendor/mawgood/shop')
+);
+
+
+📌 كده:
+
+لا تكسر Update
+
+ولا تضطر تنسخ Core Views كلها
+
+5️⃣ Middleware & Guards (تنضيف مهم)
+Guards:
+web       → customer
+admin     → admin
+vendor    → vendor
+
+Middleware واضح:
+isAdmin
+isVendor
+isCustomer
+
+
+📌 ممنوع Middleware يعمل Logic
+هو Check وبس
+
+6️⃣ Prompts جاهزة (تمشي بيها خطوة خطوة)
+🔹 Prompt 1 – Audit
+راجع مشروع Bagisto ده
+وطلعلي:
+- كل الملفات المعدلة في Core
+- درجة خطورتها
+- اقتراح نقلها Custom Package
+
+🔹 Prompt 2 – Refactor Controller
+خد Controller ده
+وفصله إلى:
+Request + Service + Repository
+بما يتماشى مع Laravel Best Practices
+
+🔹 Prompt 3 – Folder Migration
+انقل Feature Vendor
+من App إلى Package
+مع الحفاظ على:
+Routes
+Views
+Migrations
+
+🔹 Prompt 4 – Safe Override
+اعمل Override للـ View دي
+من غير ما اعدل Bagisto Core
+وقولي احطها فين بالظبط
+
+7️⃣ Definition of Done (مهم جداً)
+
+المرحلة 0 تعتبر خلصت لما:
+
+✅ ولا ملف معدل داخل Webkul
+
+✅ كل Vendor Logic في Package
+
+✅ Controllers رفيعة
+
+✅ Views Overridden صح
+
+✅ تقدر تعمل composer update وانت مطمّن 😌
+

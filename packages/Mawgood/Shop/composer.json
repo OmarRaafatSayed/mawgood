@@ -1,0 +1,14 @@
+{
+    "name": "mawgood/shop",
+    "description": "Mawgood Shop Package - Public vendor stores",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Mawgood\\Shop\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "mawgood/core": "*"
+    }
+}

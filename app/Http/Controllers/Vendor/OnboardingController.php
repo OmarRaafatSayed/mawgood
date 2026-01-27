@@ -17,20 +17,19 @@ class OnboardingController extends Controller
     {
         $customer = Auth::guard('customer')->user();
         
-        // Check if already has vendor account
         $vendor = Vendor::where('customer_id', $customer->id)->first();
+        
+        // If vendor exists, check status
         if ($vendor) {
             if ($vendor->status === 'pending') {
-                return redirect()->route('vendor.under-review');
+                return view('vendor.onboarding.pending', compact('vendor'));
             }
             if ($vendor->status === 'approved') {
-                return redirect()->route('vendor.admin.dashboard.index');
+                return redirect()->route('vendor.dashboard');
             }
         }
         
-        // تعريف متغير categories من قاعدة البيانات
         $categories = Category::all();
-        
         return view('vendor.onboarding.form', compact('categories'));
     }
 
@@ -88,13 +87,11 @@ class OnboardingController extends Controller
             'business_address' => $request->business_address,
             'facebook_url' => $request->facebook_url,
             'instagram_url' => $request->instagram_url,
-            'status' => 'approved',
+            'status' => 'pending',
             'commission_rate' => config('multivendor.default_commission_rate', 10.00),
         ]);
 
-        // Redirect immediately to under-review with success message
-        // إزالة تخزين بيانات الجلسة غير المستخدمة
-        return redirect()->route('vendor.under-review')
+        return redirect()->route('vendor.onboarding.form')
             ->with('success', app()->getLocale() === 'ar' ? 'تم إرسال طلب الانضمام بنجاح!' : 'Your application has been submitted successfully!');
     }
 

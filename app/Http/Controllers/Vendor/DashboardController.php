@@ -53,8 +53,11 @@ class DashboardController extends Controller
 
             // Get dashboard statistics directly
             $stats = $this->calculateStats($vendor);
+            
+            // Calculate unread notifications count
+            $unreadNotifications = $this->getUnreadNotificationsCount($vendor);
 
-            return view('vendor.dashboard.index', compact('stats', 'vendor'));
+            return view('vendor.dashboard.index', compact('stats', 'vendor', 'unreadNotifications'));
             
         } catch (\Exception $e) {
             Log::error('Vendor Dashboard Error: ' . $e->getMessage());
@@ -66,7 +69,8 @@ class DashboardController extends Controller
             ];
             return view('vendor.dashboard.index', [
                 'stats' => $this->getDefaultStats(),
-                'vendor' => $defaultVendor
+                'vendor' => $defaultVendor,
+                'unreadNotifications' => 0
             ]);
         }
     }
@@ -289,5 +293,34 @@ class DashboardController extends Controller
             'top_products' => [],
             'monthly_sales' => []
         ];
+    }
+    
+    /**
+     * Get unread notifications count for vendor
+     */
+    private function getUnreadNotificationsCount($vendor)
+    {
+        $count = 0;
+        
+        // Count pending orders
+        $count += DB::table('vendor_orders')
+            ->where('vendor_id', $vendor->id)
+            ->where('status', 'pending')
+            ->count();
+            
+        // Count low stock products
+        try {
+            if (Schema::hasTable('product_inventories')) {
+                $productIds = DB::table('products')->where('vendor_id', $vendor->id)->pluck('id');
+                $count += DB::table('product_inventories')
+                    ->whereIn('product_id', $productIds)
+                    ->whereBetween('qty', [1, 5])
+                    ->count();
+            }
+        } catch (\Exception $e) {
+            // Handle gracefully
+        }
+        
+        return $count;
     }
 }

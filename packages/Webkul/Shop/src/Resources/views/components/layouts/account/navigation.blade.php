@@ -97,7 +97,7 @@
                         </a>
                     @elseif($vendor->status === 'approved')
                         <!-- Vendor Dashboard -->
-                        <a href="{{ route('vendor.admin.dashboard.index') }}">
+                        <a href="{{ route('vendor.dashboard') }}">
                             <div class="flex justify-between px-6 py-5 border-t border-zinc-200 hover:bg-purple-50 cursor-pointer max-md:p-4 max-md:border-0 max-md:py-3 max-md:px-0 bg-gradient-to-r from-purple-50 to-indigo-50">
                                 <p class="flex items-center text-lg font-medium gap-x-4 max-sm:text-base text-purple-700">
                                     <span class="icon-dashboard text-2xl"></span>

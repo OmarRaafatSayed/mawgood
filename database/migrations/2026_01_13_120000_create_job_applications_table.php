@@ -8,7 +8,8 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('job_applications', function (Blueprint $table) {
+        if (!Schema::hasTable('job_applications')) {
+            Schema::create('job_applications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('job_listing_id');
             $table->unsignedBigInteger('customer_id')->nullable();
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->foreign('job_listing_id')->references('id')->on('job_listings')->onDelete('cascade');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('set null');
         });
+        }
     }
 
     public function down()
