@@ -60,6 +60,15 @@ class VendorProductService
                 'updated_at' => now(),
             ]);
 
+            if (!$productId) {
+                throw new \Exception('Failed to create product');
+            }
+
+            $productExists = DB::table('products')->where('id', $productId)->exists();
+            if (!$productExists) {
+                throw new \Exception('Product not found after insertion');
+            }
+
             DB::table('product_inventories')->insert([
                 'product_id' => $productId,
                 'inventory_source_id' => 1,
@@ -67,7 +76,6 @@ class VendorProductService
                 'qty' => $data['quantity'] ?? 0,
             ]);
 
-            // Insert for both locales (ar and en)
             foreach (['ar', 'en'] as $locale) {
                 DB::table('product_flat')->insert([
                     'sku' => $sku,
@@ -98,18 +106,48 @@ class VendorProductService
                 'channel_id' => 1,
             ]);
 
-            // Add product attributes
             foreach (['ar', 'en'] as $locale) {
                 DB::table('product_attribute_values')->insert([
-                    ['product_id' => $productId, 'attribute_id' => 2, 'channel' => 'default', 'locale' => $locale, 'text_value' => $data['name']],
-                    ['product_id' => $productId, 'attribute_id' => 3, 'channel' => 'default', 'locale' => $locale, 'text_value' => $urlKey],
-                    ['product_id' => $productId, 'attribute_id' => 7, 'channel' => 'default', 'locale' => $locale, 'boolean_value' => 1],
-                    ['product_id' => $productId, 'attribute_id' => 8, 'channel' => 'default', 'locale' => $locale, 'boolean_value' => 0],
-                    ['product_id' => $productId, 'attribute_id' => 11, 'channel' => 'default', 'locale' => $locale, 'float_value' => $data['price']],
+                    'locale' => $locale,
+                    'channel' => 'default',
+                    'text_value' => $data['name'],
+                    'product_id' => $productId,
+                    'attribute_id' => 2,
+                ]);
+                
+                DB::table('product_attribute_values')->insert([
+                    'locale' => $locale,
+                    'channel' => 'default',
+                    'text_value' => $urlKey,
+                    'product_id' => $productId,
+                    'attribute_id' => 3,
+                ]);
+                
+                DB::table('product_attribute_values')->insert([
+                    'locale' => $locale,
+                    'channel' => 'default',
+                    'boolean_value' => 1,
+                    'product_id' => $productId,
+                    'attribute_id' => 7,
+                ]);
+                
+                DB::table('product_attribute_values')->insert([
+                    'locale' => $locale,
+                    'channel' => 'default',
+                    'boolean_value' => 0,
+                    'product_id' => $productId,
+                    'attribute_id' => 8,
+                ]);
+                
+                DB::table('product_attribute_values')->insert([
+                    'locale' => $locale,
+                    'channel' => 'default',
+                    'float_value' => $data['price'],
+                    'product_id' => $productId,
+                    'attribute_id' => 11,
                 ]);
             }
 
-            // Handle images
             if (isset($data['images']) && is_array($data['images'])) {
                 foreach ($data['images'] as $index => $image) {
                     if ($image && $image->isValid()) {
@@ -124,7 +162,6 @@ class VendorProductService
                 }
             }
 
-            // Handle video
             if (isset($data['video']) && $data['video']->isValid()) {
                 $videoPath = $data['video']->store('product/videos', 'public');
                 DB::table('product_videos')->insert([
@@ -140,6 +177,7 @@ class VendorProductService
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Product Creation Error: ' . $e->getMessage());
+            \Log::error('Stack: ' . $e->getTraceAsString());
             throw $e;
         }
     }
