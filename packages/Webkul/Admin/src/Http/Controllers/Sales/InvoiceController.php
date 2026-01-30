@@ -140,10 +140,23 @@ class InvoiceController extends Controller
     {
         $invoice = $this->invoiceRepository->findOrFail($id);
 
-        return $this->downloadPDF(
-            view('admin::sales.invoices.pdf', compact('invoice'))->render(),
-            'invoice-'.$invoice->created_at->format('d-m-Y')
-        );
+        // Use mPDF for better Arabic support
+        $html = view('admin::sales.invoices.pdf', compact('invoice'))->render();
+        
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 10,
+            'margin_bottom' => 10,
+            'autoScriptToLang' => true,
+            'autoLangToFont' => true,
+        ]);
+        
+        $mpdf->WriteHTML($html);
+        
+        return $mpdf->Output('invoice-'.$invoice->created_at->format('d-m-Y').'.pdf', 'D');
     }
 
     /**
