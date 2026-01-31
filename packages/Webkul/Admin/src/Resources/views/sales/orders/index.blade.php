@@ -189,7 +189,7 @@
                                 <template v-if="isSearching">
                                     <img
                                         class="absolute top-2.5 h-5 w-5 animate-spin ltr:right-3 rtl:left-3"
-                                        src="{{ bagisto_asset('images/spinner.svg') }}"
+                                        src="{{ asset('vendor/webkul/admin/assets/images/spinner.svg') }}"
                                     />
                                 </template>
 
@@ -228,7 +228,7 @@
                         >
                             <!-- Placeholder Image -->
                             <img
-                                src="{{ bagisto_asset('images/empty-placeholders/customers.svg') }}"
+                                src="{{ asset('vendor/webkul/admin/assets/images/empty-placeholders/customers.svg') }}"
                                 class="h-20 w-20 dark:mix-blend-exclusion dark:invert"
                             />
 
@@ -324,3 +324,4 @@
         </script>
     @endPushOnce
 </x-admin::layouts>
+

@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\HandleNullArrayAccess;
 use App\Http\Middleware\SellerMiddleware;
+use App\Http\Middleware\SetLocaleFromUrl;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Cookie\Middleware\EncryptCookies as BaseEncryptCookies;
 use Illuminate\Foundation\Application;
@@ -34,6 +36,8 @@ return Application::configure(basePath: dirname(__DIR__))
          */
         $middleware->remove(ConvertEmptyStringsToNull::class);
 
+        $middleware->append(SetLocaleFromUrl::class);
+        $middleware->append(HandleNullArrayAccess::class);
         $middleware->append(SecureHeaders::class);
         $middleware->append(CanInstall::class);
 

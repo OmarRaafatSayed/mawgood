@@ -18,7 +18,7 @@
     <x-admin::media.images
         name="images[files]"
         allow-multiple="true"
-        show-placeholders="true"
+        show-placeholders="false"
         :uploaded-images="$product->images"
     />
 

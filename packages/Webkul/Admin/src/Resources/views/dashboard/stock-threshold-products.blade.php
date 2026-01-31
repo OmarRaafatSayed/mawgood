@@ -41,7 +41,7 @@
                                 <div class="relative h-[65px] max-h-[65px] w-full max-w-[65px] overflow-hidden rounded border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert">
 @php
     try {
-        $frontPlaceholder = bagisto_asset('images/product-placeholders/front.svg');
+        $frontPlaceholder = asset('vendor/webkul/admin/assets/images/product-placeholders/front.svg');
     } catch (\Exception $e) {
         $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
     }
@@ -95,7 +95,7 @@
                 v-else
             >
                 <div class="grid justify-center justify-items-center gap-3.5 px-2.5 py-10">
-                    <img src="{{ bagisto_asset('images/icon-add-product.svg') }}" class="h-20 w-20 dark:mix-blend-exclusion dark:invert">
+                    <img class="h-20 w-20 flex items-center justify-center"><span class="text-4xl text-gray-400">??</span></div><div style="display:none">
                     
                     <div class="flex flex-col items-center">
                         <p class="text-base font-semibold text-gray-400">
@@ -151,3 +151,4 @@
         });
     </script>
 @endPushOnce
+

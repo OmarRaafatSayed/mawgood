@@ -28,9 +28,9 @@ class ProductInventoryRepository extends Repository
             $this->updateOrCreate([
                 'product_id'          => $product->id,
                 'inventory_source_id' => $inventorySourceId,
-                'vendor_id'           => $data['vendor_id'] ?? 0,
             ], [
-                'qty' => $qty ?? 0,
+                'qty'       => $qty ?? 0,
+                'vendor_id' => $product->vendor_id ?? 0,
             ]);
         }
     }

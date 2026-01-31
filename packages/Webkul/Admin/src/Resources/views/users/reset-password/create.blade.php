@@ -16,7 +16,7 @@
             @else
                 <img
                     class="w-max" 
-                    src="{{ bagisto_asset('images/logo.svg') }}"
+                    src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}"
                     alt="{{ config('app.name') }}"
                 />
             @endif

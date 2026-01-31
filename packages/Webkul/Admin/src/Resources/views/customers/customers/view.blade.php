@@ -323,7 +323,7 @@
                                     <!-- Empty Address Container -->
                                     <div class="flex items-center gap-5 py-2.5">
                                         <img
-                                            src="{{ bagisto_asset('images/settings/address.svg') }}"
+                                            src="{{ asset('vendor/webkul/admin/assets/images/settings/address.svg') }}"
                                             class="h-20 w-20 dark:mix-blend-exclusion dark:invert"
                                         />
 

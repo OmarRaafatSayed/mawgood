@@ -208,6 +208,8 @@
             data() {
                 return {
                     currencies: @json($currentChannel->currencies),
+                };
+            },
 
             methods: {
                 change(currency) {

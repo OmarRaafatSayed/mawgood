@@ -25,6 +25,13 @@
             background-color: #f8f9fa;
         }
         
+        /* Sidebar always visible */
+        .sidebar {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
         .main-content {
             margin-right: 280px;
             min-height: 100vh;
@@ -129,7 +136,7 @@
                         
                         <!-- Page Title -->
                         <h1 class="h3 mb-0 mt-2">
-                            @yield('page-icon', '<i class="fas fa-tachometer-alt me-2"></i>')
+                            @yield('page-icon')
                             @yield('page-title', 'لوحة التحكم')
                         </h1>
                     </div>

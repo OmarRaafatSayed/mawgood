@@ -132,7 +132,7 @@
                 >
                     <img
                         class="h-[120px] w-[120px] p-2 dark:mix-blend-exclusion dark:invert"
-                        src="{{ bagisto_asset('images/empty-placeholders/default.svg') }}"
+                        src="{{ asset('vendor/webkul/admin/assets/images/empty-placeholders/default.svg') }}"
                         alt="@lang('admin::app.settings.themes.edit.slider')"
                     >
 
@@ -267,7 +267,7 @@
                         this.sliders.images.push({
                             title: formData.get("{{ $currentLocale->code }}[title]"),
                             link: formData.get("{{ $currentLocale->code }}[link]"),
-                            slider_image: sliderImage,
+                            image: sliderImage,
                         });
 
                         if (sliderImage instanceof File) {
@@ -314,4 +314,4 @@
             },
         });
     </script>
-@endPushOnce    
+@endpushOnce

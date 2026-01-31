@@ -166,7 +166,7 @@
                                 <template v-if="isLoading">
                                     <img
                                         class="h-5 w-5 animate-spin"
-                                        src="{{ bagisto_asset('images/spinner.svg') }}"
+                                        src="{{ asset('vendor/webkul/admin/assets/images/spinner.svg') }}"
                                     />
 
                                     @lang('admin::app.components.tinymce.ai-generation.generating')

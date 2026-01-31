@@ -515,6 +515,7 @@ return [
                     'compare'       => 'Compare',
                     'currencies'    => 'Currencies',
                     'dropdown-text' => 'Manage Cart, Orders & Wishlist',
+                    'language'      => 'Language',
                     'locales'       => 'Locales',
                     'login'         => 'Sign up or Login',
                     'logout'        => 'Logout',
@@ -634,6 +635,7 @@ return [
         'products' => [
             'card' => [
                 'add-to-cart'            => 'Add To Cart',
+                'adding'                 => 'Adding...',
                 'add-to-compare'         => 'Add To Compare',
                 'add-to-compare-success' => 'Item added successfully to compare list.',
                 'add-to-wishlist'        => 'Add To Wishlist',
@@ -855,6 +857,7 @@ return [
             'clear-all' => 'Clear All',
             'filters'   => 'Filters:',
             'filter'    => 'Filter',
+            'title'     => 'Filters',
 
             'search'    => [
                 'load-more'            => 'Load More',

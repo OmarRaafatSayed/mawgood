@@ -1,13 +1,13 @@
 <x-shop::layouts.account>
     <!-- Page Title -->
     <x-slot:title>
-        @lang('shop::app.customers.account.orders.title')
+        @lang('shop::app.customers.account.profile.index.title')
     </x-slot>
 
     <!-- Breadcrumbs -->
     @if ((core()->getConfigData('general.general.breadcrumbs.shop')))
         @section('breadcrumbs')
-            <x-shop::breadcrumbs name="orders" />
+            <x-shop::breadcrumbs name="profile" />
         @endSection
     @endif
 
@@ -17,25 +17,51 @@
 
     <span class="mb-5 mt-2 w-full border-t border-zinc-300"></span>
 
-    <!--Customers logout-->
-    @auth('customer')
-        <div class="mx-4">
-            <div class="mx-auto w-[400px] rounded-lg border border-navyBlue py-2.5 text-center max-sm:w-full max-sm:py-1.5">
-                <x-shop::form
-                    method="DELETE"
-                    action="{{ route('shop.customer.session.destroy') }}"
-                    id="customerLogout"
-                />
+    <div class="mx-4 mb-8">
+        <div class="grid gap-4">
+            <!-- Account Information -->
+            <div class="rounded-lg border border-zinc-200 p-6">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-xl font-semibold">@lang('shop::app.customers.account.profile.index.title')</h2>
+                    <a href="{{ route('shop.customers.account.profile.edit') }}" class="text-navyBlue hover:underline">
+                        @lang('shop::app.customers.account.profile.index.edit')
+                    </a>
+                </div>
+                
+                <div class="grid gap-3">
+                    <div>
+                        <span class="text-sm text-gray-600">@lang('shop::app.customers.account.profile.index.first-name'):</span>
+                        <span class="ml-2 font-medium">{{ auth()->guard('customer')->user()->first_name }}</span>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-600">@lang('shop::app.customers.account.profile.index.last-name'):</span>
+                        <span class="ml-2 font-medium">{{ auth()->guard('customer')->user()->last_name }}</span>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-600">@lang('shop::app.customers.account.profile.index.email'):</span>
+                        <span class="ml-2 font-medium">{{ auth()->guard('customer')->user()->email }}</span>
+                    </div>
+                </div>
+            </div>
 
-                <a
-                    class="flex items-center justify-center gap-1.5 text-base hover:bg-gray-100"
-                    href="{{ route('shop.customer.session.destroy') }}"
-                    onclick="event.preventDefault(); document.getElementById('customerLogout').submit();"
-                >
-                    @lang('shop::app.components.layouts.header.desktop.bottom.logout')
+            <!-- Quick Links -->
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <a href="{{ route('shop.customers.account.orders.index') }}" class="rounded-lg border border-zinc-200 p-6 hover:border-navyBlue hover:shadow-md transition">
+                    <h3 class="mb-2 text-lg font-semibold">@lang('shop::app.customers.account.orders.title')</h3>
+                    <p class="text-sm text-gray-600">@lang('shop::app.components.layouts.header.desktop.bottom.orders')</p>
+                </a>
+
+                <a href="{{ route('shop.customers.account.addresses.index') }}" class="rounded-lg border border-zinc-200 p-6 hover:border-navyBlue hover:shadow-md transition">
+                    <h3 class="mb-2 text-lg font-semibold">@lang('shop::app.customers.account.addresses.index.title')</h3>
+                    <p class="text-sm text-gray-600">@lang('shop::app.layouts.address')</p>
+                </a>
+
+                <a href="{{ route('shop.customers.account.wishlist.index') }}" class="rounded-lg border border-zinc-200 p-6 hover:border-navyBlue hover:shadow-md transition">
+                    <h3 class="mb-2 text-lg font-semibold">@lang('shop::app.customers.account.wishlist.page-title')</h3>
+                    <p class="text-sm text-gray-600">@lang('shop::app.layouts.wishlist')</p>
                 </a>
             </div>
         </div>
-    @endauth
+    </div>
 
-</x-shop::layouts.accounts>
+</x-shop::layouts.account>

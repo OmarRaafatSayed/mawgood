@@ -5,10 +5,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\RoleSelectionController;
 use App\Http\Controllers\JobApplicationController;
 
-// Test route for homepage
-Route::get('/test-home', function() {
-    return '<h1>Homepage Test - Working!</h1><p>Database: ' . (DB::connection()->getPdo() ? 'Connected' : 'Not Connected') . '</p>';
-});
+require __DIR__.'/test-view.php';
 
 // Role Selection
 Route::middleware(['customer'])->group(function () {
@@ -94,3 +91,8 @@ Route::get('/test-db', function() {
         ], 500);
     }
 });
+
+
+Route::get('/quick-login', function() {
+    return view('simple-login');
+})->name('quick.login');

@@ -2,7 +2,11 @@
 <div class="sidebar bg-dark text-white" id="vendorSidebar">
     <div class="sidebar-header p-3 border-bottom border-secondary">
         <div class="d-flex align-items-center">
-            <img src="{{ asset('images/logo_white.svg') }}" alt="Logo" class="me-2" style="height: 30px;">
+            @if(core()->getConfigData('general.design.admin_logo.logo_image'))
+                <img src="{{ Storage::url(core()->getConfigData('general.design.admin_logo.logo_image')) }}" alt="Logo" class="me-2" style="height: 30px;">
+            @else
+                <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="Logo" class="me-2" style="height: 30px;">
+            @endif
             <h5 class="mb-0">لوحة التاجر</h5>
         </div>
         <button class="btn btn-sm btn-outline-light d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarContent">
@@ -58,10 +62,10 @@
                 </a>
                 @if(request()->routeIs('vendor.products*'))
                 <div class="submenu ms-4 mt-2">
-                    <a href="{{ route('vendor.products.index') }}" class="nav-link text-light small">
+                    <a href="{{ route('vendor.products.index') }}" class="nav-link text-light small {{ request()->routeIs('vendor.products.index') ? 'bg-secondary' : '' }}">
                         <i class="fas fa-list me-2"></i>جميع المنتجات
                     </a>
-                    <a href="{{ route('vendor.products.create') }}" class="nav-link text-light small">
+                    <a href="{{ route('vendor.products.create') }}" class="nav-link text-light small {{ request()->routeIs('vendor.products.create') ? 'bg-secondary' : '' }}">
                         <i class="fas fa-plus me-2"></i>إضافة منتج
                     </a>
                     <a href="{{ route('vendor.products.index') }}?status=pending" class="nav-link text-light small">

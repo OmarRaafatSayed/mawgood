@@ -19,7 +19,7 @@
         <x-slot:content class="!border-none">
             <img
                 class="border border-gray-200"
-                src="{{ bagisto_asset('images/configuration/default-menu.svg') }}"
+                src="{{ asset('vendor/webkul/admin/assets/images/configuration/default-menu.svg') }}"
                 alt="{{ trans('admin::app.configuration.index.general.design.menu-category.default') }}"
             >
         </x-slot>
@@ -44,7 +44,7 @@
         <x-slot:content class="!border-none">
             <img 
                 class="border border-gray-200"
-                src="{{ bagisto_asset('images/configuration/side-bar-menu.svg') }}"
+                src="{{ asset('vendor/webkul/admin/assets/images/configuration/side-bar-menu.svg') }}"
                 alt="{{ trans('admin::app.configuration.index.general.design.menu-category.sidebar') }}"
             >
         </x-slot>

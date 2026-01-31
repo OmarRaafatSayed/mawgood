@@ -23,7 +23,7 @@
                             />
                         @else
                             <img
-                                src="{{ bagisto_asset('images/logo.svg', 'admin') }}"
+                                src="{{ asset('vendor/webkul/admin/assets/images/logo.svg', 'admin') }}"
                                 alt="{{ config('app.name') }}"
                                 style="width: 156px;height: 40px;"
                             />
@@ -46,3 +46,4 @@
         </div>
     </body>
 </html>
+

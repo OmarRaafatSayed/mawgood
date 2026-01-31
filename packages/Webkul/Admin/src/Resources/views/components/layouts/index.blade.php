@@ -74,7 +74,7 @@
     @else
         <link
             type="image/x-icon"
-            href="{{ bagisto_asset('images/favicon.ico') }}"
+            href="{{ asset('vendor/webkul/admin/assets/images/favicon.ico') }}"
             rel="shortcut icon"
             sizes="16x16"
         />
@@ -167,3 +167,4 @@
 </body>
 
 </html>
+

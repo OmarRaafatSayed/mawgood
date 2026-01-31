@@ -106,16 +106,18 @@
 
             <!-- Mobile Toolbar -->
             <div class="md:hidden">
-                <ul>
-                    <li
-                        class="px-4 py-2.5"
-                        :class="{'bg-gray-100': sort.value == filters.applied.sort}"
+                <select 
+                    class="w-full rounded-lg border border-zinc-200 bg-white p-3 text-base"
+                    :value="filters.applied.sort"
+                    @change="apply('sort', $event.target.value)"
+                >
+                    <option
                         v-for="(sort, key) in filters.available.sort"
-                        @click="apply('sort', sort.value)"
+                        :value="sort.value"
                     >
                         @{{ sort.title }}
-                    </li>
-                </ul>
+                    </option>
+                </select>
             </div>
         </div>
     </script>

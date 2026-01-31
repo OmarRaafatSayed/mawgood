@@ -515,6 +515,7 @@ return [
                     'compare'       => 'مقارنة',
                     'currencies'    => 'العملات',
                     'dropdown-text' => 'إدارة السلة، الطلبات وقائمة الرغبات',
+                    'language'      => 'اللغة',
                     'locales'       => 'اللغات',
                     'login'         => 'تسجيل الدخول أو إنشاء حساب',
                     'logout'        => 'تسجيل الخروج',
@@ -634,6 +635,7 @@ return [
         'products' => [
             'card' => [
                 'add-to-cart'            => 'أضف إلى السلة',
+                'adding'                 => 'جارٍ الإضافة...',
                 'add-to-compare'         => 'أضف إلى قائمة المقارنة',
                 'add-to-compare-success' => 'تمت إضافة العنصر بنجاح إلى قائمة المقارنة.',
                 'add-to-wishlist'        => 'أضف إلى قائمة الرغبات',
@@ -807,6 +809,7 @@ return [
             'description'            => 'الوصف',
             'related-product-title'  => 'منتجات ذات صلة',
             'review'                 => 'المراجعات',
+            'sold-by'                => 'يباع بواسطة',
             'tax-inclusive'          => 'شامل للضرائب',
             'up-sell-title'          => 'لقد وجدنا منتجات أخرى قد تعجبك!',
         ],

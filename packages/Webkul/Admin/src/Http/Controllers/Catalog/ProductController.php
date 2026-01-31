@@ -306,6 +306,56 @@ class ProductController extends Controller
     }
 
     /**
+     * Approve vendor product.
+     */
+    public function approve(int $id): JsonResponse
+    {
+        try {
+            Event::dispatch('catalog.product.update.before', $id);
+
+            $product = $this->productRepository->update([
+                'approved_by_admin' => true,
+                'status' => self::ACTIVE_STATUS,
+            ], $id);
+
+            Event::dispatch('catalog.product.update.after', $product);
+
+            return new JsonResponse([
+                'message' => 'تم الموافقة على المنتج بنجاح',
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Reject vendor product.
+     */
+    public function reject(int $id): JsonResponse
+    {
+        try {
+            Event::dispatch('catalog.product.update.before', $id);
+
+            $product = $this->productRepository->update([
+                'approved_by_admin' => false,
+                'status' => 0,
+            ], $id);
+
+            Event::dispatch('catalog.product.update.after', $product);
+
+            return new JsonResponse([
+                'message' => 'تم رفض المنتج',
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
      * To be manually invoked when data is seeded into products.
      *
      * @return \Illuminate\Http\Response

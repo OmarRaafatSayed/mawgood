@@ -93,7 +93,7 @@
                     v-if="! prices.length"
                 >
                     <img
-                        src="{{ bagisto_asset('images/icon-discount.svg') }}"
+                        src="{{ asset('vendor/webkul/admin/assets/images/icon-discount.svg') }}"
                         class="h-20 w-20 rounded border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert"
                     />
 
@@ -324,3 +324,4 @@
         });
     </script>
 @endPushOnce
+

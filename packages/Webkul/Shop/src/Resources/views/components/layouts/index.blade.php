@@ -176,6 +176,10 @@
 
         {!! view_render_event('bagisto.shop.layout.body.after') !!}
 
+        <!-- Mobile Bottom Navigation -->
+        <x-shop::mobile-bottom-bar />
+        <x-shop::mobile-search-modal />
+
         @stack('scripts')
 
         {!! view_render_event('bagisto.shop.layout.vue-app-mount.before') !!}

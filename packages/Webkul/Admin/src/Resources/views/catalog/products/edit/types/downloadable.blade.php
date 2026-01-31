@@ -241,9 +241,7 @@
             >
                 <!-- Placeholder Image -->
                 <img
-                    src="{{ bagisto_asset('images/icon-add-product.svg') }}"
-                    class="h-20 w-20 dark:mix-blend-exclusion dark:invert"
-                />
+                    class="h-20 w-20 flex items-center justify-center"><span class="text-4xl text-gray-400">??</span></div><div style="display:none">
 
                 <!-- Add Variants Information -->
                 <div class="flex flex-col items-center gap-1.5">
@@ -686,9 +684,7 @@
             >
                 <!-- Placeholder Image -->
                 <img
-                    src="{{ bagisto_asset('images/icon-add-product.svg') }}"
-                    class="h-20 w-20 dark:mix-blend-exclusion dark:invert"
-                />
+                    class="h-20 w-20 flex items-center justify-center"><span class="text-4xl text-gray-400">??</span></div><div style="display:none">
 
                 <!-- Add Variants Information -->
                 <div class="flex flex-col items-center gap-1.5">
@@ -1006,3 +1002,4 @@
         });
     </script>
 @endpushOnce
+

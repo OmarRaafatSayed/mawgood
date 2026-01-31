@@ -3,189 +3,90 @@
     $title = $searchTitle ? trans('shop::app.search.title', ['query' => $searchTitle]) : trans('shop::app.search.results');
     $searchInstead = $suggestion ? $query : null;
 ?>
-<!-- SEO Meta Content -->
-@push('meta')
-    <meta
-        name="description"
-        content="{{ $title }}"
-    />
 
-    <meta
-        name="keywords"
-        content="{{ $title }}"
-    />
-@endPush
+@push('meta')
+    <meta name="description" content="{{ $title }}"/>
+    <meta name="keywords" content="{{ $title }}"/>
+@endpush
 
 <x-shop::layouts :has-feature="false">
-    <!-- Page Title -->
-    <x-slot:title>
-        {{ $title }}
-    </x-slot>
+    <x-slot:title>{{ $title }}</x-slot>
 
-    <div class="container px-[60px] max-lg:px-8 max-sm:px-4">
-        @if (request()->has('image-search'))
-            @include('shop::search.images.results')
-        @endif
-
-        <div class="mt-8 flex items-center justify-between max-md:mt-5">
-            <h2 class="break-all text-2xl font-medium max-sm:text-base">
-                <span v-text="'{{ preg_replace('/[,\\"\\\']+/', '', $title) }}'" ></span>
-            </h2>
+    <div class="search-page">
+        <!-- Header Section -->
+        <div class="search-header">
+            <div class="search-header__content">
+                <h1 class="search-header__title">{{ $title }}</h1>
+                
+                @if ($searchInstead)
+                    <form action="{{ route('shop.search.index', ['suggest' => false]) }}" class="search-header__suggest">
+                        <input type="hidden" name="query" value="{{ $searchInstead }}">
+                        <input type="hidden" name="suggest" value="0">
+                        <p>
+                            {{ trans('shop::app.search.suggest') }}
+                            <button type="submit" class="search-header__suggest-link">{{ $searchInstead }}</button>
+                        </p>
+                    </form>
+                @endif
+            </div>
         </div>
 
-        @if ($searchInstead)
-            <form
-                action="{{ route('shop.search.index', ['suggest' => false]) }}"
-                class="flex max-w-[445px] items-center"
-                role="search"
-            >
-                <input
-                    type="text"
-                    name="query"
-                    class="hidden"
-                    value="{{ $searchInstead }}"
-                >
-
-                <input
-                    type="text"
-                    name="suggest"
-                    class="hidden"
-                    value="0"
-                >
-
-                <p class="mt-1 text-sm text-gray-600">
-                    {{ trans('shop::app.search.suggest') }}
-
-                    <button
-                        type="submit"
-                        class="text-blue-600 hover:text-blue-800 hover:underline"
-                        aria-label="{{ trans('shop::app.components.layouts.header.desktop.bottom.submit') }}"
-                    >
-                        {{ $searchInstead }}
-                    </button>
-                </p>
-            </form>
-        @endif
+        <!-- Main Content -->
+        <v-search>
+            <x-shop::shimmer.categories.view />
+        </v-search>
     </div>
 
-    <!-- Product Listing -->
-    <v-search>
-        <x-shop::shimmer.categories.view />
-    </v-search>
-
     @pushOnce('scripts')
-        <script
-            type="text/x-template"
-            id="v-search-template"
-        >
-            <div class="container px-[60px] max-lg:px-8 max-sm:px-4">
-                <div class="flex items-start gap-10 max-lg:gap-5 md:mt-10">
-                    <!-- Product Listing Filters -->
-                    @include('shop::categories.filters')
-
-                    <!-- Product Listing Container -->
-                    <div class="flex-1">
-                        <!-- Desktop Product Listing Toolbar -->
-                        <div class="max-md:hidden">
-                            @include('shop::categories.toolbar')
+        <script type="text/x-template" id="v-search-template">
+            <div class="search-container">
+                <div class="search-layout">
+                    <!-- Products Section -->
+                    <main class="search-main">
+                        <!-- Toolbar -->
+                        <div class="search-toolbar">
+                            <div class="search-toolbar__actions">
+                                @include('shop::categories.toolbar')
+                            </div>
                         </div>
 
-                        <!-- Product List Card Container -->
-                        <div
-                            class="mt-8 grid grid-cols-1 gap-6"
-                            v-if="(filters.toolbar.applied.mode ?? filters.toolbar.default.mode) === 'list'"
-                        >
-                            <!-- Product Card Shimmer Effect -->
+                        <!-- Products Grid -->
+                        <div class="search-products">
+                            <!-- Loading State -->
                             <template v-if="isLoading">
-                                <x-shop::shimmer.products.cards.list count="12" />
-                            </template>
-
-                            <!-- Product Card Listing -->
-                            <template v-else>
-                                <template v-if="products.length">
-                                    <x-shop::products.card
-                                        ::mode="'list'"
-                                        v-for="product in products"
-                                    />
-                                </template>
-
-                                <!-- Empty Products Container -->
-                                <template v-else>
-                                    <div class="m-auto grid w-full place-content-center items-center justify-items-center py-32 text-center">
-                                        <img
-                                            class="max-sm:h-[100px] max-sm:w-[100px]"
-                                            src="{{ bagisto_asset('images/thank-you.png') }}"
-                                            alt="Empty result"
-                                            loading="lazy"
-                                            decoding="async"
-                                        />
-
-                                        <p
-                                            class="text-xl max-sm:text-sm"
-                                            role="heading"
-                                        >
-                                            @lang('shop::app.categories.view.empty')
-                                        </p>
-                                    </div>
-                                </template>
-                            </template>
-                        </div>
-
-                        <!-- Product Grid Card Container -->
-                        <div v-else>
-                            <!-- Product Card Shimmer Effect -->
-                            <template v-if="isLoading">
-                                <div class="mt-8 grid grid-cols-3 gap-8 max-1060:grid-cols-2 max-md:gap-x-4 max-sm:mt-5 max-sm:justify-items-center max-sm:gap-y-5">
+                                <div class="search-products__grid">
                                     <x-shop::shimmer.products.cards.grid count="12" />
                                 </div>
                             </template>
 
-                            <!-- Product Card Listing -->
+                            <!-- Products List -->
+                            <template v-else-if="products.length">
+                                <div class="search-products__grid" :class="gridClass">
+                                    <x-shop::products.card
+                                        ::mode="currentMode"
+                                        v-for="product in products"
+                                        :navigation-link="route('shop.search.index')"
+                                    />
+                                </div>
+
+                                <!-- Load More -->
+                                <button v-if="links.next" @click="loadMoreProducts" class="search-products__load-more">
+                                    @lang('shop::app.categories.view.load-more')
+                                </button>
+                            </template>
+
+                            <!-- Empty State -->
                             <template v-else>
-                                <template v-if="products.length">
-                                    <div class="mt-8 grid grid-cols-3 gap-8 max-1060:grid-cols-2 max-md:mt-5 max-md:justify-items-center max-md:gap-x-4 max-md:gap-y-5">
-                                        <x-shop::products.card
-                                            ::mode="'grid'"
-                                            v-for="product in products"
-                                            :navigation-link="route('shop.search.index')"
-                                        />
-                                    </div>
-                                </template>
-
-                                <!-- Empty Products Container -->
-                                <template v-else>
-                                    <div class="m-auto grid w-full place-content-center items-center justify-items-center py-32 text-center">
-                                        <img
-                                            class="max-sm:h-[100px] max-sm:w-[100px]"
-                                            src="{{ bagisto_asset('images/thank-you.png') }}"
-                                            alt="Empty result"
-                                            loading="lazy"
-                                            decoding="async"
-                                        />
-
-                                        <p
-                                            class="text-xl max-sm:text-sm"
-                                            role="heading"
-                                        >
-                                            @lang('shop::app.categories.view.empty')
-                                        </p>
-                                    </div>
-                                </template>
+                                <div class="search-empty">
+                                    <img src="{{ bagisto_asset('images/thank-you.png') }}" alt="No results" class="search-empty__image" loading="lazy">
+                                    <p class="search-empty__text">@lang('shop::app.categories.view.empty')</p>
+                                </div>
                             </template>
                         </div>
-
-                        <!-- Load More Button -->
-                        <button
-                            class="secondary-button mx-auto mt-[60px] block w-max rounded-2xl px-11 py-3 text-center text-base max-md:rounded-lg max-md:text-sm max-sm:mt-7 max-sm:px-7 max-sm:py-2"
-                            @click="loadMoreProducts"
-                            v-if="links.next"
-                        >
-                            @lang('shop::app.categories.view.load-more')
-                        </button>
-                    </div>
+                    </main>
                 </div>
             </div>
-    </script>
+        </script>
 
         <script type="module">
             app.component('v-search', {
@@ -193,121 +94,231 @@
 
                 data() {
                     return {
-                        isMobile: window.innerWidth <= 767,
-
                         isLoading: true,
-
-                        isDrawerActive: {
-                            toolbar: false,
-
-                            filter: false,
-                        },
-
-                        filters: {
-                            toolbar: {
-                                default: {},
-
-                                applied: {},
-                            },
-
-                            filter: {},
-                        },
-
+                        isDrawerActive: { toolbar: false },
+                        filters: { toolbar: { default: {}, applied: {} } },
                         products: [],
-
-                        links: {},
+                        links: {}
                     }
                 },
 
                 computed: {
-                    queryParams() {
-                        let queryParams = Object.assign({}, this.filters.filter, this.filters.toolbar.applied);
-
-                        return this.removeJsonEmptyValues(queryParams);
+                    currentMode() {
+                        return this.filters.toolbar.applied.mode ?? this.filters.toolbar.default.mode ?? 'grid';
                     },
-
+                    gridClass() {
+                        return this.currentMode === 'list' ? 'search-products__grid--list' : 'search-products__grid--grid';
+                    },
+                    queryParams() {
+                        return this.removeJsonEmptyValues({...this.filters.toolbar.applied});
+                    },
                     queryString() {
                         return this.jsonToQueryString(this.queryParams);
-                    },
+                    }
                 },
 
                 watch: {
-                    queryParams() {
-                        this.getProducts();
-                    },
-
-                    queryString() {
-                        window.history.pushState({}, '', '?' + this.queryString);
-                    },
+                    queryParams() { this.getProducts(); },
+                    queryString() { window.history.pushState({}, '', '?' + this.queryString); }
                 },
 
                 methods: {
-                    setFilters(type, filters) {
-                        this.filters[type] = filters;
-                    },
-
-                    clearFilters(type, filters) {
-                        this.filters[type] = {};
-                    },
+                    setFilters(type, filters) { this.filters[type] = filters; },
 
                     getProducts() {
-                        this.isDrawerActive = {
-                            toolbar: false,
-
-                            filter: false,
-                        };
-
-                        this.$axios.get(("{{ route('shop.api.products.index') }}"), {
-                            params: this.queryParams
-                        })
+                        this.isDrawerActive = { toolbar: false };
+                        this.$axios.get("{{ route('shop.api.products.index') }}", { params: this.queryParams })
                             .then(response => {
                                 this.isLoading = false;
-
                                 this.products = response.data.data;
-
                                 this.links = response.data.links;
-                            }).catch(error => {
-                                console.log(error);
-                            });
+                            })
+                            .catch(error => console.log(error));
                     },
 
                     loadMoreProducts() {
                         if (this.links.next) {
-                            this.$axios.get(this.links.next).then(response => {
-                                this.products = [...this.products, ...response.data.data];
-
-                                this.links = response.data.links;
-                            }).catch(error => {
-                                console.log(error);
-                            });
+                            this.$axios.get(this.links.next)
+                                .then(response => {
+                                    this.products = [...this.products, ...response.data.data];
+                                    this.links = response.data.links;
+                                })
+                                .catch(error => console.log(error));
                         }
                     },
 
                     removeJsonEmptyValues(params) {
-                        Object.keys(params).forEach(function (key) {
-                            if ((! params[key] && params[key] !== undefined)) {
-                                delete params[key];
-                            }
-
-                            if (Array.isArray(params[key])) {
-                                params[key] = params[key].join(',');
-                            }
+                        Object.keys(params).forEach(key => {
+                            if (!params[key] && params[key] !== undefined) delete params[key];
+                            if (Array.isArray(params[key])) params[key] = params[key].join(',');
                         });
-
                         return params;
                     },
 
                     jsonToQueryString(params) {
                         let parameters = new URLSearchParams();
-
-                        for (const key in params) {
-                            parameters.append(key, params[key]);
-                        }
-
+                        for (const key in params) parameters.append(key, params[key]);
                         return parameters.toString();
                     }
-                },
+                }
             });
         </script>
+    @endPushOnce
+
+    @pushOnce('styles')
+        <style>
+            /* Base Reset */
+            .search-page * { box-sizing: border-box; }
+
+            /* Header */
+            .search-header {
+                padding: 1.25rem 1rem;
+                background: #fff;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            .search-header__content {
+                max-width: 1280px;
+                margin: 0 auto;
+            }
+            .search-header__title {
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: #111827;
+                margin: 0 0 0.5rem;
+                word-break: break-word;
+            }
+            .search-header__suggest p {
+                font-size: 0.875rem;
+                color: #6b7280;
+                margin: 0;
+            }
+            .search-header__suggest-link {
+                color: #2563eb;
+                text-decoration: none;
+                background: none;
+                border: none;
+                padding: 0;
+                cursor: pointer;
+            }
+            .search-header__suggest-link:hover {
+                text-decoration: underline;
+            }
+
+            /* Container */
+            .search-container {
+                max-width: 1280px;
+                margin: 0 auto;
+                padding: 1rem;
+            }
+
+            /* Layout */
+            .search-layout {
+                display: block;
+            }
+
+            /* Main Content */
+            .search-main {
+                width: 100%;
+            }
+
+            /* Toolbar */
+            .search-toolbar {
+                margin-bottom: 1.5rem;
+                padding: 1rem;
+                background: #fff;
+                border-radius: 0.5rem;
+                border: 1px solid #e5e7eb;
+            }
+
+            /* Products Grid */
+            .search-products__grid {
+                display: grid;
+                gap: 1.5rem;
+            }
+            .search-products__grid--grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .search-products__grid--list {
+                grid-template-columns: 1fr;
+            }
+
+            /* Load More */
+            .search-products__load-more {
+                display: block;
+                margin: 2rem auto 0;
+                padding: 0.75rem 2rem;
+                background: #fff;
+                border: 1px solid #d1d5db;
+                border-radius: 0.5rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: #374151;
+                cursor: pointer;
+                min-height: 44px;
+            }
+            .search-products__load-more:hover {
+                background: #f9fafb;
+            }
+
+            /* Empty State */
+            .search-empty {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 4rem 1rem;
+                text-align: center;
+            }
+            .search-empty__image {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 1rem;
+            }
+            .search-empty__text {
+                font-size: 1.125rem;
+                color: #6b7280;
+                margin: 0;
+            }
+
+            /* Tablet (768-1023px) */
+            @media (max-width: 1023px) {
+                .search-products__grid--grid {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            }
+
+            /* Mobile (≤767px) */
+            @media (max-width: 767px) {
+                .search-header {
+                    padding: 1rem;
+                }
+                .search-header__title {
+                    font-size: 1rem;
+                }
+                .search-container {
+                    padding: 0.75rem;
+                }
+                .search-toolbar {
+                    padding: 0.75rem;
+                }
+                .search-products__grid {
+                    gap: 1rem;
+                }
+                .search-products__grid--grid {
+                    grid-template-columns: 1fr;
+                }
+                .search-products__load-more {
+                    width: 100%;
+                    margin-top: 1.5rem;
+                }
+                .search-empty__image {
+                    width: 100px;
+                    height: 100px;
+                }
+                .search-empty__text {
+                    font-size: 0.875rem;
+                }
+            }
+        </style>
     @endPushOnce
 </x-shop::layouts>

@@ -169,7 +169,7 @@
                                         <div class="relative h-12 w-12 rounded border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert sm:h-16 sm:w-16">
 @php
                                                 try {
-                                                    $frontPlaceholder = bagisto_asset('images/product-placeholders/front.svg');
+                                                    $frontPlaceholder = asset('vendor/webkul/admin/assets/images/product-placeholders/front.svg');
                                                 } catch (\Exception $e) {
                                                     $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
                                                 }
@@ -312,7 +312,7 @@
                                     <div class="relative h-[60px] max-h-[60px] w-full max-w-[60px] rounded border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert">
 @php
                                             try {
-                                                $frontPlaceholder = bagisto_asset('images/product-placeholders/front.svg');
+                                                $frontPlaceholder = asset('vendor/webkul/admin/assets/images/product-placeholders/front.svg');
                                             } catch (\Exception $e) {
                                                 $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
                                             }
@@ -643,3 +643,4 @@
         </script>
     @endPushOnce
 </x-admin::layouts>
+

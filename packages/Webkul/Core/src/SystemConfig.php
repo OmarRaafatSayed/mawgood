@@ -129,7 +129,8 @@ class SystemConfig
         }
 
         if ($slug2 = request()->route('slug2')) {
-            $activeItem = $activeItem->getChildren()[$slug2];
+            $slug2Key = str_replace('-', '_', $slug2);
+            $activeItem = $activeItem->getChildren()->firstWhere('key', $slug.'.'.$slug2Key);
         }
 
         return $activeItem;

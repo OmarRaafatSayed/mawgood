@@ -65,10 +65,9 @@
             <template v-else>
                 <div class="grid justify-center justify-items-center gap-3.5 px-2.5 py-10">
                     <!-- Placeholder Image -->
-                    <img
-                        src="{{ bagisto_asset('images/icon-add-product.svg') }}"
-                        class="h-20 w-20 dark:mix-blend-exclusion dark:invert"
-                    />
+                    <div class="h-20 w-20 flex items-center justify-center">
+                        <span class="text-4xl text-gray-400">📦</span>
+                    </div>
 
                     <!-- Add Variants Information -->
                     <div class="flex flex-col items-center gap-1.5">
@@ -789,7 +788,7 @@
                     :class="{'border border-dashed border-gray-300 dark:border-gray-800 dark:mix-blend-exclusion dark:invert': ! variant.images.length}"
                 >
                     <template v-if="! variant.images.length">
-                        <img src="{{ bagisto_asset('images/product-placeholders/front.svg') }}">
+                        <img src="{{ asset('vendor/webkul/admin/assets/images/product-placeholders/front.svg') }}">
                     
                         <p class="absolute bottom-1.5 w-full text-center text-[6px] font-semibold text-gray-400">
                             @lang('admin::app.catalog.products.edit.types.configurable.image-placeholder')

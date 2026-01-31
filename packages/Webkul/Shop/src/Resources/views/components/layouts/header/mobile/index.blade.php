@@ -303,6 +303,14 @@
                 <v-mobile-category ref="mobileCategory"></v-mobile-category>
 
                 {!! view_render_event('bagisto.shop.components.layouts.header.mobile.drawer.categories.after') !!}
+
+                <!-- Language Switcher -->
+                @if((core()->getCurrentChannel()->locales ?? collect())->count() > 1)
+                    <div class="border-t border-zinc-200 p-4">
+                        <p class="mb-3 text-base font-semibold">@lang('shop::app.components.layouts.header.mobile.language')</p>
+                        <v-locale-switcher></v-locale-switcher>
+                    </div>
+                @endif
             </x-slot>
 
             <x-slot:footer>

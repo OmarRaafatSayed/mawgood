@@ -110,6 +110,10 @@ Route::prefix('catalog')->group(function () {
 
         Route::post('mass-delete', 'massDestroy')->name('admin.catalog.products.mass_delete');
 
+        Route::post('{id}/approve', 'approve')->name('admin.catalog.products.approve');
+
+        Route::post('{id}/reject', 'reject')->name('admin.catalog.products.reject');
+
         Route::controller(SimpleController::class)->group(function () {
             Route::get('{id}/simple-customizable-options', 'customizableOptions')->name('admin.catalog.products.simple.customizable-options');
         });

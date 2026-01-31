@@ -22,7 +22,7 @@
                     <div class="flex min-w-[200px] flex-1 gap-2.5">
                         <div class="h-[60px] max-h-[60px] w-full max-w-[60px] dark:mix-blend-exclusion dark:invert">
                             <img
-                                src="{{ bagisto_asset('images/total-sales.svg')}}"
+                                src="{{ asset('vendor/webkul/admin/assets/images/total-sales.svg')}}"
                                 title="@lang('admin::app.dashboard.index.total-sales')"
                             >
                         </div>
@@ -58,7 +58,7 @@
                     <div class="flex min-w-[200px] flex-1 gap-2.5">
                         <div class="h-[60px] max-h-[60px] w-full max-w-[60px] dark:mix-blend-exclusion dark:invert">
                             <img
-                                src="{{ bagisto_asset('images/total-orders.svg')}}"
+                                src="{{ asset('vendor/webkul/admin/assets/images/total-orders.svg')}}"
                                 title="@lang('admin::app.dashboard.index.total-orders')"
                             >
                         </div>
@@ -94,7 +94,7 @@
                     <div class="flex min-w-[200px] flex-1 gap-2.5">
                         <div class="h-[60px] max-h-[60px] w-full max-w-[60px] dark:mix-blend-exclusion dark:invert">
                             <img
-                                src="{{ bagisto_asset('images/customers.svg')}}"
+                                src="{{ asset('vendor/webkul/admin/assets/images/customers.svg')}}"
                                 title="@lang('admin::app.dashboard.index.total-customers')"
                             >
                         </div>
@@ -130,7 +130,7 @@
                     <div class="flex min-w-[200px] flex-1 gap-2.5">
                         <div class="h-[60px] max-h-[60px] w-full max-w-[60px] dark:mix-blend-exclusion dark:invert">
                             <img
-                                src="{{ bagisto_asset('images/average-orders.svg')}}"
+                                src="{{ asset('vendor/webkul/admin/assets/images/average-orders.svg')}}"
                                 title="@lang('admin::app.dashboard.index.average-sale')"
                             >
                         </div>
@@ -167,7 +167,7 @@
                     <div class="flex min-w-[200px] flex-1 gap-2.5">
                         <div class="h-[60px] max-h-[60px] w-full max-w-[60px] dark:mix-blend-exclusion dark:invert">
                             <img
-                                src="{{ bagisto_asset('images/unpaid-invoices.svg')}}"
+                                src="{{ asset('vendor/webkul/admin/assets/images/unpaid-invoices.svg')}}"
                                 title="@lang('admin::app.dashboard.index.total-unpaid-invoices')"
                             >
                         </div>

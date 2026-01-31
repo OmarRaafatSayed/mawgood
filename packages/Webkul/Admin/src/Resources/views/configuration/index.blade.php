@@ -50,7 +50,7 @@
                             @if ($icon = $child->getIcon())
                                 <img
                                     class="h-[60px] w-[60px] dark:mix-blend-exclusion dark:invert"
-                                    src="{{ bagisto_asset('images/' . $icon) }}"
+                                    src="{{ asset('vendor/webkul/admin/assets/images/' . $icon) }}"
                                 >
                             @endif
 
@@ -184,3 +184,4 @@
         </script>
     @endpushOnce
 </x-admin::layouts>
+

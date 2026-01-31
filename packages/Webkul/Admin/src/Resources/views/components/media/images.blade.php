@@ -292,7 +292,7 @@
                                                 <template v-if="isLoading">
                                                     <img
                                                         class="h-5 w-5 animate-spin"
-                                                        src="{{ bagisto_asset('images/spinner.svg') }}"
+                                                        src="{{ asset('vendor/webkul/admin/assets/images/spinner.svg') }}"
                                                     />
 
                                                     @lang('admin::app.components.media.images.ai-generation.generating')
@@ -312,7 +312,7 @@
                                                 <template v-if="isLoading">
                                                     <img
                                                         class="h-5 w-5 animate-spin"
-                                                        src="{{ bagisto_asset('images/spinner.svg') }}"
+                                                        src="{{ asset('vendor/webkul/admin/assets/images/spinner.svg') }}"
                                                     />
 
                                                     @lang('admin::app.components.media.images.ai-generation.regenerating')
@@ -437,27 +437,12 @@
                             label: "@lang('admin::app.components.media.images.placeholders.front')",
 @php
                                 try {
-                                    $frontPlaceholder = bagisto_asset('images/product-placeholders/front.svg');
+                                    $frontPlaceholder = asset('vendor/webkul/admin/assets/images/product-placeholders/front.svg');
                                 } catch (\Exception $e) {
-                                    $frontPlaceholder = url('cache/images/product-placeholders/front.svg');
+                                    $frontPlaceholder = '';
                                 }
                             @endphp
                             image: "{{ $frontPlaceholder }}"
-                        }, {
-                            label: "@lang('admin::app.components.media.images.placeholders.next')",
-                            image: "{{ bagisto_asset('images/product-placeholders/next-1.svg') }}"
-                        }, {
-                            label: "@lang('admin::app.components.media.images.placeholders.next')",
-                            image: "{{ bagisto_asset('images/product-placeholders/next-2.svg') }}"
-                        }, {
-                            label: "@lang('admin::app.components.media.images.placeholders.zoom')",
-                            image: "{{ bagisto_asset('images/product-placeholders/zoom.svg') }}"
-                        }, {
-                            label: "@lang('admin::app.components.media.images.placeholders.use-cases')",
-                            image: "{{ bagisto_asset('images/product-placeholders/use-cases.svg') }}"
-                        }, {
-                            label: "@lang('admin::app.components.media.images.placeholders.size')",
-                            image: "{{ bagisto_asset('images/product-placeholders/size.svg') }}"
                         }
                     ],
 

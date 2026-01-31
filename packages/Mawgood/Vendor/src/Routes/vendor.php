@@ -11,7 +11,7 @@ use Mawgood\Vendor\Http\Middleware\EnsureVendorAccess;
 
 Route::group([
     'prefix' => 'vendor',
-    'middleware' => ['web', 'customer', EnsureVendorAccess::class],
+    'middleware' => ['web', 'customer', 'locale', EnsureVendorAccess::class],
     'as' => 'vendor.'
 ], function () {
     

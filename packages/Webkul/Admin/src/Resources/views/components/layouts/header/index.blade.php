@@ -22,7 +22,7 @@
             @else
                 @php
                     try {
-                        $logoPath = request()->cookie('dark_mode') ? bagisto_asset('images/dark-logo.svg') : bagisto_asset('images/logo.svg');
+                        $logoPath = request()->cookie('dark_mode') ? asset('vendor/webkul/admin/assets/images/dark-logo.svg') : asset('vendor/webkul/admin/assets/images/logo.svg');
                     } catch (\Exception $e) {
                         $logoPath = url('cache/logo/bagisto.png');
                     }
@@ -231,7 +231,7 @@
             @else
                 @php
                     try {
-                        $logoPath = request()->cookie('dark_mode') ? bagisto_asset('images/dark-logo.svg') : bagisto_asset('images/logo.svg');
+                        $logoPath = request()->cookie('dark_mode') ? asset('vendor/webkul/admin/assets/images/dark-logo.svg') : asset('vendor/webkul/admin/assets/images/logo.svg');
                     } catch (\Exception $e) {
                         $logoPath = url('cache/logo/bagisto.png');
                     }
