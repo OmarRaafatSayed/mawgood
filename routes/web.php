@@ -44,6 +44,9 @@ Route::group(['prefix' => config('app.admin_url', 'admin'), 'middleware' => ['we
     Route::post('vendor-management/{id}/suspend', [App\Http\Controllers\Admin\VendorManagementController::class, 'suspend'])->name('admin.vendor-management.suspend');
 
     Route::get('debug-products', [App\Http\Controllers\Admin\VendorController::class, 'debugProducts'])->name('admin.debug.products');
+    
+    // Jobs Management
+    Route::post('jobs', [App\Http\Controllers\Admin\JobController::class, 'store'])->name('admin.jobs.store');
 });
 
 // Jobs Routes
