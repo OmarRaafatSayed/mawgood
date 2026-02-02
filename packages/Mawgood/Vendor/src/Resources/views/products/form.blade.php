@@ -73,6 +73,35 @@
                     <small class="text-muted">⚠️ سيتم تفعيل المنتج بعد موافقة الإدارة</small>
                 </div>
                 
+                <!-- Weight -->
+                <div class="col-md-4 mb-3">
+                    <label class="form-label required">الوزن (كجم)</label>
+                    <input type="number" name="weight" class="form-control @error('weight') is-invalid @enderror" value="{{ old('weight', $product->weight ?? 1) }}" step="0.01" min="0.01" required>
+                    @error('weight')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                
+                <!-- Visible Individually -->
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">ظهور المنتج</label>
+                    <select name="visible_individually" class="form-control">
+                        <option value="1" selected>نعم - يظهر في الموقع</option>
+                        <option value="0">لا - مخفي</option>
+                    </select>
+                    <input type="hidden" name="visible_individually" value="0">
+                    <small class="text-muted">⚠️ سيتم تفعيله بعد الموافقة</small>
+                </div>
+                
+                <!-- Guest Checkout -->
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">الشراء بدون تسجيل</label>
+                    <select name="guest_checkout" class="form-control">
+                        <option value="1" selected>نعم - مسموح</option>
+                        <option value="0">لا - يتطلب تسجيل</option>
+                    </select>
+                </div>
+                
                 <!-- Description -->
                 <div class="col-12 mb-3">
                     <label class="form-label">الوصف</label>

@@ -27,26 +27,21 @@ class ProductController extends Controller
     {
         $vendor = $request->vendor;
         
-        // Create empty product with proper relations
         $product = new \Webkul\Product\Models\Product();
         $product->type = 'simple';
         $product->vendor_id = $vendor->id;
         
-        // Load attribute family with relations
-        $attributeFamily = \Webkul\Attribute\Models\AttributeFamily::with([
-            'attribute_groups.custom_attributes'
-        ])->first();
+        $attributeFamily = \Webkul\Attribute\Models\AttributeFamily::first();
         
         if ($attributeFamily) {
             $product->attribute_family_id = $attributeFamily->id;
             $product->setRelation('attribute_family', $attributeFamily);
         }
         
-        // Load all necessary data for form
-        $categories = \Webkul\Category\Models\Category::all();
-        $inventorySources = \Webkul\Inventory\Models\InventorySource::where('status', 1)->get();
-        $channels = \Webkul\Core\Models\Channel::all();
-        $locales = \Webkul\Core\Models\Locale::all();
+        $categories = \Webkul\Category\Models\Category::select('id', 'parent_id')->get();
+        $inventorySources = \Webkul\Inventory\Models\InventorySource::where('status', 1)->select('id', 'name')->get();
+        $channels = \Webkul\Core\Models\Channel::select('id', 'code')->get();
+        $locales = \Webkul\Core\Models\Locale::select('id', 'code')->get();
         $currentLocale = core()->getCurrentLocale();
         
         return view('mawgood-vendor::products.create', compact(
@@ -69,32 +64,23 @@ class ProductController extends Controller
         $data['vendor_id'] = $vendor->id;
         
         // Set defaults
-        if (!isset($data['type'])) {
-            $data['type'] = 'simple';
-        }
+        $data['type'] = $data['type'] ?? 'simple';
+        $data['attribute_family_id'] = $data['attribute_family_id'] ?? 1;
+        $data['sku'] = $data['sku'] ?? 'PROD-' . strtoupper(uniqid());
         
-        if (!isset($data['attribute_family_id'])) {
-            $data['attribute_family_id'] = \Webkul\Attribute\Models\AttributeFamily::first()->id ?? 1;
-        }
-        
-        // Generate SKU if not provided
-        if (empty($data['sku'])) {
-            $data['sku'] = 'PROD-' . strtoupper(uniqid());
-        }
-        
-        // Set status to pending for vendor products (needs admin approval)
-        $data['approved_by_admin'] = false; // يحتاج موافقة الأدمن
-        $data['status'] = 0; // غير نشط حتى يوافق الأدمن
+        // ✅ Auto-approve vendor products
+        $data['approved_by_admin'] = true;
+        $data['status'] = 1;
+        $data['visible_individually'] = 1;
         
         try {
             $product = $this->productService->create($data);
             
-            // توليد url_key إذا لم يكن موجود
+            // Generate url_key if missing
             if (empty($data['url_key'])) {
                 $data['url_key'] = \Illuminate\Support\Str::slug($data['name']) . '-' . $product->id;
             }
             
-            // Update product with all data including inventory, images, videos
             $product = $this->productService->update($data, $product->id);
             
             // Handle images
@@ -113,8 +99,8 @@ class ProductController extends Controller
                 }
             }
             
-            return redirect()->route('vendor.products.edit', $product->id)
-                ->with('success', 'تم إضافة المنتج بنجاح');
+            return redirect()->route('vendor.products.index')
+                ->with('success', 'تم إضافة المنتج بنجاح ونشره في الموقع');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
@@ -126,25 +112,16 @@ class ProductController extends Controller
     {
         $vendor = $request->vendor;
         
-        // Load product with all relations
         $product = $this->productRepository
-            ->with([
-                'attribute_family.attribute_groups.custom_attributes',
-                'images',
-                'videos',
-                'inventories',
-                'categories',
-                'channels'
-            ])
+            ->with(['images', 'videos', 'inventories', 'categories', 'channels'])
             ->where('id', $id)
             ->where('vendor_id', $vendor->id)
             ->firstOrFail();
         
-        // Load all necessary data for form
-        $categories = \Webkul\Category\Models\Category::all();
-        $inventorySources = \Webkul\Inventory\Models\InventorySource::where('status', 1)->get();
-        $channels = \Webkul\Core\Models\Channel::all();
-        $locales = \Webkul\Core\Models\Locale::all();
+        $categories = \Webkul\Category\Models\Category::select('id', 'parent_id')->get();
+        $inventorySources = \Webkul\Inventory\Models\InventorySource::where('status', 1)->select('id', 'name')->get();
+        $channels = \Webkul\Core\Models\Channel::select('id', 'code')->get();
+        $locales = \Webkul\Core\Models\Locale::select('id', 'code')->get();
         $currentLocale = core()->getCurrentLocale();
 
         return view('mawgood-vendor::products.edit', compact(

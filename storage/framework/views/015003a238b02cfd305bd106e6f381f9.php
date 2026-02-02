@@ -61,7 +61,7 @@
 <?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.top.after'); ?>
 
 
-<?php if (! $__env->hasRenderedOnce('cf68e89e-f303-4a54-b180-c34a17fc5adf')): $__env->markAsRenderedOnce('cf68e89e-f303-4a54-b180-c34a17fc5adf');
+<?php if (! $__env->hasRenderedOnce('ec05b9fd-9640-4d74-b821-d16c211a92e2')): $__env->markAsRenderedOnce('ec05b9fd-9640-4d74-b821-d16c211a92e2');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"
@@ -157,14 +157,6 @@ $__env->startPush('scripts'); ?>
                         tabindex="0"
                         @click="localeToggler = ! localeToggler"
                     >
-                        <img
-                            src="<?php echo e(optional(core()->getCurrentLocale())->logo_url ?? bagisto_asset('images/default-language.svg')); ?>"
-                            class="h-full"
-                            alt="<?php echo app('translator')->get('shop::app.components.layouts.header.desktop.top.default-locale'); ?>"
-                            width="24"
-                            height="16"
-                        />
-                        
                         <span>
                             <?php echo e(core()->getCurrentLocale()->name ?? ''); ?>
 
@@ -220,17 +212,11 @@ $__env->startPush('scripts'); ?>
     >
         <div class="my-2.5 grid gap-1 overflow-auto max-md:my-0 sm:max-h-[500px]">
             <span
-                class="flex cursor-pointer items-center gap-2.5 px-5 py-2 text-base hover:bg-gray-100"
+                class="cursor-pointer px-5 py-2 text-base hover:bg-gray-100"
                 :class="{'bg-gray-100': locale.code == '<?php echo e(app()->getLocale()); ?>'}"
                 v-for="locale in locales"
                 @click="change(locale)"                  
             >
-                <img
-                    :src="locale.logo_url || '<?php echo e(bagisto_asset('images/default-language.svg')); ?>'"
-                    width="24"
-                    height="16"
-                />
-
                 {{ locale.name }}
             </span>
         </div>

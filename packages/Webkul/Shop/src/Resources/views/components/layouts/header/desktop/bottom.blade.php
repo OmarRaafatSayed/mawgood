@@ -66,6 +66,13 @@
         <!-- CMS Pages Links -->
         <div class="flex items-center gap-2">
             <a
+                href="{{ route('blog.index') }}"
+                class="flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue px-2 text-sm font-medium"
+            >
+                المقالات
+            </a>
+            
+            <a
                 href="{{ route('shop.cms.page', 'about-us') }}"
                 class="flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue px-2 text-sm font-medium"
             >

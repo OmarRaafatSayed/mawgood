@@ -516,6 +516,44 @@ class Product extends Model implements ProductContract
     }
 
     /**
+     * Scope للمنتجات النشطة فقط
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+
+    /**
+     * Scope للمنتجات المرئية في الواجهة الأمامية
+     */
+    public function scopeVisibleInFrontend($query)
+    {
+        return $query->where('visible_individually', 1);
+    }
+
+    /**
+     * Scope للمنتجات الموافق عليها
+     */
+    public function scopeApproved($query)
+    {
+        return $query->where(function($q) {
+            $q->whereNull('vendor_id')
+              ->orWhere('approved_by_admin', 1);
+        });
+    }
+
+    /**
+     * Scope للمنتجات الجاهزة للعرض في المتجر
+     */
+    public function scopeForShop($query)
+    {
+        return $query
+            ->active()
+            ->visibleInFrontend()
+            ->approved();
+    }
+
+    /**
      * Create a new factory instance for the model.
      */
     protected static function newFactory(): Factory

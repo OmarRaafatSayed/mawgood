@@ -23,6 +23,7 @@ use Webkul\Product\Repositories\ProductDownloadableLinkRepository;
 use Webkul\Product\Repositories\ProductDownloadableSampleRepository;
 use Webkul\Product\Repositories\ProductInventoryRepository;
 use Webkul\Product\Repositories\ProductRepository;
+use App\Services\ProductApprovalService;
 
 class ProductController extends Controller
 {
@@ -44,6 +45,7 @@ class ProductController extends Controller
         protected ProductInventoryRepository $productInventoryRepository,
         protected ProductRepository $productRepository,
         protected CustomerRepository $customerRepository,
+        protected ProductApprovalService $productApprovalService,
     ) {}
 
     /**
@@ -313,19 +315,24 @@ class ProductController extends Controller
         try {
             Event::dispatch('catalog.product.update.before', $id);
 
-            $product = $this->productRepository->update([
-                'approved_by_admin' => true,
-                'status' => self::ACTIVE_STATUS,
-            ], $id);
+            // Use ProductApprovalService for complete approval workflow
+            $this->productApprovalService->approveProduct($id);
+
+            $product = $this->productRepository->find($id);
 
             Event::dispatch('catalog.product.update.after', $product);
+            
+            // Force immediate cache clear
+            \Artisan::call('cache:clear');
+            \Artisan::call('view:clear');
 
             return new JsonResponse([
-                'message' => 'تم الموافقة على المنتج بنجاح',
+                'message' => 'تم الموافقة على المنتج بنجاح وتم نشره في الموقع',
+                'redirect' => route('admin.catalog.products.index'),
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([
-                'message' => $e->getMessage(),
+                'message' => 'فشل في الموافقة على المنتج: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -338,19 +345,19 @@ class ProductController extends Controller
         try {
             Event::dispatch('catalog.product.update.before', $id);
 
-            $product = $this->productRepository->update([
-                'approved_by_admin' => false,
-                'status' => 0,
-            ], $id);
+            // Use ProductApprovalService for complete rejection workflow
+            $this->productApprovalService->rejectProduct($id);
+
+            $product = $this->productRepository->find($id);
 
             Event::dispatch('catalog.product.update.after', $product);
 
             return new JsonResponse([
-                'message' => 'تم رفض المنتج',
+                'message' => 'تم رفض المنتج وإخفاؤه من الموقع',
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([
-                'message' => $e->getMessage(),
+                'message' => 'فشل في رفض المنتج: ' . $e->getMessage(),
             ], 500);
         }
     }

@@ -43,7 +43,10 @@ class ProductDataGrid extends DataGrid
             ->leftJoin('products', 'product_flat.product_id', '=', 'products.id')
             ->leftJoin('attribute_families as af', 'product_flat.attribute_family_id', '=', 'af.id')
             ->leftJoin('product_inventories', 'product_flat.product_id', '=', 'product_inventories.product_id')
-            ->leftJoin('product_images', 'product_flat.product_id', '=', 'product_images.product_id')
+            ->leftJoin('product_images', function($join) {
+                $join->on('product_flat.product_id', '=', 'product_images.product_id')
+                     ->whereRaw('product_images.id = (SELECT MIN(id) FROM product_images WHERE product_id = product_flat.product_id)');
+            })
             ->leftJoin('product_categories as pc', 'product_flat.product_id', '=', 'pc.product_id')
             ->leftJoin('category_translations as ct', function ($leftJoin) {
                 $leftJoin->on('pc.category_id', '=', 'ct.category_id')
@@ -64,6 +67,8 @@ class ProductDataGrid extends DataGrid
                 'product_flat.url_key',
                 'product_flat.visible_individually',
                 'af.name as attribute_family',
+                'products.vendor_id',
+                'products.approved_by_admin',
             )
             ->addSelect(DB::raw('SUM(DISTINCT '.$tablePrefix.'product_inventories.qty) as quantity'))
             ->addSelect(DB::raw('COUNT(DISTINCT '.$tablePrefix.'product_images.id) as images_count'))
@@ -239,6 +244,19 @@ class ProductDataGrid extends DataGrid
                         'id'      => $row->product_id,
                         'channel' => $filteredChannel,
                     ]);
+                },
+            ]);
+            
+            // Add Approve action for vendor products
+            $this->addAction([
+                'icon'   => 'icon-checkmark',
+                'title'  => 'موافقة',
+                'method' => 'POST',
+                'url'    => function ($row) {
+                    return route('admin.catalog.products.approve', $row->product_id);
+                },
+                'condition' => function ($row) {
+                    return isset($row->vendor_id) && $row->vendor_id && !$row->approved_by_admin;
                 },
             ]);
         }

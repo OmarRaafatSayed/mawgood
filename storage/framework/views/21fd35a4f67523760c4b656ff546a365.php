@@ -71,6 +71,13 @@
         <!-- CMS Pages Links -->
         <div class="flex items-center gap-2">
             <a
+                href="<?php echo e(route('blog.index')); ?>"
+                class="flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue px-2 text-sm font-medium"
+            >
+                المقالات
+            </a>
+            
+            <a
                 href="<?php echo e(route('shop.cms.page', 'about-us')); ?>"
                 class="flex h-[77px] items-center border-b-4 border-transparent hover:border-b-4 hover:border-navyBlue px-2 text-sm font-medium"
             >
@@ -351,7 +358,7 @@
     </div>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('714fee09-4b60-47e3-b887-9994eff43808')): $__env->markAsRenderedOnce('714fee09-4b60-47e3-b887-9994eff43808');
+<?php if (! $__env->hasRenderedOnce('de7f0419-5f54-4299-8783-21e620166661')): $__env->markAsRenderedOnce('de7f0419-5f54-4299-8783-21e620166661');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"

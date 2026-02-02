@@ -304,10 +304,39 @@
 
                 {!! view_render_event('bagisto.shop.components.layouts.header.mobile.drawer.categories.after') !!}
 
+                <!-- Additional Pages Section -->
+                <div class="border-t border-zinc-200">
+                    <div class="p-4">
+                        <p class="mb-3 text-base font-semibold text-gray-800">@lang('shop::app.components.layouts.header.mobile.pages')</p>
+                        <div class="space-y-1">
+                            <a href="{{ route('blog.index') }}" class="flex items-center justify-between px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span>المقالات</span>
+                                <span class="icon-arrow-right rtl:icon-arrow-left text-gray-400"></span>
+                            </a>
+                            <a href="{{ route('shop.cms.page', 'terms-of-use') }}" class="flex items-center justify-between px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span>@lang('shop::app.components.layouts.header.mobile.terms-of-use')</span>
+                                <span class="icon-arrow-right rtl:icon-arrow-left text-gray-400"></span>
+                            </a>
+                            <a href="{{ route('shop.cms.page', 'terms-conditions') }}" class="flex items-center justify-between px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span>@lang('shop::app.components.layouts.header.mobile.terms-conditions')</span>
+                                <span class="icon-arrow-right rtl:icon-arrow-left text-gray-400"></span>
+                            </a>
+                            <a href="{{ route('shop.cms.page', 'customer-service') }}" class="flex items-center justify-between px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span>@lang('shop::app.components.layouts.header.mobile.customer-service')</span>
+                                <span class="icon-arrow-right rtl:icon-arrow-left text-gray-400"></span>
+                            </a>
+                            <a href="{{ route('jobs.index') }}" class="flex items-center justify-between px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span>@lang('shop::app.components.layouts.header.mobile.jobs')</span>
+                                <span class="icon-arrow-right rtl:icon-arrow-left text-gray-400"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Language Switcher -->
                 @if((core()->getCurrentChannel()->locales ?? collect())->count() > 1)
                     <div class="border-t border-zinc-200 p-4">
-                        <p class="mb-3 text-base font-semibold">@lang('shop::app.components.layouts.header.mobile.language')</p>
+                        <p class="mb-3 text-base font-semibold text-gray-800">@lang('shop::app.components.layouts.header.mobile.language')</p>
                         <v-locale-switcher></v-locale-switcher>
                     </div>
                 @endif
@@ -366,14 +395,6 @@
                                     class="flex cursor-pointer items-center gap-x-2.5 px-2.5 py-3.5 text-lg font-medium uppercase max-md:py-3 max-sm:text-base"
                                     role="button"
                                 >
-                                    <img
-                                        src="{{ optional(core()->getCurrentLocale())->logo_url ?? bagisto_asset('images/default-language.svg') }}"
-                                        class="h-full"
-                                        alt="Default locale"
-                                        width="24"
-                                        height="16"
-                                    />
-
                                     {{ core()->getCurrentLocale()->name ?? '' }}
                                 </div>
                             </x-slot>

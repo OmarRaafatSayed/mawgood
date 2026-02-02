@@ -291,7 +291,7 @@
 
 </div>
 
-<?php if (! $__env->hasRenderedOnce('ecdfbb20-0fb3-45ac-a557-9014d5aa6ccd')): $__env->markAsRenderedOnce('ecdfbb20-0fb3-45ac-a557-9014d5aa6ccd');
+<?php if (! $__env->hasRenderedOnce('76335739-f486-40eb-9850-9ce59837ef82')): $__env->markAsRenderedOnce('76335739-f486-40eb-9850-9ce59837ef82');
 $__env->startPush('scripts'); ?>
     <script type="text/x-template" id="v-mobile-drawer-template">
         <?php if (isset($component)) { $__componentOriginal2b3e2da8ab003ef79d854b1862e64fc8 = $component; } ?>
@@ -362,10 +362,39 @@ $__env->startPush('scripts'); ?>
                 <?php echo view_render_event('bagisto.shop.components.layouts.header.mobile.drawer.categories.after'); ?>
 
 
+                <!-- Additional Pages Section -->
+                <div class="border-t border-zinc-200">
+                    <div class="p-4">
+                        <p class="mb-3 text-base font-semibold text-gray-800"><?php echo app('translator')->get('shop::app.components.layouts.header.mobile.pages'); ?></p>
+                        <div class="space-y-1">
+                            <a href="<?php echo e(route('blog.index')); ?>" class="flex items-center justify-between px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span>المقالات</span>
+                                <span class="icon-arrow-right rtl:icon-arrow-left text-gray-400"></span>
+                            </a>
+                            <a href="<?php echo e(route('shop.cms.page', 'terms-of-use')); ?>" class="flex items-center justify-between px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span><?php echo app('translator')->get('shop::app.components.layouts.header.mobile.terms-of-use'); ?></span>
+                                <span class="icon-arrow-right rtl:icon-arrow-left text-gray-400"></span>
+                            </a>
+                            <a href="<?php echo e(route('shop.cms.page', 'terms-conditions')); ?>" class="flex items-center justify-between px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span><?php echo app('translator')->get('shop::app.components.layouts.header.mobile.terms-conditions'); ?></span>
+                                <span class="icon-arrow-right rtl:icon-arrow-left text-gray-400"></span>
+                            </a>
+                            <a href="<?php echo e(route('shop.cms.page', 'customer-service')); ?>" class="flex items-center justify-between px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span><?php echo app('translator')->get('shop::app.components.layouts.header.mobile.customer-service'); ?></span>
+                                <span class="icon-arrow-right rtl:icon-arrow-left text-gray-400"></span>
+                            </a>
+                            <a href="<?php echo e(route('jobs.index')); ?>" class="flex items-center justify-between px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                                <span><?php echo app('translator')->get('shop::app.components.layouts.header.mobile.jobs'); ?></span>
+                                <span class="icon-arrow-right rtl:icon-arrow-left text-gray-400"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Language Switcher -->
                 <?php if((core()->getCurrentChannel()->locales ?? collect())->count() > 1): ?>
                     <div class="border-t border-zinc-200 p-4">
-                        <p class="mb-3 text-base font-semibold"><?php echo app('translator')->get('shop::app.components.layouts.header.mobile.language'); ?></p>
+                        <p class="mb-3 text-base font-semibold text-gray-800"><?php echo app('translator')->get('shop::app.components.layouts.header.mobile.language'); ?></p>
                         <v-locale-switcher></v-locale-switcher>
                     </div>
                 <?php endif; ?>
@@ -446,14 +475,6 @@ $__env->startPush('scripts'); ?>
                                     class="flex cursor-pointer items-center gap-x-2.5 px-2.5 py-3.5 text-lg font-medium uppercase max-md:py-3 max-sm:text-base"
                                     role="button"
                                 >
-                                    <img
-                                        src="<?php echo e(optional(core()->getCurrentLocale())->logo_url ?? bagisto_asset('images/default-language.svg')); ?>"
-                                        class="h-full"
-                                        alt="Default locale"
-                                        width="24"
-                                        height="16"
-                                    />
-
                                     <?php echo e(core()->getCurrentLocale()->name ?? ''); ?>
 
                                 </div>

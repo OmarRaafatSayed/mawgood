@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الفئات</title>
+    <style>
+        body{font-family:Arial,sans-serif;padding:20px;background:#f5f5f5}
+        .container{max-width:600px;margin:0 auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+        h1{color:#333;text-align:center}
+        .btn{background:#f97316;color:#fff;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-size:16px;width:100%;margin:10px 0}
+        .btn:hover{background:#ea580c}
+        .result{margin-top:20px;padding:15px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb}
+        .category{padding:10px;margin:5px 0;background:#fff;border-radius:6px;border:1px solid #e5e7eb}
+        .category img{width:32px;height:32px;object-fit:contain;margin-left:10px;vertical-align:middle}
+        .loading{text-align:center;color:#9ca3af}
+        .error{color:#ef4444;text-align:center}
+        .success{color:#10b981;text-align:center}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 اختبار الفئات</h1>
+        
+        <button class="btn" onclick="testCategories()">اختبار جلب الفئات</button>
+        
+        <div id="result" class="result" style="display:none">
+            <h3>النتيجة:</h3>
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <script>
+        function testCategories() {
+            const result = document.getElementById('result');
+            const output = document.getElementById('output');
+            
+            result.style.display = 'block';
+            output.innerHTML = '<div class="loading">⏳ جاري جلب الفئات...</div>';
+            
+            // استبدل هذا بـ URL موقعك
+            const apiUrl = window.location.origin + '/api/categories/tree';
+            
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error! status: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Categories data:', data);
+                    
+                    if (!data.data || !data.data.length) {
+                        output.innerHTML = '<div class="error">❌ لا توجد فئات متاحة</div>';
+                        return;
+                    }
+                    
+                    let html = '<div class="success">✅ تم جلب ' + data.data.length + ' فئة بنجاح!</div>';
+                    html += '<h4>الفئات:</h4>';
+                    
+                    data.data.forEach(cat => {
+                        html += '<div class="category">';
+                        if (cat.logo_url) {
+                            html += '<img src="' + cat.logo_url + '" alt="' + cat.name + '">';
+                        }
+                        html += '<strong>' + cat.name + '</strong>';
+                        
+                        if (cat.children && cat.children.length) {
+                            html += ' <small>(' + cat.children.length + ' فئة فرعية)</small>';
+                            cat.children.forEach(child => {
+                                html += '<div style="margin-right:40px;margin-top:5px">';
+                                if (child.logo_url) {
+                                    html += '<img src="' + child.logo_url + '" alt="' + child.name + '">';
+                                }
+                                html += '↳ ' + child.name;
+                                html += '</div>';
+                            });
+                        }
+                        
+                        html += '</div>';
+                    });
+                    
+                    output.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    output.innerHTML = '<div class="error">❌ حدث خطأ: ' + error.message + '</div>';
+                    output.innerHTML += '<p style="margin-top:10px;font-size:12px;color:#6b7280">تأكد من أن API يعمل على: ' + apiUrl + '</p>';
+                });
+        }
+    </script>
+</body>
+</html>

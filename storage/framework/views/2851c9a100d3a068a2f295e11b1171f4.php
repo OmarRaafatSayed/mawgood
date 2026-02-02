@@ -162,7 +162,7 @@
 <?php echo view_render_event('bagisto.shop.layout.header.after'); ?>
 
 
-<?php if (! $__env->hasRenderedOnce('9cbf0c6c-c6cf-4d15-a599-27b173842041')): $__env->markAsRenderedOnce('9cbf0c6c-c6cf-4d15-a599-27b173842041');
+<?php if (! $__env->hasRenderedOnce('02c55399-134b-41fe-b408-9d1904dd471a')): $__env->markAsRenderedOnce('02c55399-134b-41fe-b408-9d1904dd471a');
 $__env->startPush('scripts'); ?>
     <script 
         type="text/x-template" 

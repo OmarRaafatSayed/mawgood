@@ -99,3 +99,14 @@ Route::get('/test-db', function() {
 Route::get('/quick-login', function() {
     return view('simple-login');
 })->name('quick.login');
+
+// Blog Routes
+use App\Http\Controllers\BlogController;
+
+Route::prefix('blog')->name('blog.')->group(function () {
+    Route::get('/', [BlogController::class, 'index'])->name('index');
+    Route::get('/{slug}', [BlogController::class, 'show'])->name('show');
+});
+
+// Test Blog System
+require __DIR__.'/test-blog.php';

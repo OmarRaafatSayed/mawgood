@@ -505,6 +505,11 @@ return [
                         'welcome'       => 'Welcome',
                         'welcome-guest' => 'Welcome Guest',
                         'wishlist'      => 'Wishlist',
+                    'pages'            => 'Pages',
+                    'terms-of-use'     => 'Terms of Use',
+                    'terms-conditions' => 'Terms & Conditions',
+                    'customer-service' => 'Customer Service',
+                    'jobs'             => 'Jobs Page',
                     ],
                 ],
 
@@ -528,6 +533,11 @@ return [
                     'welcome'       => 'Welcome',
                     'welcome-guest' => 'Welcome Guest',
                     'wishlist'      => 'Wishlist',
+                    'pages'            => 'Pages',
+                    'terms-of-use'     => 'Terms of Use',
+                    'terms-conditions' => 'Terms & Conditions',
+                    'customer-service' => 'Customer Service',
+                    'jobs'             => 'Jobs Page',
                 ],
             ],
 

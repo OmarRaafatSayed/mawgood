@@ -8,7 +8,7 @@
 
 <?php $toolbar = app('Webkul\Product\Helpers\Toolbar'); ?>
 
-<?php if (! $__env->hasRenderedOnce('64d2c9d8-6182-4ee8-b2fb-47059a8d022b')): $__env->markAsRenderedOnce('64d2c9d8-6182-4ee8-b2fb-47059a8d022b');
+<?php if (! $__env->hasRenderedOnce('39bedc22-0686-42d6-90a2-2bdbe11de230')): $__env->markAsRenderedOnce('39bedc22-0686-42d6-90a2-2bdbe11de230');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"

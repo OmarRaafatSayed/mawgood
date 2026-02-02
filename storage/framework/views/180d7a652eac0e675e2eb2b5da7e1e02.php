@@ -76,16 +76,11 @@
                 </svg>
             </button>
         </div>
-        <div class="sheet-body">
-            <?php $__currentLoopData = app('Webkul\Category\Repositories\CategoryRepository')->getVisibleCategoryTree(core()->getCurrentChannel()->root_category_id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <a href="<?php echo e(route('shop.product_or_category.index', $category->slug)); ?>" class="cat-item">
-                <?php if($category->category_icon_path): ?><img src="<?php echo e($category->category_icon_path); ?>" alt="<?php echo e($category->name); ?>"><?php endif; ?>
-                <span><?php echo e($category->name); ?></span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"/>
-                </svg>
-            </a>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <div class="sheet-body" id="categoriesContent">
+            <div class="loading-cats" style="padding:40px 20px;text-align:center;color:#9ca3af">
+                <svg style="width:40px;height:40px;margin:0 auto 12px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M12 2a10 10 0 0 1 10 10" opacity=".75"/></svg>
+                <p>جاري تحميل الفئات...</p>
+            </div>
         </div>
     </div>
 </div>
@@ -119,6 +114,53 @@
 .cat-item svg{width:18px;height:18px;color:#9ca3af}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
+
+<script>
+(function(){
+let categoriesLoaded=false;
+const btn=document.querySelector('.mobile-nav-bar button[onclick*="categoriesSheet"]');
+if(!btn)return;
+btn.onclick=function(e){
+e.preventDefault();
+const sheet=document.getElementById('categoriesSheet');
+if(!sheet){console.error('categoriesSheet not found');return;}
+sheet.classList.add('show');
+if(categoriesLoaded)return;
+const content=document.getElementById('categoriesContent');
+if(!content){console.error('categoriesContent not found');return;}
+console.log('Fetching categories...');
+fetch('<?php echo e(route("shop.api.categories.tree")); ?>')
+.then(r=>r.json())
+.then(data=>{
+console.log('Categories data:',data);
+if(!data.data||!data.data.length){
+content.innerHTML='<div style="padding:40px 20px;text-align:center;color:#9ca3af"><p>لا توجد فئات متاحة</p></div>';
+return;
+}
+let html='';
+function renderCategory(cat){
+html+=`<a href="${cat.url||'#'}" class="cat-item">`;
+if(cat.logo_url)html+=`<img src="${cat.logo_url}" alt="${cat.name}" onerror="this.style.display='none'">`;
+html+=`<span>${cat.name}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>`;
+}
+data.data.forEach(cat=>{
+renderCategory(cat);
+if(cat.children&&cat.children.length){
+cat.children.forEach(child=>renderCategory(child));
+}
+});
+content.innerHTML=html;
+categoriesLoaded=true;
+console.log('Categories loaded successfully');
+})
+.catch(err=>{
+console.error('Error loading categories:',err);
+content.innerHTML='<div style="padding:40px 20px;text-align:center;color:#ef4444"><p>حدث خطأ في تحميل الفئات</p><button onclick="location.reload()" style="margin-top:10px;padding:8px 16px;background:#f97316;color:#fff;border:none;border-radius:8px">إعادة المحاولة</button></div>';
+});
+};
+})();
+</script>
 <?php endif; ?>
 <?php /**PATH C:\Users\EXPRESS\Downloads\coding\mawgood\mawgood\packages\Webkul\Shop\src/resources/views/components/mobile-bottom-bar.blade.php ENDPATH**/ ?>

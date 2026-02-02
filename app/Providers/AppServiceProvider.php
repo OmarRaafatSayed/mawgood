@@ -3,12 +3,15 @@
 namespace App\Providers;
 
 use App\Observers\ProductInventoryObserver;
+use App\Observers\ProductApprovalObserver;
+use App\Observers\ProductAutoFixObserver;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\ParallelTesting;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 use Webkul\Product\Models\ProductInventory;
+use Webkul\Product\Models\Product;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         ProductInventory::observe(ProductInventoryObserver::class);
+        Product::observe(ProductApprovalObserver::class);
+        // Product::observe(ProductAutoFixObserver::class); // Disabled temporarily
 
         ParallelTesting::setUpTestDatabase(function (string $database, int $token) {
             Artisan::call('db:seed');
