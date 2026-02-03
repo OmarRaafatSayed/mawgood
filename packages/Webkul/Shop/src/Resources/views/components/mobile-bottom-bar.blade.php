@@ -38,7 +38,7 @@
     </button>
 
     <button type="button" class="nav-item nav-search" onclick="document.getElementById('searchModal').classList.add('show')">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
     </button>
@@ -86,80 +86,255 @@
 </div>
 
 <style>
-.mobile-nav-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:999;box-shadow:0 -2px 10px rgba(0,0,0,.05)}
-@media(max-width:768px){.mobile-nav-bar{display:flex;justify-content:space-around;align-items:center}body{padding-bottom:calc(65px + env(safe-area-inset-bottom))}}
-.mobile-nav-bar .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;padding:6px 4px;color:#6b7280;text-decoration:none;transition:all .2s;border:none;background:none;cursor:pointer;position:relative}
-.mobile-nav-bar .nav-item.nav-search{background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:#fff;border-radius:50%;width:56px;height:56px;margin-top:-28px;box-shadow:0 4px 12px rgba(249,115,22,.3);flex:0 0 56px}
-.mobile-nav-bar .nav-item.nav-search .icon{width:24px;height:24px}
-.mobile-nav-bar .nav-item.nav-search span{display:none}
-.mobile-nav-bar .nav-item .icon{width:22px;height:22px;stroke-width:2}
-.mobile-nav-bar .nav-item span{font-size:11px;font-weight:500;white-space:nowrap}
-.mobile-nav-bar .nav-item.active{color:#f97316}
-.mobile-nav-bar .nav-item:active{transform:scale(.95)}
-.mobile-nav-bar .icon-wrap{position:relative}
-.mobile-nav-bar .badge{position:absolute;top:-6px;right:-8px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:2px 5px;border-radius:10px;min-width:18px;text-align:center;line-height:1.2;box-shadow:0 2px 4px rgba(0,0,0,.2)}
-.bottom-sheet{display:none;position:fixed;inset:0;z-index:9999}
-.bottom-sheet.show{display:block}
-.sheet-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);animation:fadeIn .3s}
-.sheet-content{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;max-height:70vh;display:flex;flex-direction:column;animation:slideUp .3s}
-.sheet-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:1px solid #e5e7eb}
-.sheet-header h3{font-size:18px;font-weight:700;color:#111827;margin:0}
-.sheet-header button{width:32px;height:32px;border:none;background:#f3f4f6;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#6b7280;padding:0}
-.sheet-header button svg{width:18px;height:18px}
-.sheet-body{overflow-y:auto;padding:12px 0}
-.cat-item{display:flex;align-items:center;gap:12px;padding:14px 20px;color:#374151;text-decoration:none;transition:background .2s}
-.cat-item:active{background:#f9fafb}
-.cat-item img{width:32px;height:32px;object-fit:contain}
-.cat-item span{flex:1;font-size:15px;font-weight:500}
-.cat-item svg{width:18px;height:18px;color:#9ca3af}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-@keyframes spin{to{transform:rotate(360deg)}}
+.mobile-nav-bar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+    z-index: 999;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.05);
+}
+
+@media(max-width:768px) {
+    .mobile-nav-bar {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end; /* مواءمة العناصر مع القاعدة */
+    }
+    body {
+        padding-bottom: calc(65px + env(safe-area-inset-bottom));
+    }
+}
+
+.mobile-nav-bar .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    padding: 6px 4px;
+    color: #6b7280;
+    text-decoration: none;
+    transition: all .2s;
+    border: none;
+    background: none;
+    cursor: pointer;
+    position: relative;
+}
+
+/* إصلاح زر البحث */
+.mobile-nav-bar .nav-item.nav-search {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: #fff;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 20px; /* دفع الزر للأعلى دون تداخل */
+    box-shadow: 0 4px 12px rgba(249,115,22,.3), 0 0 0 5px #fff;
+    flex: 0 0 56px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.mobile-nav-bar .nav-item.nav-search svg {
+    width: 28px;
+    height: 28px;
+}
+
+.mobile-nav-bar .nav-item .icon {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2;
+}
+
+.mobile-nav-bar .nav-item span {
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.mobile-nav-bar .nav-item.active {
+    color: #f97316;
+}
+
+.mobile-nav-bar .nav-item:active {
+    transform: scale(.95);
+}
+
+.mobile-nav-bar .icon-wrap {
+    position: relative;
+}
+
+.mobile-nav-bar .badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.2;
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+}
+
+.bottom-sheet {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+}
+
+.bottom-sheet.show {
+    display: block;
+}
+
+.sheet-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    animation: fadeIn .3s;
+}
+
+.sheet-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp .3s;
+}
+
+.sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.sheet-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+.sheet-header button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #f3f4f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6b7280;
+    padding: 0;
+}
+
+.sheet-header button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.sheet-body {
+    overflow-y: auto;
+    padding: 12px 0;
+}
+
+.cat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    color: #374151;
+    text-decoration: none;
+    transition: background .2s;
+}
+
+.cat-item:active {
+    background: #f9fafb;
+}
+
+.cat-item img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.cat-item span {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.cat-item svg {
+    width: 18px;
+    height: 18px;
+    color: #9ca3af;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes spin { to { transform: rotate(360deg); } }
 </style>
 
 <script>
 (function(){
-let categoriesLoaded=false;
-const btn=document.querySelector('.mobile-nav-bar button[onclick*="categoriesSheet"]');
-if(!btn)return;
-btn.onclick=function(e){
-e.preventDefault();
-const sheet=document.getElementById('categoriesSheet');
-if(!sheet){console.error('categoriesSheet not found');return;}
-sheet.classList.add('show');
-if(categoriesLoaded)return;
-const content=document.getElementById('categoriesContent');
-if(!content){console.error('categoriesContent not found');return;}
-console.log('Fetching categories...');
-fetch('{{ route("shop.api.categories.tree") }}')
-.then(r=>r.json())
-.then(data=>{
-console.log('Categories data:',data);
-if(!data.data||!data.data.length){
-content.innerHTML='<div style="padding:40px 20px;text-align:center;color:#9ca3af"><p>لا توجد فئات متاحة</p></div>';
-return;
-}
-let html='';
-function renderCategory(cat){
-html+=`<a href="${cat.url||'#'}" class="cat-item">`;
-if(cat.logo_url)html+=`<img src="${cat.logo_url}" alt="${cat.name}" onerror="this.style.display='none'">`;
-html+=`<span>${cat.name}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>`;
-}
-data.data.forEach(cat=>{
-renderCategory(cat);
-if(cat.children&&cat.children.length){
-cat.children.forEach(child=>renderCategory(child));
-}
-});
-content.innerHTML=html;
-categoriesLoaded=true;
-console.log('Categories loaded successfully');
-})
-.catch(err=>{
-console.error('Error loading categories:',err);
-content.innerHTML='<div style="padding:40px 20px;text-align:center;color:#ef4444"><p>حدث خطأ في تحميل الفئات</p><button onclick="location.reload()" style="margin-top:10px;padding:8px 16px;background:#f97316;color:#fff;border:none;border-radius:8px">إعادة المحاولة</button></div>';
-});
-};
+    let categoriesLoaded = false;
+    const btn = document.querySelector('.mobile-nav-bar button[onclick*="categoriesSheet"]');
+    if(!btn) return;
+    btn.onclick = function(e){
+        e.preventDefault();
+        const sheet = document.getElementById('categoriesSheet');
+        if(!sheet) return;
+        sheet.classList.add('show');
+        if(categoriesLoaded) return;
+        const content = document.getElementById('categoriesContent');
+        if(!content) return;
+        
+        fetch('{{ route("shop.api.categories.tree") }}')
+        .then(r => r.json())
+        .then(data => {
+            if(!data.data || !data.data.length){
+                content.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#9ca3af"><p>لا توجد فئات متاحة</p></div>';
+                return;
+            }
+            let html = '';
+            function renderCategory(cat){
+                html += `<a href="${cat.url || '#'}" class="cat-item">`;
+                if(cat.logo_url) html += `<img src="${cat.logo_url}" alt="${cat.name}" onerror="this.style.display='none'">`;
+                html += `<span>${cat.name}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>`;
+            }
+            data.data.forEach(cat => {
+                renderCategory(cat);
+                if(cat.children && cat.children.length){
+                    cat.children.forEach(child => renderCategory(child));
+                }
+            });
+            content.innerHTML = html;
+            categoriesLoaded = true;
+        })
+        .catch(err => {
+            content.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#ef4444"><p>حدث خطأ</p></div>';
+        });
+    };
 })();
 </script>
 @endif

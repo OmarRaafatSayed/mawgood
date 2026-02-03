@@ -1,6 +1,6 @@
 <v-gallery-zoomer <?php echo e($attributes); ?>></v-gallery-zoomer>
 
-<?php if (! $__env->hasRenderedOnce('4222f48e-c6c9-4eca-b01a-bf09a7443435')): $__env->markAsRenderedOnce('4222f48e-c6c9-4eca-b01a-bf09a7443435');
+<?php if (! $__env->hasRenderedOnce('92ec5e69-98ef-468d-b171-a5f0c1b95eaa')): $__env->markAsRenderedOnce('92ec5e69-98ef-468d-b171-a5f0c1b95eaa');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"

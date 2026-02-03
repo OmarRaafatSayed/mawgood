@@ -38,7 +38,13 @@ class HomeController extends Controller
             'theme_code' => core()->getCurrentChannel()->theme,
         ]);
 
-        $categories = $this->categoryRepository->getVisibleCategoryTree(core()->getCurrentChannel()->root_category_id);
+        $cacheKey = 'category_tree_' . core()->getCurrentChannel()->id . '_' . app()->getLocale();
+        
+        $categories = cache()->remember($cacheKey, 3600, function () {
+            return $this->categoryRepository->getVisibleCategoryTree(
+                core()->getCurrentChannel()->root_category_id
+            );
+        });
 
         $categories = CategoryTreeResource::collection($categories);
 

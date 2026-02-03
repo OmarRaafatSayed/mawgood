@@ -44,6 +44,11 @@ class AppServiceProvider extends ServiceProvider
         Product::observe(ProductApprovalObserver::class);
         // Product::observe(ProductAutoFixObserver::class); // Disabled temporarily
 
+        // Register Category Observer for automatic cache invalidation
+        if (class_exists(\Webkul\Category\Models\Category::class)) {
+            \Webkul\Category\Models\Category::observe(\App\Observers\CategoryObserver::class);
+        }
+
         ParallelTesting::setUpTestDatabase(function (string $database, int $token) {
             Artisan::call('db:seed');
         });

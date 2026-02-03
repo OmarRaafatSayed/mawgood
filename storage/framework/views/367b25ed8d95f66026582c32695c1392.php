@@ -100,14 +100,24 @@ unset($__defined_vars); ?>
         />
 
         <link
-            rel="preload" as="style"
+            rel="preload" 
+            as="style"
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap"
         />
 
         <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap"
+            media="print"
+            onload="this.media='all'"
         />
+        
+        <noscript>
+            <link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap"
+            />
+        </noscript>
 
         <?php echo $__env->yieldPushContent('styles'); ?>
 
@@ -378,12 +388,11 @@ unset($__defined_vars); ?>
 
         <script>
             /**
-             * Load event, the purpose of using the event is to mount the application
-             * after all of our `Vue` components which is present in blade file have
-             * been registered in the app. No matter what `app.mount()` should be
-             * called in the last.
+             * DOMContentLoaded event ensures Vue mounts as soon as DOM is ready,
+             * without waiting for images and other resources to load.
+             * This improves interactivity and perceived performance.
              */
-            window.addEventListener("load", function (event) {
+            document.addEventListener("DOMContentLoaded", function (event) {
                 app.mount("#app");
                 
                 // Ensure RTL/LTR is applied correctly

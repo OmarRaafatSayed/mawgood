@@ -32,9 +32,15 @@ class CartController extends APIController
     {
         Cart::collectTotals();
 
-        $response = [
-            'data' => ($cart = Cart::getCart()) ? new CartResource($cart) : null,
-        ];
+        $cart = Cart::getCart();
+        
+        // Cache cart response per session for 10 minutes
+        $cacheKey = 'cart_api_response_' . session()->getId();
+        $cartData = cache()->remember($cacheKey, 600, function () use ($cart) {
+            return $cart ? new CartResource($cart) : null;
+        });
+
+        $response = ['data' => $cartData];
 
         if (session()->has('info')) {
             $response['message'] = session()->get('info');
@@ -70,6 +76,9 @@ class CartController extends APIController
             }
 
             $cart = Cart::addProduct($product, request()->all());
+            
+            // Clear cart cache on update
+            cache()->forget('cart_api_response_' . session()->getId());
 
             return new JsonResource(array_merge([
                 'data'    => new CartResource($cart),
@@ -97,8 +106,10 @@ class CartController extends APIController
         ]);
 
         Cart::removeItem(request()->input('cart_item_id'));
-
         Cart::collectTotals();
+        
+        // Clear cart cache on update
+        cache()->forget('cart_api_response_' . session()->getId());
 
         return new JsonResource([
             'data'    => new CartResource(Cart::getCart()),
@@ -145,6 +156,9 @@ class CartController extends APIController
     {
         try {
             Cart::updateItems(request()->input());
+            
+            // Clear cart cache on update
+            cache()->forget('cart_api_response_' . session()->getId());
 
             return new JsonResource([
                 'data'    => new CartResource(Cart::getCart()),

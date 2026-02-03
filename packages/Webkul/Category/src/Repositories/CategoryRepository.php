@@ -2,6 +2,7 @@
 
 namespace Webkul\Category\Repositories;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -124,6 +125,8 @@ class CategoryRepository extends Repository
             $category->filterableAttributes()->sync($data['attributes']);
         }
 
+        // Cache clearing now handled by CategoryObserver
+
         return $category;
     }
 
@@ -179,9 +182,20 @@ class CategoryRepository extends Repository
      */
     public function getVisibleCategoryTree($id = null)
     {
+        // Optimized with eager loading and selective columns
+        $query = $this->model::select('id', 'parent_id', 'position', 'status', 'logo_path', 'banner_path')
+            ->with([
+                'translations' => function($q) {
+                    $q->select('id', 'category_id', 'name', 'slug', 'locale', 'url_path')
+                      ->where('locale', app()->getLocale());
+                }
+            ])
+            ->where('status', 1)
+            ->orderBy('position', 'ASC');
+
         return $id
-            ? $this->model::orderBy('position', 'ASC')->where('status', 1)->descendantsAndSelf($id)->toTree($id)
-            : $this->model::orderBy('position', 'ASC')->where('status', 1)->get()->toTree();
+            ? $query->descendantsAndSelf($id)->toTree($id)
+            : $query->get()->toTree();
     }
 
     /**

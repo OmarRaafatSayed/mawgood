@@ -39,7 +39,7 @@
     </v-product-carousel>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('d2937076-0297-47b1-a433-7bbf6c5a4afa')): $__env->markAsRenderedOnce('d2937076-0297-47b1-a433-7bbf6c5a4afa');
+<?php if (! $__env->hasRenderedOnce('a269a88a-6e54-4bd7-839f-90d2ea2d5541')): $__env->markAsRenderedOnce('a269a88a-6e54-4bd7-839f-90d2ea2d5541');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"

@@ -21,7 +21,7 @@
 <?php endif; ?>
 </v-product-gallery>
 
-<?php if (! $__env->hasRenderedOnce('94599c2b-faa3-4ecf-adac-f3cb6969ed37')): $__env->markAsRenderedOnce('94599c2b-faa3-4ecf-adac-f3cb6969ed37');
+<?php if (! $__env->hasRenderedOnce('30b53995-fb53-4e62-bad8-916e2cc13a2a')): $__env->markAsRenderedOnce('30b53995-fb53-4e62-bad8-916e2cc13a2a');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"

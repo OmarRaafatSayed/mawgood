@@ -234,7 +234,7 @@
     <?php echo view_render_event('bagisto.shop.products.view.after', ['product' => $product]); ?>
 
 
-    <?php if (! $__env->hasRenderedOnce('4529c139-bbfc-4578-916c-83cdee55392d')): $__env->markAsRenderedOnce('4529c139-bbfc-4578-916c-83cdee55392d');
+    <?php if (! $__env->hasRenderedOnce('3daf587c-ea4b-4c16-9b41-f4e36f85971b')): $__env->markAsRenderedOnce('3daf587c-ea4b-4c16-9b41-f4e36f85971b');
 $__env->startPush('scripts'); ?>
         <script type="text/x-template" id="v-product-template">
             <?php if (isset($component)) { $__componentOriginal4d3fcee3e355fb6c8889181b04f357cc = $component; } ?>

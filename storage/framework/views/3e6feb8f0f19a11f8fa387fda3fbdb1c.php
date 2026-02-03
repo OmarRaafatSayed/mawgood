@@ -28,7 +28,7 @@
         <?php echo view_render_event('bagisto.shop.products.view.customizable-options.after', ['product' => $product]); ?>
 
 
-        <?php if (! $__env->hasRenderedOnce('9d24db03-7bef-404a-b29b-8e8492790edd')): $__env->markAsRenderedOnce('9d24db03-7bef-404a-b29b-8e8492790edd');
+        <?php if (! $__env->hasRenderedOnce('34a573f7-9aab-478c-b0fc-2d83243e7ad0')): $__env->markAsRenderedOnce('34a573f7-9aab-478c-b0fc-2d83243e7ad0');
 $__env->startPush('scripts'); ?>
             <script
                 type="text/x-template"

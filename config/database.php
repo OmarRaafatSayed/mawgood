@@ -59,6 +59,9 @@ return [
             'engine'         => null,
             'options'        => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci',
+                PDO::ATTR_EMULATE_PREPARES => true,
+                PDO::ATTR_PERSISTENT => env('DB_PERSISTENT', true),
             ]) : [],
         ],
 
@@ -157,6 +160,7 @@ return [
             'password' => env('REDIS_PASSWORD'),
             'port'     => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
+            'read_write_timeout' => 60,
         ],
 
         'cache' => [
@@ -166,6 +170,7 @@ return [
             'password' => env('REDIS_PASSWORD'),
             'port'     => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
+            'read_write_timeout' => 60,
         ],
 
         'session' => [
@@ -175,6 +180,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port'     => env('REDIS_PORT', 6379),
             'database' => env('REDIS_SESSION_DATABASE', '2'),
+            'read_write_timeout' => 60,
         ],
 
     ],

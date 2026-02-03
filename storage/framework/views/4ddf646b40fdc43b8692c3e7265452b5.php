@@ -7,7 +7,7 @@
     </button>
 </v-image-search>
 
-<?php if (! $__env->hasRenderedOnce('3b46dfff-086b-4e19-92b6-7be993c97a0b')): $__env->markAsRenderedOnce('3b46dfff-086b-4e19-92b6-7be993c97a0b');
+<?php if (! $__env->hasRenderedOnce('526737a9-0d2c-4755-9cd1-ab16cfdddf8a')): $__env->markAsRenderedOnce('526737a9-0d2c-4755-9cd1-ab16cfdddf8a');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"
