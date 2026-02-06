@@ -25,24 +25,7 @@
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.category.before') !!}
 
-        <v-desktop-category>
-            <div class="flex items-center gap-5">
-                <span
-                    class="w-20 h-6 rounded shimmer"
-                    role="presentation"
-                ></span>
-
-                <span
-                    class="w-20 h-6 rounded shimmer"
-                    role="presentation"
-                ></span>
-
-                <span
-                    class="w-20 h-6 rounded shimmer"
-                    role="presentation"
-                ></span>
-            </div>
-        </v-desktop-category>
+        <!-- Categories hidden - use Categories button instead -->
 
         {!! view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.category.after') !!}
 

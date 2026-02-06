@@ -77,10 +77,7 @@
             </button>
         </div>
         <div class="sheet-body" id="categoriesContent">
-            <div class="loading-cats" style="padding:40px 20px;text-align:center;color:#9ca3af">
-                <svg style="width:40px;height:40px;margin:0 auto 12px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M12 2a10 10 0 0 1 10 10" opacity=".75"/></svg>
-                <p>جاري تحميل الفئات...</p>
-            </div>
+            <!-- Categories loaded from CategoryMenuService -->
         </div>
     </div>
 </div>
@@ -297,43 +294,60 @@
 
 <script>
 (function(){
-    let categoriesLoaded = false;
+    const categories = @json($categoryTree ?? []);
     const btn = document.querySelector('.mobile-nav-bar button[onclick*="categoriesSheet"]');
     if(!btn) return;
     btn.onclick = function(e){
         e.preventDefault();
         const sheet = document.getElementById('categoriesSheet');
-        if(!sheet) return;
-        sheet.classList.add('show');
-        if(categoriesLoaded) return;
         const content = document.getElementById('categoriesContent');
-        if(!content) return;
+        if(!sheet || !content) return;
+        sheet.classList.add('show');
         
-        fetch('{{ route("shop.api.categories.tree") }}')
-        .then(r => r.json())
-        .then(data => {
-            if(!data.data || !data.data.length){
-                content.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#9ca3af"><p>لا توجد فئات متاحة</p></div>';
-                return;
+        if(!categories || !categories.length){
+            content.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#9ca3af"><p>لا توجد فئات متاحة</p></div>';
+            return;
+        }
+        
+        let html = '';
+        const expanded = new Set();
+        
+        function renderCategory(cat, level = 0){
+            const hasChildren = cat.children && cat.children.length > 0;
+            const catId = 'cat-' + cat.id;
+            const padding = level > 0 ? `padding-right:${20 + (level * 16)}px` : '';
+            
+            if(hasChildren){
+                html += `<div class="cat-item" style="${padding}" onclick="toggleCat('${catId}')">`;
+                html += `<span>${cat.name}</span>`;
+                html += `<svg id="${catId}-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(0deg);transition:transform .2s"><polyline points="9 18 15 12 9 6"/></svg>`;
+                html += `</div>`;
+                html += `<div id="${catId}" style="display:none">`;
+                cat.children.forEach(child => renderCategory(child, level + 1));
+                html += `</div>`;
+            } else {
+                html += `<a href="${cat.url}" class="cat-item" style="${padding}">`;
+                html += `<span>${cat.name}</span>`;
+                html += `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>`;
+                html += `</a>`;
             }
-            let html = '';
-            function renderCategory(cat){
-                html += `<a href="${cat.url || '#'}" class="cat-item">`;
-                if(cat.logo_url) html += `<img src="${cat.logo_url}" alt="${cat.name}" onerror="this.style.display='none'">`;
-                html += `<span>${cat.name}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>`;
+        }
+        
+        categories.forEach(cat => renderCategory(cat));
+        content.innerHTML = html;
+        
+        window.toggleCat = function(id){
+            const el = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            if(!el || !icon) return;
+            if(el.style.display === 'none'){
+                el.style.display = 'block';
+                icon.style.transform = 'rotate(90deg)';
+            } else {
+                el.style.display = 'none';
+                icon.style.transform = 'rotate(0deg)';
             }
-            data.data.forEach(cat => {
-                renderCategory(cat);
-                if(cat.children && cat.children.length){
-                    cat.children.forEach(child => renderCategory(child));
-                }
-            });
-            content.innerHTML = html;
-            categoriesLoaded = true;
-        })
-        .catch(err => {
-            content.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#ef4444"><p>حدث خطأ</p></div>';
-        });
+        };
     };
 })();
 </script>

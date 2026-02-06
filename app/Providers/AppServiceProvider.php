@@ -46,8 +46,13 @@ class AppServiceProvider extends ServiceProvider
 
         // Register Category Observer for automatic cache invalidation
         if (class_exists(\Webkul\Category\Models\Category::class)) {
-            \Webkul\Category\Models\Category::observe(\App\Observers\CategoryObserver::class);
+            \Webkul\Category\Models\Category::observe(\App\Observers\CategoryCacheObserver::class);
         }
+
+        // Share category tree with all views
+        view()->composer('*', function ($view) {
+            $view->with('categoryTree', app(\App\Services\CategoryMenuService::class)->getTree());
+        });
 
         ParallelTesting::setUpTestDatabase(function (string $database, int $token) {
             Artisan::call('db:seed');

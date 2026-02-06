@@ -46,6 +46,51 @@ class Product extends Model implements ProductContract
     ];
 
     /**
+     * Append computed status attributes
+     */
+    protected $appends = ['approval_state', 'operational_state', 'storefront_state'];
+
+    /**
+     * Get approval status (admin controlled)
+     */
+    public function getApprovalStateAttribute(): string
+    {
+        if (!$this->vendor_id) {
+            return 'approved'; // Admin products auto-approved
+        }
+        
+        return $this->approved_by_admin ? 'approved' : 'pending';
+    }
+
+    /**
+     * Get operational status (product active/disabled)
+     */
+    public function getOperationalStateAttribute(): string
+    {
+        return $this->status == 1 ? 'active' : 'disabled';
+    }
+
+    /**
+     * Get storefront visibility status
+     */
+    public function getStorefrontStateAttribute(): string
+    {
+        if ($this->approval_state !== 'approved') {
+            return 'hidden';
+        }
+        
+        if ($this->operational_state !== 'active') {
+            return 'hidden';
+        }
+        
+        if (!$this->visible_individually) {
+            return 'hidden';
+        }
+        
+        return 'visible';
+    }
+
+    /**
      * The type of product.
      *
      * @var \Webkul\Product\Type\AbstractType

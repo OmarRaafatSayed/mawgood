@@ -68,9 +68,9 @@ class ProductController extends Controller
         $data['attribute_family_id'] = $data['attribute_family_id'] ?? 1;
         $data['sku'] = $data['sku'] ?? 'PROD-' . strtoupper(uniqid());
         
-        // ✅ Auto-approve vendor products
-        $data['approved_by_admin'] = true;
-        $data['status'] = 1;
+        // Set product as inactive by default - requires admin approval
+        $data['approved_by_admin'] = false;
+        $data['status'] = 0;
         $data['visible_individually'] = 1;
         
         try {

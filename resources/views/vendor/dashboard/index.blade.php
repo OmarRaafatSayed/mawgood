@@ -1,8 +1,6 @@
-@extends('vendor.layouts.app')
+@extends('vendor.layouts.app', ['pageTitle' => 'لوحة التحكم', 'pageIcon' => '<i class="fas fa-tachometer-alt me-2"></i>'])
 
 @section('title', 'لوحة التحكم')
-@section('page-title', 'لوحة التحكم')
-@section('page-icon', '<i class="fas fa-tachometer-alt me-2"></i>')
 
 @section('content')
 <!-- Welcome Message -->

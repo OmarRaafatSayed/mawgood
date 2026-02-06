@@ -29,24 +29,7 @@
         <?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.category.before'); ?>
 
 
-        <v-desktop-category>
-            <div class="flex items-center gap-5">
-                <span
-                    class="w-20 h-6 rounded shimmer"
-                    role="presentation"
-                ></span>
-
-                <span
-                    class="w-20 h-6 rounded shimmer"
-                    role="presentation"
-                ></span>
-
-                <span
-                    class="w-20 h-6 rounded shimmer"
-                    role="presentation"
-                ></span>
-            </div>
-        </v-desktop-category>
+        <!-- Categories hidden - use Categories button instead -->
 
         <?php echo view_render_event('bagisto.shop.components.layouts.header.desktop.bottom.category.after'); ?>
 
@@ -358,7 +341,7 @@
     </div>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('b3fa4e17-109d-4ee4-b450-5c609abab1bc')): $__env->markAsRenderedOnce('b3fa4e17-109d-4ee4-b450-5c609abab1bc');
+<?php if (! $__env->hasRenderedOnce('64787e42-efda-4682-a70e-9056763f703c')): $__env->markAsRenderedOnce('64787e42-efda-4682-a70e-9056763f703c');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"

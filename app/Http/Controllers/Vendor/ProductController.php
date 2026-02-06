@@ -32,43 +32,97 @@ class ProductController extends Controller
                 return redirect()->route('shop.home.index')->with('error', 'غير مصرح لك بالوصول لهذه الصفحة');
             }
 
+            // Log request parameters
+            \Log::info('Products Filter Request:', $request->all());
+
             $query = DB::table('products')
                 ->where(function($q) use ($vendor) {
                     $q->where('vendor_id', $vendor->id)
                       ->orWhere('seller_id', $vendor->id);
-                })
-                ->select(
-                    'id',
-                    'sku',
-                    'type',
-                    'status',
-                    'created_at',
-                    'updated_at',
-                    DB::raw('JSON_UNQUOTE(JSON_EXTRACT(name, "$.ar")) as name')
-                );
+                });
 
-            // Apply filters
-            if ($request->has('search') && $request->search) {
+            // Search filter
+            if ($request->filled('search')) {
                 $search = $request->search;
                 $query->where(function($q) use ($search) {
-                    $q->where('sku', 'like', "%{$search}%")
-                      ->orWhere(DB::raw('JSON_UNQUOTE(JSON_EXTRACT(name, "$.ar"))'), 'like', "%{$search}%");
+                    $q->where('products.sku', 'like', "%{$search}%")
+                      ->orWhere(DB::raw('JSON_UNQUOTE(JSON_EXTRACT(products.name, "$.ar"))'), 'like', "%{$search}%");
                 });
             }
 
-            if ($request->has('status') && $request->status !== '') {
-                $query->where('status', $request->status);
+            // Category filter
+            if ($request->filled('category')) {
+                $query->whereExists(function($q) use ($request) {
+                    $q->select(DB::raw(1))
+                      ->from('product_categories')
+                      ->whereRaw('product_categories.product_id = products.id')
+                      ->where('product_categories.category_id', $request->category);
+                });
             }
 
-            $products = $query->orderBy('created_at', 'desc')->paginate(15);
+            // Select fields
+            $query->select(
+                'products.id',
+                'products.sku',
+                'products.type',
+                'products.status',
+                'products.vendor_id',
+                'products.approved_by_admin',
+                'products.visible_individually',
+                'products.created_at',
+                'products.updated_at',
+                DB::raw('JSON_UNQUOTE(JSON_EXTRACT(products.name, "$.ar")) as name'),
+                DB::raw('COALESCE((SELECT SUM(qty) FROM product_inventories WHERE product_inventories.product_id = products.id), 0) as quantity')
+            );
 
-            return view('vendor.products.index', compact('products', 'vendor'));
+            // Log final query
+            \Log::info('SQL Query: ' . $query->toSql());
+            \Log::info('Query Bindings: ', $query->getBindings());
+
+            $products = $query->orderBy('created_at', 'desc')->paginate(15);
+            
+            // Debug: Log first product status
+            if ($products->count() > 0) {
+                $first = $products->first();
+                \Log::info('First Product Debug:', [
+                    'id' => $first->id,
+                    'name' => $first->name,
+                    'status' => $first->status,
+                    'approved_by_admin' => $first->approved_by_admin,
+                    'status_type' => gettype($first->status),
+                ]);
+            }
+
+            $categories = DB::table('categories')
+                ->select('id', DB::raw('JSON_UNQUOTE(JSON_EXTRACT(name, "$.ar")) as name'))
+                ->where('status', 1)
+                ->orderBy('id', 'desc')
+                ->get();
+
+            $stats = [
+                'products' => [
+                    'total' => 0,
+                    'active' => 0,
+                    'inactive' => 0,
+                    'low_stock' => 0
+                ],
+                'orders' => ['pending' => 0, 'total' => 0],
+                'wallet' => ['available' => 0]
+            ];
+
+            return view('vendor.products.index', compact('products', 'vendor', 'stats', 'categories'));
 
         } catch (\Exception $e) {
             \Log::error('Vendor Products Error: ' . $e->getMessage());
+            $stats = [
+                'products' => ['total' => 0, 'active' => 0, 'inactive' => 0, 'low_stock' => 0],
+                'orders' => ['pending' => 0, 'total' => 0],
+                'wallet' => ['available' => 0]
+            ];
             return view('vendor.products.index', [
                 'products' => collect(),
-                'vendor' => null
+                'vendor' => null,
+                'stats' => $stats
             ]);
         }
     }
@@ -198,6 +252,7 @@ class ProductController extends Controller
                 'sku' => $sku,
                 'type' => 'simple',
                 'vendor_id' => $vendor->id,
+                'status' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -209,6 +264,7 @@ class ProductController extends Controller
                 'name' => $data['name'],
                 'price' => $data['price'],
                 'weight' => $data['weight'] ?? null,
+                'status' => 0,
                 'created_at' => now(),
                 'locale' => core()->getRequestedLocaleCode(),
                 'channel' => core()->getRequestedChannelCode(),

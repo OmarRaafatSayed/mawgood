@@ -121,6 +121,8 @@ unset($__defined_vars); ?>
 
         <?php echo $__env->yieldPushContent('styles'); ?>
 
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
         <style>
             <?php echo core()->getConfigData('general.content.custom_scripts.custom_css'); ?>
 
