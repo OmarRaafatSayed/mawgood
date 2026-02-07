@@ -5,7 +5,7 @@
     @onRemove="remove($event)"
 />
 
-<?php if (! $__env->hasRenderedOnce('64e41d52-6d63-4286-b9ea-3a74f73f44b0')): $__env->markAsRenderedOnce('64e41d52-6d63-4286-b9ea-3a74f73f44b0');
+<?php if (! $__env->hasRenderedOnce('be4a230c-a4d7-4b6a-9528-641663d2da01')): $__env->markAsRenderedOnce('be4a230c-a4d7-4b6a-9528-641663d2da01');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"
