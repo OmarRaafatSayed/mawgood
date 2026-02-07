@@ -16,7 +16,7 @@
             : $acceptedCurrenciesArray[0];
     ?>
 
-    <?php if (! $__env->hasRenderedOnce('038f1950-ba1b-4078-afcc-2d2186094001')): $__env->markAsRenderedOnce('038f1950-ba1b-4078-afcc-2d2186094001');
+    <?php if (! $__env->hasRenderedOnce('a5467c50-c571-42e3-afb0-7ce6718454b8')): $__env->markAsRenderedOnce('a5467c50-c571-42e3-afb0-7ce6718454b8');
 $__env->startPush('scripts'); ?>
         <script
             src="https://www.paypal.com/sdk/js?client-id=<?php echo e($clientId); ?>&currency=<?php echo e($currencyToUse); ?>"

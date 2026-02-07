@@ -139,16 +139,13 @@
                         </x-shop::form.control-group>
                     @endif
 
-                    <!-- Submit Button -->
-                    <div class="mt-8 flex flex-wrap items-center gap-9 max-sm:justify-center max-sm:gap-5 max-sm:text-center">
+                    <div class="mt-8">
                         <button
                             class="primary-button m-0 mx-auto block w-full max-w-[374px] rounded-2xl px-11 py-4 text-center text-base max-md:max-w-full max-md:rounded-lg max-md:py-3 max-sm:py-1.5 ltr:ml-0 rtl:mr-0"
                             type="submit"
                         >
                             @lang('shop::app.customers.login-form.button-title')
                         </button>
-
-                        {!! view_render_event('bagisto.shop.customers.login_form_controls.after') !!}
                     </div>
                 </x-shop::form>
             </div>
@@ -160,11 +157,11 @@
                 <div class="relative flex items-center justify-center">
                     <hr class="w-full border-zinc-200">
                     <span class="absolute bg-white px-4 text-sm text-zinc-500">
-                        @lang('shop::app.customers.login-form.or')
+                        أو تسجيل الدخول عبر
                     </span>
                 </div>
 
-                <div class="mt-6 flex flex-col gap-3">
+                <div class="mt-6 flex flex-col gap-3" style="direction: rtl;">
                     <!-- Google Login -->
                     <a href="{{ route('customer.social-login.index', 'google') }}"
                        class="flex items-center justify-center gap-3 rounded-xl border border-zinc-300 px-6 py-3 transition-all hover:bg-zinc-50">
@@ -179,11 +176,9 @@
 
                     <!-- Facebook Login -->
                     <a href="{{ route('customer.social-login.index', 'facebook') }}"
-                       class="flex items-center justify-center gap-3 rounded-xl border border-zinc-300 bg-[#1877F2] px-6 py-3 text-white transition-all hover:bg-[#166FE5]">
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                        </svg>
-                        <span class="font-medium">تسجيل الدخول بـ Facebook</span>
+                       class="flex items-center justify-center gap-3 rounded-xl border border-zinc-300 bg-white px-6 py-3 transition-all hover:bg-zinc-50">
+                        <i class="fab fa-facebook-f" style="color: #1877F2; font-size: 1.25rem;"></i>
+                        <span class="font-medium text-zinc-700">تسجيل الدخول بـ Facebook</span>
                     </a>
                 </div>
             </div>

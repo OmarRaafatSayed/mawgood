@@ -7,6 +7,12 @@ use App\Http\Controllers\JobApplicationController;
 
 require __DIR__.'/test-view.php';
 
+// Social Login Routes
+Route::get('/customer/login/{provider}', [App\Http\Controllers\SocialLoginController::class, 'redirectToProvider'])
+    ->name('customer.social-login.index');
+Route::get('/customer/login/{provider}/callback', [App\Http\Controllers\SocialLoginController::class, 'handleProviderCallback'])
+    ->name('customer.social-login.callback');
+
 // Role Selection
 Route::middleware(['customer'])->group(function () {
     Route::get('/select-role', [RoleSelectionController::class, 'index'])->name('role.select');
