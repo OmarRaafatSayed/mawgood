@@ -23,12 +23,7 @@ class EnsureVendorAccess
             return redirect()->route('vendor.onboarding.form');
         }
 
-        // Vendor not approved - redirect to onboarding
-        if ($vendor->status !== 'approved') {
-            return redirect()->route('vendor.onboarding.form');
-        }
-
-        // Vendor approved - grant access
+        // Grant access regardless of status
         session(['active_role' => 'vendor']);
         $request->merge(['vendor' => $vendor]);
         session(['active_profile_id' => $vendor->id]);

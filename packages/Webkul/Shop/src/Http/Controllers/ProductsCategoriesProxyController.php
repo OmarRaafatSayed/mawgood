@@ -75,6 +75,12 @@ class ProductsCategoriesProxyController extends Controller
             ->setSearchEngine($searchEngine ?? 'database')
             ->findBySlug($slugOrURLKey);
 
+        if (! $product) {
+            $product = $this->productRepository
+                ->setSearchEngine($searchEngine ?? 'database')
+                ->findOneWhere(['url_key' => $slugOrURLKey]);
+        }
+
         if ($product) {
             if (
                 ! $product->url_key

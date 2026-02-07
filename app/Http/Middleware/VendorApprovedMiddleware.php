@@ -19,8 +19,8 @@ class VendorApprovedMiddleware
 
         $vendor = Vendor::where('customer_id', $customer->id)->first();
 
-        // If no vendor or not approved, redirect to application
-        if (!$vendor || $vendor->status !== 'approved') {
+        // If no vendor, redirect to application
+        if (!$vendor) {
             return redirect()->route('vendor.onboarding.form');
         }
 

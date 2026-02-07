@@ -5,7 +5,7 @@
 >
 </v-product-card>
 
-<?php if (! $__env->hasRenderedOnce('a8b2f1a6-cdb4-45b5-9b61-54bf8e88779f')): $__env->markAsRenderedOnce('a8b2f1a6-cdb4-45b5-9b61-54bf8e88779f');
+<?php if (! $__env->hasRenderedOnce('655369a4-6879-444a-802b-275277b12e7e')): $__env->markAsRenderedOnce('655369a4-6879-444a-802b-275277b12e7e');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"
@@ -201,7 +201,7 @@ $__env->startPush('scripts'); ?>
                             class="secondary-button w-full max-w-full p-2.5 text-sm font-medium max-sm:rounded-xl max-sm:p-2"
                             @click="addToCart()"
                         >
-                            <?php echo app('translator')->get('shop::app.components.products.card.add-to-cart'); ?>
+                            شراء
                         </button>
 
                         <?php echo view_render_event('bagisto.shop.components.products.card.add_to_cart.after'); ?>
@@ -553,6 +553,7 @@ $__env->startPush('scripts'); ?>
                 },
 
                 addToCart() {
+                    if (this.isAddingToCart) return;
                     this.isAddingToCart = true;
 
                     this.$axios.post('<?php echo e(route("shop.api.checkout.cart.store")); ?>', {
@@ -561,22 +562,22 @@ $__env->startPush('scripts'); ?>
                         })
                         .then(response => {
                             if (response.data.message) {
-                                this.$emitter.emit('update-mini-cart', response.data.data );
-
-                                this.$emitter.emit('add-flash', { type: 'success', message: response.data.message });
+                                this.$emitter.emit('update-mini-cart', response.data.data);
+                                setTimeout(() => {
+                                    window.location.href = '<?php echo e(route("shop.checkout.onepage.index")); ?>';
+                                }, 100);
                             } else {
                                 this.$emitter.emit('add-flash', { type: 'warning', message: response.data.data.message });
+                                this.isAddingToCart = false;
                             }
-
-                            this.isAddingToCart = false;
                         })
                         .catch(error => {
-                            this.$emitter.emit('add-flash', { type: 'error', message: error.response.data.message });
-
-                            if (error.response.data.redirect_uri) {
+                            if (error.response?.data?.message) {
+                                this.$emitter.emit('add-flash', { type: 'error', message: error.response.data.message });
+                            }
+                            if (error.response?.data?.redirect_uri) {
                                 window.location.href = error.response.data.redirect_uri;
                             }
-
                             this.isAddingToCart = false;
                         });
                 },

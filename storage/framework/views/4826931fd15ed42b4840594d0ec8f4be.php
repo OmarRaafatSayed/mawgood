@@ -44,7 +44,7 @@ unset($__defined_vars); ?>
 >
 </v-product-ratings>
 
-<?php if (! $__env->hasRenderedOnce('2a2a0187-bec6-4e2f-b37e-d1ee765f9718')): $__env->markAsRenderedOnce('2a2a0187-bec6-4e2f-b37e-d1ee765f9718');
+<?php if (! $__env->hasRenderedOnce('42cc2329-2598-475e-9cea-09b289eacce8')): $__env->markAsRenderedOnce('42cc2329-2598-475e-9cea-09b289eacce8');
 $__env->startPush("scripts"); ?>
     <script
         type="text/x-template"

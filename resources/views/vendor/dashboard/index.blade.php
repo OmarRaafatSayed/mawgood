@@ -115,6 +115,14 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="mobile-card-view">
+                            <div class="mobile-product-card">
+                                <div class="product-name">منتج تجريبي</div>
+                                <div class="product-attr"><span>SKU:</span><span>PROD-001</span></div>
+                                <div class="product-attr"><span>الحالة:</span><span class="badge bg-success">نشط</span></div>
+                                <div class="product-attr"><span>الكمية:</span><span>50</span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

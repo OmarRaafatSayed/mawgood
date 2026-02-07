@@ -18,9 +18,19 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $vendor = $request->vendor;
-        $products = $this->productRepository->where('vendor_id', $vendor->id)->paginate(15);
+        $products = $this->productRepository
+            ->with(['images', 'inventories'])
+            ->where('vendor_id', $vendor->id)
+            ->paginate(15);
+        
+        // Add computed properties
+        $products->getCollection()->transform(function ($product) {
+            $product->image_url = $product->images->first()?->url ?? $product->base_image?->medium_image_url ?? asset('images/placeholder.png');
+            $product->quantity = $product->inventories->sum('qty') ?? 0;
+            return $product;
+        });
 
-        return view('mawgood-vendor::products.index', compact('products', 'vendor'));
+        return view('vendor.products.index', compact('products', 'vendor'));
     }
 
     public function create(Request $request)

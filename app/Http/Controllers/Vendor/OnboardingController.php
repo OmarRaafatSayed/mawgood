@@ -19,14 +19,9 @@ class OnboardingController extends Controller
         
         $vendor = Vendor::where('customer_id', $customer->id)->first();
         
-        // If vendor exists, check status
-        if ($vendor) {
-            if ($vendor->status === 'pending') {
-                return view('vendor.onboarding.pending', compact('vendor'));
-            }
-            if ($vendor->status === 'approved') {
-                return redirect()->route('vendor.dashboard');
-            }
+        // If vendor exists and approved, redirect to dashboard
+        if ($vendor && $vendor->status === 'approved') {
+            return redirect()->route('vendor.dashboard');
         }
         
         $categories = Category::all();
@@ -72,7 +67,7 @@ class OnboardingController extends Controller
             $counter++;
         }
 
-        // Create vendor application immediately (status: pending)
+        // Create vendor with auto-approval
         $vendor = Vendor::create([
             'customer_id' => $customer->id,
             'store_name' => $request->store_name,
@@ -87,12 +82,12 @@ class OnboardingController extends Controller
             'business_address' => $request->business_address,
             'facebook_url' => $request->facebook_url,
             'instagram_url' => $request->instagram_url,
-            'status' => 'pending',
+            'status' => 'approved',
             'commission_rate' => config('multivendor.default_commission_rate', 10.00),
         ]);
 
-        return redirect()->route('vendor.onboarding.form')
-            ->with('success', app()->getLocale() === 'ar' ? 'تم إرسال طلب الانضمام بنجاح!' : 'Your application has been submitted successfully!');
+        return redirect()->route('vendor.dashboard')
+            ->with('success', app()->getLocale() === 'ar' ? 'تم إنشاء متجرك بنجاح!' : 'Your store has been created successfully!');
     }
 
     // إزالة طريقة finalSubmit غير المستخدمة

@@ -95,9 +95,9 @@ class VendorRepository extends Repository
      */
     public function createVendor(array $data)
     {
-        // Validate required fields
+        // Validate required fields and force approval
         $validated = array_merge($data, [
-            'status' => $data['status'] ?? 'pending',
+            'status' => 'approved',
             'commission_rate' => $data['commission_rate'] ?? 10.00,
             'total_earnings' => 0.00,
             'current_balance' => 0.00

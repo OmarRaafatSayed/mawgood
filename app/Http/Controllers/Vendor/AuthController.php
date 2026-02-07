@@ -24,13 +24,6 @@ class AuthController extends Controller
         ]);
 
         if (Auth::guard('vendor')->attempt($request->only('email', 'password'))) {
-            $vendor = Auth::guard('vendor')->user();
-            
-            if (!$vendor->isApproved()) {
-                Auth::guard('vendor')->logout();
-                return back()->withErrors(['email' => 'حسابك لم يتم الموافقة عليه بعد']);
-            }
-
             return redirect()->route('vendor.admin.dashboard.index');
         }
 
@@ -53,17 +46,18 @@ class AuthController extends Controller
             'address' => 'required|string',
         ]);
 
-        Vendor::create([
+        $vendor = Vendor::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'shop_name' => $request->shop_name,
             'phone' => $request->phone,
             'address' => $request->address,
-            'status' => 'pending',
+            'status' => 'approved',
         ]);
 
-        return redirect()->route('vendor.login')->with('success', 'تم إنشاء حسابك بنجاح. في انتظار موافقة الإدارة');
+        Auth::guard('vendor')->login($vendor);
+        return redirect()->route('vendor.admin.dashboard.index');
     }
 
     public function logout()

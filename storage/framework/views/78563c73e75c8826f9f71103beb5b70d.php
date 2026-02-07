@@ -75,7 +75,7 @@ unset($__defined_vars); ?>
     </v-accordion>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('38ce0b08-05cd-4479-8bd6-60e9886b83d6')): $__env->markAsRenderedOnce('38ce0b08-05cd-4479-8bd6-60e9886b83d6');
+<?php if (! $__env->hasRenderedOnce('c2a71636-739b-4040-8668-fb2bfa53650b')): $__env->markAsRenderedOnce('c2a71636-739b-4040-8668-fb2bfa53650b');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"
