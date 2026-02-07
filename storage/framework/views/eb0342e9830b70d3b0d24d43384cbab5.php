@@ -65,7 +65,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">قائمة المنتجات</h5>
         <div class="d-flex align-items-center gap-3">
-            <small class="text-muted">عرض <?php echo e($products->firstItem() ?? 0); ?> - <?php echo e($products->lastItem() ?? 0); ?> من <?php echo e($products->total() ?? 0); ?></small>
+            <small class="text-muted">عرض <?php echo e($products->count()); ?> منتج</small>
             <div class="btn-group" role="group">
                 <input type="radio" class="btn-check" name="view" id="table-view" checked>
                 <label class="btn btn-outline-primary btn-sm" for="table-view">
@@ -251,7 +251,7 @@
             <?php endif; ?>
         </div>
     </div>
-    <?php if(isset($products) && $products->hasPages()): ?>
+    <?php if(isset($products) && method_exists($products, 'hasPages') && $products->hasPages()): ?>
     <div class="card-footer">
         <?php echo e($products->links()); ?>
 

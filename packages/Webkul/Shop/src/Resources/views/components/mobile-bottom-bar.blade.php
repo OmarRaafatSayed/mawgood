@@ -15,7 +15,7 @@
         <span>حسابي</span>
     </a>
 
-    <a href="{{ route('vendor.dashboard.index') }}" class="nav-item nav-fab">
+    <a href="{{ url('vendor/dashboard') }}" class="nav-item nav-fab">
         {!! '<i class="fas fa-plus"></i>' !!}
     </a>
 

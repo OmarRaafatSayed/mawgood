@@ -111,7 +111,7 @@ use App\Http\Controllers\BlogController;
 
 Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('/', [BlogController::class, 'index'])->name('index');
-    Route::get('/{slug}', [BlogController::class, 'show'])->name('show');
+    Route::get('/{slug}', [BlogController::class, 'show'])->name('show')->where('slug', '.*');
 });
 
 // Test Blog System

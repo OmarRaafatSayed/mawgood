@@ -1,0 +1,6 @@
+
+In RegistrationController.php line 8:
+                                                                
+  Class "Mawgood\Vendor\Http\Controllers\Controller" not found  
+                                                                
+

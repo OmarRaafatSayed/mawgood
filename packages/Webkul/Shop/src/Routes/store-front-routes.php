@@ -11,20 +11,6 @@ use Webkul\Shop\Http\Controllers\SearchController;
 use Webkul\Shop\Http\Controllers\SubscriptionController;
 
 /**
- * CMS pages.
- */
-Route::get('page/{slug}', [PageController::class, 'view'])
-    ->name('shop.cms.page')
-    ->middleware('cache.response');
-
-/**
- * Fallback route.
- */
-Route::fallback(ProductsCategoriesProxyController::class.'@index')
-    ->name('shop.product_or_category.index')
-    ->middleware('cache.response');
-
-/**
  * Store front home.
  */
 Route::get('/', [HomeController::class, 'index'])
@@ -78,3 +64,17 @@ Route::controller(ProductController::class)->group(function () {
  */
 Route::get('booking-slots/{id}', [BookingProductController::class, 'index'])
     ->name('shop.booking-product.slots.index');
+
+/**
+ * CMS pages.
+ */
+Route::get('page/{slug}', [PageController::class, 'view'])
+    ->name('shop.cms.page')
+    ->middleware('cache.response');
+
+/**
+ * Fallback route.
+ */
+Route::fallback(ProductsCategoriesProxyController::class.'@index')
+    ->name('shop.product_or_category.index')
+    ->middleware('cache.response');
