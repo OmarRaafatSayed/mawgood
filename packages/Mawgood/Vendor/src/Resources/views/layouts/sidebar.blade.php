@@ -1,20 +1,22 @@
 <!-- Vendor Dashboard Sidebar -->
 <div class="sidebar bg-dark text-white" id="vendorSidebar">
     <div class="sidebar-header p-3 border-bottom border-secondary">
-        <div class="d-flex align-items-center">
-            @if(core()->getConfigData('general.design.admin_logo.logo_image'))
-                <img src="{{ Storage::url(core()->getConfigData('general.design.admin_logo.logo_image')) }}" alt="Logo" class="me-2" style="height: 30px;">
-            @else
-                <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="Logo" class="me-2" style="height: 30px;">
-            @endif
-            <h5 class="mb-0">لوحة التاجر</h5>
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                @if(core()->getConfigData('general.design.admin_logo.logo_image'))
+                    <img src="{{ Storage::url(core()->getConfigData('general.design.admin_logo.logo_image')) }}" alt="Logo" class="me-2" style="height: 30px;">
+                @else
+                    <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="Logo" class="me-2" style="height: 30px;">
+                @endif
+                <h5 class="mb-0">لوحة التاجر</h5>
+            </div>
+            <button class="btn btn-sm btn-outline-light d-md-none" type="button" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <button class="btn btn-sm btn-outline-light d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarContent">
-            <i class="fas fa-bars"></i>
-        </button>
     </div>
 
-    <div class="sidebar-content collapse d-md-block" id="sidebarContent">
+    <div class="sidebar-content" id="sidebarContent">
         <!-- Vendor Info -->
         <div class="p-3 border-bottom border-secondary">
             <div class="d-flex align-items-center">
@@ -284,8 +286,6 @@
     right: 0;
     z-index: 1050;
     transition: transform 0.3s ease;
-    display: block !important;
-    visibility: visible !important;
 }
 
 .sidebar-content {
@@ -336,11 +336,6 @@
     
     .sidebar.show {
         transform: translateX(0) !important;
-        display: block !important;
-    }
-    
-    body.sidebar-open {
-        overflow: hidden;
     }
     
     body.sidebar-open::before {
@@ -352,6 +347,18 @@
         bottom: 0;
         background: rgba(0,0,0,0.5);
         z-index: 1040;
+        animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+}
+
+@media (min-width: 769px) {
+    .sidebar {
+        transform: translateX(0);
     }
 }
 
@@ -369,12 +376,27 @@
 </style>
 
 <script>
+// Mobile sidebar toggle - removed duplicate
+window.toggleSidebar = function() {
+    const sidebar = document.getElementById('vendorSidebar');
+    const body = document.body;
+    
+    void sidebar.offsetWidth;
+    
+    if (sidebar.classList.contains('show')) {
+        sidebar.classList.remove('show');
+        body.classList.remove('sidebar-open');
+    } else {
+        sidebar.classList.add('show');
+        body.classList.add('sidebar-open');
+    }
+};
+
 // Real-time updates for sidebar badges
 function updateSidebarStats() {
     fetch('{{ route("vendor.api.dashboard.stats") }}')
         .then(response => response.json())
         .then(data => {
-            // Update badges
             document.getElementById('dashboard-notifications').textContent = data.orders?.pending ?? 0;
             document.getElementById('products-count').textContent = data.products?.total ?? 0;
             document.getElementById('orders-count').textContent = data.orders?.total ?? 0;
@@ -385,18 +407,5 @@ function updateSidebarStats() {
         .catch(error => console.error('Error updating sidebar stats:', error));
 }
 
-// Update every 30 seconds
 setInterval(updateSidebarStats, 30000);
-
-// Mobile sidebar toggle
-document.addEventListener('DOMContentLoaded', function() {
-    const sidebar = document.getElementById('vendorSidebar');
-    const toggleBtn = document.querySelector('[data-bs-target="#sidebarContent"]');
-    
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('show');
-        });
-    }
-});
 </script>

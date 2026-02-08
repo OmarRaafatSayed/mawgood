@@ -25,13 +25,6 @@
             background-color: #f8f9fa;
         }
         
-        /* Sidebar always visible */
-        .sidebar {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-        
         .main-content {
             margin-right: 280px;
             min-height: 100vh;
@@ -320,11 +313,35 @@
             }
         });
         
-        // Mobile Sidebar Toggle
+        // Mobile Sidebar Toggle - Fixed for immediate response
         function toggleSidebar() {
             const sidebar = document.getElementById('vendorSidebar');
-            sidebar.classList.toggle('show');
+            const body = document.body;
+            
+            // Force immediate display
+            void sidebar.offsetWidth; // Force reflow
+            
+            if (sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+                body.classList.remove('sidebar-open');
+            } else {
+                sidebar.classList.add('show');
+                body.classList.add('sidebar-open');
+            }
         }
+        
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('vendorSidebar');
+            const toggleBtn = document.querySelector('[onclick="toggleSidebar()"]');
+            
+            if (sidebar && sidebar.classList.contains('show')) {
+                if (!sidebar.contains(e.target) && e.target !== toggleBtn && !toggleBtn?.contains(e.target)) {
+                    sidebar.classList.remove('show');
+                    document.body.classList.remove('sidebar-open');
+                }
+            }
+        });
         
         // Loading Overlay Functions
         function showLoading() {
