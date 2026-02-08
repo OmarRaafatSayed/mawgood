@@ -17,7 +17,7 @@
         <span>حسابي</span>
     </a>
 
-    <a href="<?php echo e(url('vendor/dashboard')); ?>" class="nav-item nav-fab">
+    <a href="<?php echo e(route('vendor.onboarding.form')); ?>" class="nav-item nav-fab">
         <?php echo '<i class="fas fa-plus"></i>'; ?>
 
     </a>

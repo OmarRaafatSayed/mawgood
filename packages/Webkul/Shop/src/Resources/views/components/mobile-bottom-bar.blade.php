@@ -15,7 +15,7 @@
         <span>حسابي</span>
     </a>
 
-    <a href="{{ url('vendor/dashboard') }}" class="nav-item nav-fab">
+    <a href="{{ route('vendor.onboarding.form') }}" class="nav-item nav-fab">
         {!! '<i class="fas fa-plus"></i>' !!}
     </a>
 
