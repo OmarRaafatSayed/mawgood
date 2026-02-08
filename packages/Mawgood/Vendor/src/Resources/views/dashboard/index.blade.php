@@ -1,8 +1,9 @@
-@extends('vendor.layouts.app')
+@extends('mawgood-vendor::layouts.app')
 
 @section('title', 'لوحة التحكم')
-@section('page-title', 'لوحة التحكم')
-@section('page-icon', '<i class="fas fa-tachometer-alt me-2"></i>')
+@section('page-title')
+    <i class="fas fa-tachometer-alt me-2"></i>لوحة التحكم
+@endsection
 
 @section('content')
 <!-- Welcome Message -->

@@ -34,6 +34,20 @@ class VendorOrderService
         return $query->orderBy('vendor_orders.created_at', 'desc')->paginate(15);
     }
 
+    public function getOrderStats(Vendor $vendor)
+    {
+        $stats = [
+            'orders' => [
+                'pending' => DB::table('vendor_orders')->where('vendor_id', $vendor->id)->where('status', 'pending')->count(),
+                'unshipped' => DB::table('vendor_orders')->where('vendor_id', $vendor->id)->where('status', 'processing')->count(),
+                'shipped' => DB::table('vendor_orders')->where('vendor_id', $vendor->id)->where('status', 'shipped')->count(),
+                'cancelled' => DB::table('vendor_orders')->where('vendor_id', $vendor->id)->where('status', 'cancelled')->count(),
+                'total' => DB::table('vendor_orders')->where('vendor_id', $vendor->id)->count(),
+            ]
+        ];
+        return $stats;
+    }
+
     public function getOrderDetails(Vendor $vendor, $orderId)
     {
         $vendorOrder = VendorOrder::where('id', $orderId)

@@ -282,8 +282,10 @@
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 1050;
     transition: transform 0.3s ease;
+    display: block !important;
+    visibility: visible !important;
 }
 
 .sidebar-content {
@@ -328,11 +330,28 @@
 @media (max-width: 768px) {
     .sidebar {
         transform: translateX(100%);
-        width: 100%;
+        width: 85%;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.3);
     }
     
     .sidebar.show {
-        transform: translateX(0);
+        transform: translateX(0) !important;
+        display: block !important;
+    }
+    
+    body.sidebar-open {
+        overflow: hidden;
+    }
+    
+    body.sidebar-open::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 1040;
     }
 }
 

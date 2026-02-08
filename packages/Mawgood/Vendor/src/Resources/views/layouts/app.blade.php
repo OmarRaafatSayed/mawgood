@@ -67,6 +67,56 @@
         .bg-gradient-info { background: linear-gradient(45deg, #17a2b8, #138496); }
         .bg-gradient-danger { background: linear-gradient(45deg, #dc3545, #c82333); }
         
+        /* Mobile Bottom Navigation */
+        @media (max-width: 768px) {
+            .mobile-bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: #ffffff;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+                z-index: 1030;
+                display: flex;
+                justify-content: space-around;
+                padding: 8px 0;
+            }
+            
+            .mobile-bottom-nav a {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 8px;
+                color: #6c757d;
+                text-decoration: none;
+                font-size: 0.75rem;
+                transition: all 0.2s;
+            }
+            
+            .mobile-bottom-nav a.active {
+                color: #007bff;
+            }
+            
+            .mobile-bottom-nav a i {
+                font-size: 1.25rem;
+                margin-bottom: 4px;
+            }
+            
+            .mobile-bottom-nav .badge {
+                position: absolute;
+                top: 4px;
+                right: 50%;
+                transform: translateX(50%);
+                font-size: 0.6rem;
+                padding: 2px 5px;
+            }
+            
+            .main-content {
+                padding-bottom: 70px;
+            }
+        }
+        
         .card {
             border: none;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -103,7 +153,7 @@
 </head>
 <body>
     <!-- Include Sidebar -->
-    @include('vendor.layouts.sidebar')
+    @include('mawgood-vendor::layouts.sidebar')
     
     <!-- Main Content -->
     <div class="main-content">
@@ -136,7 +186,6 @@
                         
                         <!-- Page Title -->
                         <h1 class="h3 mb-0 mt-2">
-                            @yield('page-icon')
                             @yield('page-title', 'لوحة التحكم')
                         </h1>
                     </div>
@@ -218,6 +267,32 @@
             </div>
         </footer>
     </div>
+    
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav d-md-none">
+        <a href="{{ route('vendor.dashboard') }}" class="{{ request()->routeIs('vendor.dashboard*') ? 'active' : '' }}">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>الرئيسية</span>
+        </a>
+        <a href="{{ route('vendor.products.index') }}" class="{{ request()->routeIs('vendor.products*') ? 'active' : '' }}">
+            <i class="fas fa-box"></i>
+            <span>المنتجات</span>
+            @if(($stats['products']['inactive'] ?? 0) > 0)
+                <span class="badge bg-warning">{{ $stats['products']['inactive'] }}</span>
+            @endif
+        </a>
+        <a href="{{ route('vendor.orders.index') }}" class="{{ request()->routeIs('vendor.orders*') ? 'active' : '' }}">
+            <i class="fas fa-shopping-cart"></i>
+            <span>الطلبات</span>
+            @if(($stats['orders']['pending'] ?? 0) > 0)
+                <span class="badge bg-danger">{{ $stats['orders']['pending'] }}</span>
+            @endif
+        </a>
+        <a href="{{ route('vendor.settings.index') }}" class="{{ request()->routeIs('vendor.settings*') ? 'active' : '' }}">
+            <i class="fas fa-cog"></i>
+            <span>الإعدادات</span>
+        </a>
+    </nav>
     
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="d-none position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="z-index: 9999;">

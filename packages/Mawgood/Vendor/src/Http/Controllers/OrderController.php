@@ -17,8 +17,9 @@ class OrderController extends Controller
     {
         $vendor = $request->vendor;
         $orders = $this->orderService->getOrders($vendor, $request->all());
+        $stats = $this->orderService->getOrderStats($vendor);
 
-        return view('mawgood-vendor::orders.index', compact('orders', 'vendor'));
+        return view('mawgood-vendor::orders.index', compact('orders', 'vendor', 'stats'));
     }
 
     public function show(Request $request, $id)

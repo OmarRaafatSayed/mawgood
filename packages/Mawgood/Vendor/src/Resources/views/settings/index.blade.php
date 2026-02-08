@@ -1,4 +1,4 @@
-@extends('vendor.layouts.app')
+@extends('mawgood-vendor::layouts.app')
 
 @section('title', 'إعدادات المتجر')
 @section('page-title', 'إعدادات المتجر')

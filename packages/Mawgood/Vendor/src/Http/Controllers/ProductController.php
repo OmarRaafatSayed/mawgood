@@ -30,7 +30,7 @@ class ProductController extends Controller
             return $product;
         });
 
-        return view('vendor.products.index', compact('products', 'vendor'));
+        return view('mawgood-vendor::products.index', compact('products', 'vendor'));
     }
 
     public function create(Request $request)
