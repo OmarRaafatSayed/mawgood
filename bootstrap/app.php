@@ -41,6 +41,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(SecureHeaders::class);
         $middleware->append(CanInstall::class);
         $middleware->append(\App\Http\Middleware\ForceEgpCurrency::class);
+        $middleware->append(\App\Http\Middleware\FixImagePaths::class);
 
         /**
          * Add the overridden middleware at the end of the list.
