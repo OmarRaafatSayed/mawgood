@@ -40,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(HandleNullArrayAccess::class);
         $middleware->append(SecureHeaders::class);
         $middleware->append(CanInstall::class);
+        $middleware->append(\App\Http\Middleware\ForceEgpCurrency::class);
 
         /**
          * Add the overridden middleware at the end of the list.
