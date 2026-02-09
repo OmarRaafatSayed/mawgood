@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'لوحة تحكم التاجر') - {{ config('app.name') }}</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title><?php echo $__env->yieldContent('title', 'لوحة تحكم التاجر'); ?> - <?php echo e(config('app.name')); ?></title>
     
     <!-- Preload critical resources -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" as="style">
@@ -17,7 +17,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     
-    @stack('styles')
+    <?php echo $__env->yieldPushContent('styles'); ?>
     
     <style>
         body {
@@ -146,7 +146,7 @@
 </head>
 <body>
     <!-- Include Sidebar -->
-    @include('mawgood-vendor::layouts.sidebar')
+    <?php echo $__env->make('mawgood-vendor::layouts.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     
     <!-- Main Content -->
     <div class="main-content">
@@ -161,41 +161,41 @@
                         </button>
                         
                         <!-- Breadcrumb -->
-                        @if(isset($breadcrumbs))
+                        <?php if(isset($breadcrumbs)): ?>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-0">
-                                @foreach($breadcrumbs as $breadcrumb)
-                                    @if($loop->last)
-                                        <li class="breadcrumb-item active">{{ $breadcrumb['title'] }}</li>
-                                    @else
+                                <?php $__currentLoopData = $breadcrumbs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $breadcrumb): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php if($loop->last): ?>
+                                        <li class="breadcrumb-item active"><?php echo e($breadcrumb['title']); ?></li>
+                                    <?php else: ?>
                                         <li class="breadcrumb-item">
-                                            <a href="{{ $breadcrumb['url'] }}">{{ $breadcrumb['title'] }}</a>
+                                            <a href="<?php echo e($breadcrumb['url']); ?>"><?php echo e($breadcrumb['title']); ?></a>
                                         </li>
-                                    @endif
-                                @endforeach
+                                    <?php endif; ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ol>
                         </nav>
-                        @endif
+                        <?php endif; ?>
                         
                         <!-- Page Title -->
                         <h1 class="h3 mb-0 mt-2">
-                            @yield('page-title', 'لوحة التحكم')
+                            <?php echo $__env->yieldContent('page-title', 'لوحة التحكم'); ?>
                         </h1>
                     </div>
                     
                     <!-- Header Actions -->
                     <div class="col-auto">
-                        @yield('header-actions')
+                        <?php echo $__env->yieldContent('header-actions'); ?>
                         
                         <!-- Quick Stats -->
                         <div class="d-none d-lg-flex align-items-center">
                             <div class="me-3">
                                 <small class="text-muted">الطلبات المعلقة</small>
-                                <div class="fw-bold text-warning" id="header-pending-orders">{{ $stats['orders']['pending'] ?? 0 }}</div>
+                                <div class="fw-bold text-warning" id="header-pending-orders"><?php echo e($stats['orders']['pending'] ?? 0); ?></div>
                             </div>
                             <div class="me-3">
                                 <small class="text-muted">الرصيد المتاح</small>
-                                <div class="fw-bold text-success" id="header-wallet-balance">{{ number_format($stats['wallet']['available'] ?? 0, 0) }}</div>
+                                <div class="fw-bold text-success" id="header-wallet-balance"><?php echo e(number_format($stats['wallet']['available'] ?? 0, 0)); ?></div>
                             </div>
                         </div>
                     </div>
@@ -206,40 +206,44 @@
         <!-- Page Content -->
         <div class="container-fluid">
             <!-- Flash Messages -->
-            @if(session('success'))
+            <?php if(session('success')): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>
-                    {{ session('success') }}
+                    <?php echo e(session('success')); ?>
+
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            @endif
+            <?php endif; ?>
             
-            @if(session('error'))
+            <?php if(session('error')): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-circle me-2"></i>
-                    {{ session('error') }}
+                    <?php echo e(session('error')); ?>
+
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            @endif
+            <?php endif; ?>
             
-            @if(session('warning'))
+            <?php if(session('warning')): ?>
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-triangle me-2"></i>
-                    {{ session('warning') }}
+                    <?php echo e(session('warning')); ?>
+
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            @endif
+            <?php endif; ?>
             
-            @if(session('info'))
+            <?php if(session('info')): ?>
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                     <i class="fas fa-info-circle me-2"></i>
-                    {{ session('info') }}
+                    <?php echo e(session('info')); ?>
+
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            @endif
+            <?php endif; ?>
             
             <!-- Main Content Area -->
-            @yield('content')
+            <?php echo $__env->yieldContent('content'); ?>
         </div>
         
         <!-- Footer -->
@@ -248,12 +252,12 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <p class="mb-0 text-muted">
-                            © {{ date('Y') }} {{ config('app.name') }}. جميع الحقوق محفوظة.
+                            © <?php echo e(date('Y')); ?> <?php echo e(config('app.name')); ?>. جميع الحقوق محفوظة.
                         </p>
                     </div>
                     <div class="col-md-6 text-md-end">
                         <small class="text-muted">
-                            آخر تحديث: <span id="last-update">{{ now()->format('H:i') }}</span>
+                            آخر تحديث: <span id="last-update"><?php echo e(now()->format('H:i')); ?></span>
                         </small>
                     </div>
                 </div>
@@ -263,29 +267,29 @@
     
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav d-md-none">
-        <a href="{{ route('vendor.dashboard') }}" class="{{ request()->routeIs('vendor.dashboard*') ? 'active' : '' }}">
+        <a href="<?php echo e(route('vendor.dashboard')); ?>" class="<?php echo e(request()->routeIs('vendor.dashboard*') ? 'active' : ''); ?>">
             <i class="fas fa-tachometer-alt"></i>
             <span>الرئيسية</span>
         </a>
-        <a href="{{ route('vendor.products.index') }}" class="{{ request()->routeIs('vendor.products*') ? 'active' : '' }}">
+        <a href="<?php echo e(route('vendor.products.index')); ?>" class="<?php echo e(request()->routeIs('vendor.products*') ? 'active' : ''); ?>">
             <i class="fas fa-box"></i>
             <span>المنتجات</span>
-            @if(($stats['products']['inactive'] ?? 0) > 0)
-                <span class="badge bg-warning">{{ $stats['products']['inactive'] }}</span>
-            @endif
+            <?php if(($stats['products']['inactive'] ?? 0) > 0): ?>
+                <span class="badge bg-warning"><?php echo e($stats['products']['inactive']); ?></span>
+            <?php endif; ?>
         </a>
-        <a href="{{ route('shop.search.index') }}" target="_blank" class="text-primary">
+        <a href="<?php echo e(route('shop.search.index')); ?>" target="_blank" class="text-primary">
             <i class="fas fa-store"></i>
             <span>العودة للسوق</span>
         </a>
-        <a href="{{ route('vendor.orders.index') }}" class="{{ request()->routeIs('vendor.orders*') ? 'active' : '' }}">
+        <a href="<?php echo e(route('vendor.orders.index')); ?>" class="<?php echo e(request()->routeIs('vendor.orders*') ? 'active' : ''); ?>">
             <i class="fas fa-shopping-cart"></i>
             <span>الطلبات</span>
-            @if(($stats['orders']['pending'] ?? 0) > 0)
-                <span class="badge bg-danger">{{ $stats['orders']['pending'] }}</span>
-            @endif
+            <?php if(($stats['orders']['pending'] ?? 0) > 0): ?>
+                <span class="badge bg-danger"><?php echo e($stats['orders']['pending']); ?></span>
+            <?php endif; ?>
         </a>
-        <a href="{{ route('vendor.settings.index') }}" class="{{ request()->routeIs('vendor.settings*') ? 'active' : '' }}">
+        <a href="<?php echo e(route('vendor.settings.index')); ?>" class="<?php echo e(request()->routeIs('vendor.settings*') ? 'active' : ''); ?>">
             <i class="fas fa-cog"></i>
             <span>الإعدادات</span>
         </a>
@@ -307,7 +311,7 @@
     <script>
         // CSRF Token Setup
         window.Laravel = {
-            csrfToken: '{{ csrf_token() }}'
+            csrfToken: '<?php echo e(csrf_token()); ?>'
         };
         
         // Set CSRF token for all AJAX requests
@@ -358,7 +362,7 @@
         
         // Update header stats
         function updateHeaderStats() {
-            fetch('{{ route("vendor.api.dashboard.stats") }}')
+            fetch('<?php echo e(route("vendor.api.dashboard.stats")); ?>')
                 .then(response => response.json())
                 .then(data => {
                     const pendingOrders = document.getElementById('header-pending-orders');
@@ -435,6 +439,6 @@
         }
     </script>
     
-    @stack('scripts')
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
-</html>
+</html><?php /**PATH C:\Users\EXPRESS\Downloads\coding\mawgood\mawgood\packages\Mawgood\Vendor\src\Providers/../Resources/views/layouts/app.blade.php ENDPATH**/ ?>

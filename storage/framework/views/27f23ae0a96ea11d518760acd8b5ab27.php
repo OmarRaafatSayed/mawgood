@@ -1,54 +1,19 @@
-@extends('vendor.layouts.app', ['pageTitle' => 'لوحة التحكم', 'pageIcon' => '<i class="fas fa-tachometer-alt me-2"></i>'])
 
-@section('title', 'لوحة التحكم')
 
-@section('content')
-<!-- Quick Navigation Bar -->
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="card bg-gradient-primary text-white">
-            <div class="card-body py-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <div>
-                        <h5 class="mb-0">
-                            <i class="fas fa-store me-2"></i>
-                            مرحباً {{ $vendor->business_name ?? 'التاجر' }}
-                        </h5>
-                    </div>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <a href="{{ route('shop.home.index') }}" class="btn btn-light btn-sm" target="_blank">
-                            <i class="fas fa-home me-1"></i>
-                            الصفحة الرئيسية
-                        </a>
-                        <a href="{{ route('shop.customers.account.profile.index') }}" class="btn btn-light btn-sm">
-                            <i class="fas fa-user me-1"></i>
-                            حسابي
-                        </a>
-                        <a href="{{ route('shop.product_or_category.index', '') }}" class="btn btn-light btn-sm" target="_blank">
-                            <i class="fas fa-shopping-bag me-1"></i>
-                            تصفح المنتجات
-                        </a>
-                        <form action="{{ route('shop.customer.session.destroy') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-light btn-sm">
-                                <i class="fas fa-sign-out-alt me-1"></i>
-                                تسجيل الخروج
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<?php $__env->startSection('title', 'لوحة التحكم'); ?>
+<?php $__env->startSection('page-title'); ?>
+    <i class="fas fa-tachometer-alt me-2"></i>لوحة التحكم
+<?php $__env->stopSection(); ?>
 
+<?php $__env->startSection('content'); ?>
 <!-- Welcome Message -->
-@if($vendor)
-    <div class="alert alert-info d-none">
+<?php if($vendor): ?>
+    <div class="alert alert-success">
         <i class="fas fa-check-circle me-2"></i>
-        مرحباً {{ $vendor->business_name ?? 'التاجر' }}
+        مرحباً <?php echo e($vendor->business_name ?? 'التاجر'); ?>
+
     </div>
-@endif
+<?php endif; ?>
 
         <!-- Statistics Cards -->
         <div class="row g-4 mb-4">
@@ -58,11 +23,11 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <h6 class="card-title">إجمالي المنتجات</h6>
-                                <h2 class="mb-0">{{ $stats['products']['total'] ?? 0 }}</h2>
-                                <small>نشط: {{ $stats['products']['active'] ?? 0 }} | غير نشط: {{ $stats['products']['inactive'] ?? 0 }}</small>
+                                <h2 class="mb-0"><?php echo e($stats['products']['total'] ?? 0); ?></h2>
+                                <small>نشط: <?php echo e($stats['products']['active'] ?? 0); ?> | غير نشط: <?php echo e($stats['products']['inactive'] ?? 0); ?></small>
                                 <div class="mt-2">
-                                    <small class="text-warning">منخفض: {{ $stats['products']['low_stock'] ?? 0 }}</small>
-                                    <small class="text-danger ms-3">انتهى المخزون: {{ $stats['products']['out_of_stock'] ?? 0 }}</small>
+                                    <small class="text-warning">منخفض: <?php echo e($stats['products']['low_stock'] ?? 0); ?></small>
+                                    <small class="text-danger ms-3">انتهى المخزون: <?php echo e($stats['products']['out_of_stock'] ?? 0); ?></small>
                                 </div>
                             </div>
                             <div class="align-self-center">
@@ -79,8 +44,8 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <h6 class="card-title">إجمالي الطلبات</h6>
-                                <h2 class="mb-0">{{ $stats['orders']['total'] ?? 0 }}</h2>
-                                <small>معلق: {{ $stats['orders']['pending'] ?? 0 }} · غير مشحونة: {{ $stats['orders']['unshipped'] ?? 0 }}</small>
+                                <h2 class="mb-0"><?php echo e($stats['orders']['total'] ?? 0); ?></h2>
+                                <small>معلق: <?php echo e($stats['orders']['pending'] ?? 0); ?> · غير مشحونة: <?php echo e($stats['orders']['unshipped'] ?? 0); ?></small>
                             </div>
                             <div class="align-self-center">
                                 <i class="fas fa-shopping-cart fa-2x opacity-75"></i>
@@ -96,8 +61,8 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <h6 class="card-title">إجمالي الإيرادات</h6>
-                                <h2 class="mb-0">{{ number_format($stats['revenue']['total'] ?? 0, 2) }}</h2>
-                                <small>{{ $stats['revenue']['currency'] ?? 'EGP' }}</small>
+                                <h2 class="mb-0"><?php echo e(number_format($stats['revenue']['total'] ?? 0, 2)); ?></h2>
+                                <small><?php echo e($stats['revenue']['currency'] ?? 'EGP'); ?></small>
                             </div>
                             <div class="align-self-center">
                                 <i class="fas fa-dollar-sign fa-2x opacity-75"></i>
@@ -112,13 +77,13 @@
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="card-title">رصيد المحفظة</h6>
-                            <h2 class="mb-0">{{ number_format($stats['wallet']['available'] ?? 0, 2) }}</h2>
-                            <small>محجوز: {{ number_format($stats['wallet']['unavailable'] ?? 0, 2) }}</small>
+                            <h2 class="mb-0"><?php echo e(number_format($stats['wallet']['available'] ?? 0, 2)); ?></h2>
+                            <small>محجوز: <?php echo e(number_format($stats['wallet']['unavailable'] ?? 0, 2)); ?></small>
                         </div>
                         <div class="align-self-center text-end">
                             <i class="fas fa-wallet fa-2x opacity-75"></i>
                             <div class="mt-2">
-                                <a href="{{ $stats['wallet']['request_payout_url'] ?? '#' }}" class="btn btn-sm btn-light mt-2">طلب سحب</a>
+                                <a href="<?php echo e($stats['wallet']['request_payout_url'] ?? '#'); ?>" class="btn btn-sm btn-light mt-2">طلب سحب</a>
                             </div>
                         </div>
                     </div>
@@ -154,14 +119,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="mobile-card-view">
-                            <div class="mobile-product-card">
-                                <div class="product-name">منتج تجريبي</div>
-                                <div class="product-attr"><span>SKU:</span><span>PROD-001</span></div>
-                                <div class="product-attr"><span>الحالة:</span><span class="badge bg-success">نشط</span></div>
-                                <div class="product-attr"><span>الكمية:</span><span>50</span></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -172,10 +129,10 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">مركز تنفيذ الطلبات</h5>
                         <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#orders-pending" data-bs-toggle="tab">معلق <span class="badge bg-light text-dark ms-2">{{ $stats['orders']['pending'] ?? 0 }}</span></a></li>
-                            <li class="nav-item"><a class="nav-link" href="#orders-unshipped" data-bs-toggle="tab">غير مشحون <span class="badge bg-light text-dark ms-2">{{ $stats['orders']['unshipped'] ?? 0 }}</span></a></li>
-                            <li class="nav-item"><a class="nav-link" href="#orders-shipped" data-bs-toggle="tab">مشحون <span class="badge bg-light text-dark ms-2">{{ $stats['orders']['shipped'] ?? 0 }}</span></a></li>
-                            <li class="nav-item"><a class="nav-link" href="#orders-cancelled" data-bs-toggle="tab">ملغي <span class="badge bg-light text-dark ms-2">{{ $stats['orders']['cancelled'] ?? 0 }}</span></a></li>
+                            <li class="nav-item"><a class="nav-link active" href="#orders-pending" data-bs-toggle="tab">معلق <span class="badge bg-light text-dark ms-2"><?php echo e($stats['orders']['pending'] ?? 0); ?></span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="#orders-unshipped" data-bs-toggle="tab">غير مشحون <span class="badge bg-light text-dark ms-2"><?php echo e($stats['orders']['unshipped'] ?? 0); ?></span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="#orders-shipped" data-bs-toggle="tab">مشحون <span class="badge bg-light text-dark ms-2"><?php echo e($stats['orders']['shipped'] ?? 0); ?></span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="#orders-cancelled" data-bs-toggle="tab">ملغي <span class="badge bg-light text-dark ms-2"><?php echo e($stats['orders']['cancelled'] ?? 0); ?></span></a></li>
                         </ul>
                     </div>
                     <div class="card-body tab-content">
@@ -204,7 +161,7 @@
                     </div>
                     <div class="card-body">
                         <canvas id="salesChart" height="120"></canvas>
-                        <p class="mt-3 mb-0">الوحدات المباعة: <strong id="units-sold">{{ $stats['units_sold'] ?? 0 }}</strong></p>
+                        <p class="mt-3 mb-0">الوحدات المباعة: <strong id="units-sold"><?php echo e($stats['units_sold'] ?? 0); ?></strong></p>
                     </div>
                 </div>
             </div>
@@ -222,7 +179,7 @@
                         </h5>
                     </div>
                     <div class="card-body">
-                        @if(isset($stats['recent_orders']) && count($stats['recent_orders']) > 0)
+                        <?php if(isset($stats['recent_orders']) && count($stats['recent_orders']) > 0): ?>
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
@@ -235,28 +192,29 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($stats['recent_orders'] as $order)
+                                        <?php $__currentLoopData = $stats['recent_orders']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <tr>
-                                                <td>#{{ $order->increment_id ?? $order->id }}</td>
-                                                <td>{{ $order->first_name }} {{ $order->last_name }}</td>
-                                                <td>{{ number_format($order->total_amount, 2) }} EGP</td>
+                                                <td>#<?php echo e($order->increment_id ?? $order->id); ?></td>
+                                                <td><?php echo e($order->first_name); ?> <?php echo e($order->last_name); ?></td>
+                                                <td><?php echo e(number_format($order->total_amount, 2)); ?> EGP</td>
                                                 <td>
-                                                    <span class="badge bg-{{ $order->status == 'completed' ? 'success' : ($order->status == 'pending' ? 'warning' : 'info') }}">
-                                                        {{ $order->status }}
+                                                    <span class="badge bg-<?php echo e($order->status == 'completed' ? 'success' : ($order->status == 'pending' ? 'warning' : 'info')); ?>">
+                                                        <?php echo e($order->status); ?>
+
                                                     </span>
                                                 </td>
-                                                <td>{{ date('Y-m-d', strtotime($order->created_at)) }}</td>
+                                                <td><?php echo e(date('Y-m-d', strtotime($order->created_at))); ?></td>
                                             </tr>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </tbody>
                                 </table>
                             </div>
-                        @else
+                        <?php else: ?>
                             <div class="text-center py-4">
                                 <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
                                 <p class="text-muted">لا توجد طلبات حديثة</p>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -270,22 +228,22 @@
                         </h5>
                     </div>
                     <div class="card-body">
-                        @if(isset($stats['top_products']) && count($stats['top_products']) > 0)
-                            @foreach($stats['top_products'] as $product)
+                        <?php if(isset($stats['top_products']) && count($stats['top_products']) > 0): ?>
+                            <?php $__currentLoopData = $stats['top_products']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <div>
-                                        <h6 class="mb-1">{{ $product->name ?? 'منتج' }}</h6>
-                                        <small class="text-muted">{{ $product->sku }}</small>
+                                        <h6 class="mb-1"><?php echo e($product->name ?? 'منتج'); ?></h6>
+                                        <small class="text-muted"><?php echo e($product->sku); ?></small>
                                     </div>
-                                    <span class="badge bg-primary">{{ $product->total_sold ?? 0 }}</span>
+                                    <span class="badge bg-primary"><?php echo e($product->total_sold ?? 0); ?></span>
                                 </div>
-                            @endforeach
-                        @else
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php else: ?>
                             <div class="text-center py-4">
                                 <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
                                 <p class="text-muted">لا توجد بيانات مبيعات</p>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -304,25 +262,25 @@
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-md-3">
-                                <a href="{{ route('vendor.products.index') }}" class="btn btn-outline-primary w-100">
+                                <a href="<?php echo e(route('vendor.products.index')); ?>" class="btn btn-outline-primary w-100">
                                     <i class="fas fa-box me-2"></i>
                                     إدارة المنتجات
                                 </a>
                             </div>
                             <div class="col-md-3">
-                                <a href="{{ route('vendor.orders.index') }}" class="btn btn-outline-success w-100">
+                                <a href="<?php echo e(route('vendor.orders.index')); ?>" class="btn btn-outline-success w-100">
                                     <i class="fas fa-shopping-cart me-2"></i>
                                     إدارة الطلبات
                                 </a>
                             </div>
                             <div class="col-md-3">
-                                <a href="{{ route('vendor.wallet.index') }}" class="btn btn-outline-warning w-100">
+                                <a href="<?php echo e(route('vendor.wallet.index')); ?>" class="btn btn-outline-warning w-100">
                                     <i class="fas fa-wallet me-2"></i>
                                     المحفظة
                                 </a>
                             </div>
                             <div class="col-md-3">
-                                <a href="{{ route('vendor.settings.index') }}" class="btn btn-outline-info w-100">
+                                <a href="<?php echo e(route('vendor.settings.index')); ?>" class="btn btn-outline-info w-100">
                                     <i class="fas fa-cog me-2"></i>
                                     الإعدادات
                                 </a>
@@ -333,11 +291,11 @@
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
-        const statsUrl = '{{ route("vendor.api.dashboard.stats") }}';
+        const statsUrl = '<?php echo e(route("vendor.api.dashboard.stats")); ?>';
         let salesChartInstance = null;
 
         function fetchStats() {
@@ -410,4 +368,6 @@
         fetchStats();
         setInterval(fetchStats, 30000);
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('mawgood-vendor::layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\EXPRESS\Downloads\coding\mawgood\mawgood\packages\Mawgood\Vendor\src\Providers/../Resources/views/dashboard/index.blade.php ENDPATH**/ ?>
