@@ -176,9 +176,10 @@ class OnepageController extends APIController
 
         $order = $this->orderRepository->create($data);
 
-        Cart::deActivateCart();
+        session()->put('order_id', $order->id);
+        session()->save();
 
-        session()->flash('order_id', $order->id);
+        Cart::deActivateCart();
 
         return new JsonResource([
             'redirect'     => true,

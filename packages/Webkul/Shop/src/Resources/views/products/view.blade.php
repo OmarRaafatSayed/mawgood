@@ -139,6 +139,62 @@
                                     {!! $product->short_description !!}
                                 </p>
 
+                                @php
+                                    $colors = \DB::table('product_attribute_values')
+                                        ->where('product_id', $product->id)
+                                        ->where('attribute_id', 23)
+                                        ->value('text_value');
+                                    
+                                    $colorNames = [];
+                                    if ($colors) {
+                                        $colorIds = explode(',', $colors);
+                                        $colorNames = \DB::table('attribute_options')
+                                            ->whereIn('id', $colorIds)
+                                            ->pluck('admin_name')
+                                            ->toArray();
+                                    }
+                                    
+                                    $sizes = \DB::table('product_attribute_values')
+                                        ->where('product_id', $product->id)
+                                        ->where('attribute_id', 24)
+                                        ->value('text_value');
+                                    
+                                    $sizeNames = [];
+                                    if ($sizes) {
+                                        $sizeIds = explode(',', $sizes);
+                                        $sizeNames = \DB::table('attribute_options')
+                                            ->whereIn('id', $sizeIds)
+                                            ->pluck('admin_name')
+                                            ->toArray();
+                                    }
+                                @endphp
+
+                                @if(count($colorNames) > 0)
+                                    <div class="mt-6 max-sm:mt-4">
+                                        <p class="text-base font-medium text-black mb-2">{!! '<i class="fas fa-palette me-2"></i>الألوان المتاحة' !!}</p>
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach($colorNames as $colorName)
+                                                <span class="inline-flex items-center px-3 py-1.5 rounded-lg bg-gray-100 text-sm font-medium text-gray-800 border border-gray-300">
+                                                    {{ $colorName }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if(count($sizeNames) > 0)
+                                    <div class="mt-4 max-sm:mt-3">
+                                        <p class="text-base font-medium text-black mb-2">{!! '<i class="fas fa-ruler me-2"></i>المقاسات المتاحة' !!}</p>
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach($sizeNames as $sizeName)
+                                                <span class="inline-flex items-center px-3 py-1.5 rounded-lg bg-gray-100 text-sm font-medium text-gray-800 border border-gray-300">
+                                                    {{ $sizeName }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
                                 @include('shop::products.view.types.simple')
                                 @include('shop::products.view.types.configurable')
                                 @include('shop::products.view.types.grouped')

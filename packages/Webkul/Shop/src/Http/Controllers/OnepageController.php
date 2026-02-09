@@ -74,9 +74,13 @@ class OnepageController extends Controller
      */
     public function success(OrderRepository $orderRepository)
     {
-        if (! $order = $orderRepository->find(session('order_id'))) {
-            return redirect()->route('shop.checkout.cart.index');
+        $orderId = session('order_id');
+        
+        if (! $orderId || ! $order = $orderRepository->find($orderId)) {
+            return redirect()->route('shop.home.index');
         }
+
+        session()->forget('order_id');
 
         if (
             core()->getConfigData('general.magic_ai.settings.enabled')

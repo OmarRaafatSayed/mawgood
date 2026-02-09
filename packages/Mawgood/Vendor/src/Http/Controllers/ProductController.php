@@ -73,17 +73,30 @@ class ProductController extends Controller
         // Force vendor_id
         $data['vendor_id'] = $vendor->id;
         
-        // Set defaults
+        // Set defaults for hidden fields
         $data['type'] = $data['type'] ?? 'simple';
         $data['attribute_family_id'] = $data['attribute_family_id'] ?? 1;
         $data['sku'] = $data['sku'] ?? 'PROD-' . strtoupper(uniqid());
         
+        // Set default values for removed UI fields
+        $data['weight'] = $data['weight'] ?? 1;
+        $data['meta_title'] = $data['meta_title'] ?? $data['name'] ?? '';
+        $data['meta_description'] = $data['meta_description'] ?? $data['short_description'] ?? '';
+        
+        // Hardcode visibility and purchase logic
+        $data['visible_individually'] = 1; // Always visible
+        $data['guest_checkout'] = 0; // Require login to purchase
+        
         // Set product as inactive by default - requires admin approval
         $data['approved_by_admin'] = false;
         $data['status'] = 0;
-        $data['visible_individually'] = 1;
         
         try {
+            // Remove array fields that cause PDO errors
+            $colors = $request->input('color', []);
+            $sizes = $request->input('size', []);
+            unset($data['color'], $data['size']);
+            
             $product = $this->productService->create($data);
             
             // Generate url_key if missing
@@ -92,6 +105,34 @@ class ProductController extends Controller
             }
             
             $product = $this->productService->update($data, $product->id);
+            
+            // Save Color attributes (as comma-separated string)
+            if (!empty($colors) && is_array($colors)) {
+                $colorIds = implode(',', array_unique(array_filter($colors)));
+                if (!empty($colorIds)) {
+                    \DB::table('product_attribute_values')->insert([
+                        'product_id' => $product->id,
+                        'attribute_id' => 23,
+                        'text_value' => $colorIds,
+                        'locale' => 'en',
+                        'channel' => 'default'
+                    ]);
+                }
+            }
+            
+            // Save Size attributes (as comma-separated string)
+            if (!empty($sizes) && is_array($sizes)) {
+                $sizeIds = implode(',', array_unique(array_filter($sizes)));
+                if (!empty($sizeIds)) {
+                    \DB::table('product_attribute_values')->insert([
+                        'product_id' => $product->id,
+                        'attribute_id' => 24,
+                        'text_value' => $sizeIds,
+                        'locale' => 'en',
+                        'channel' => 'default'
+                    ]);
+                }
+            }
             
             // Handle images
             if ($request->hasFile('images')) {
@@ -110,7 +151,7 @@ class ProductController extends Controller
             }
             
             return redirect()->route('vendor.products.index')
-                ->with('success', 'تم إضافة المنتج بنجاح ونشره في الموقع');
+                ->with('success', 'تم إضافة المنتج بنجاح وسيتم مراجعته من قبل الإدارة');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
@@ -160,9 +201,57 @@ class ProductController extends Controller
         // Ensure vendor_id cannot be changed
         $data['vendor_id'] = $vendor->id;
         
+        // Set default values for removed UI fields
+        $data['weight'] = $data['weight'] ?? 1;
+        $data['meta_title'] = $data['meta_title'] ?? $data['name'] ?? '';
+        $data['meta_description'] = $data['meta_description'] ?? $data['short_description'] ?? '';
+        
+        // Hardcode visibility and purchase logic
+        $data['visible_individually'] = 1; // Always visible
+        $data['guest_checkout'] = 0; // Require login to purchase
+        
         try {
-            // Update product with all data including inventory
+            // Remove array fields that cause PDO errors
+            $colors = $request->input('color', []);
+            $sizes = $request->input('size', []);
+            unset($data['color'], $data['size']);
+            
+            // Delete ALL existing attributes FIRST (before update)
+            \DB::table('product_attribute_values')
+                ->where('product_id', $id)
+                ->whereIn('attribute_id', [23, 24])
+                ->delete();
+            
+            // Update product
             $product = $this->productService->update($data, $id);
+            
+            // Insert new Color attributes (as comma-separated string)
+            if (!empty($colors) && is_array($colors)) {
+                $colorIds = implode(',', array_unique(array_filter($colors)));
+                if (!empty($colorIds)) {
+                    \DB::table('product_attribute_values')->insert([
+                        'product_id' => $id,
+                        'attribute_id' => 23,
+                        'text_value' => $colorIds,
+                        'locale' => 'en',
+                        'channel' => 'default'
+                    ]);
+                }
+            }
+            
+            // Insert new Size attributes (as comma-separated string)
+            if (!empty($sizes) && is_array($sizes)) {
+                $sizeIds = implode(',', array_unique(array_filter($sizes)));
+                if (!empty($sizeIds)) {
+                    \DB::table('product_attribute_values')->insert([
+                        'product_id' => $id,
+                        'attribute_id' => 24,
+                        'text_value' => $sizeIds,
+                        'locale' => 'en',
+                        'channel' => 'default'
+                    ]);
+                }
+            }
             
             // Handle new images
             if ($request->hasFile('images')) {

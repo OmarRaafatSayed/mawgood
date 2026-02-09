@@ -26,11 +26,18 @@
                     class="flex min-h-[30px]"
                     aria-label="Mawgood"
                 >
+                    @php
+                        $logoUrl = core()->getCurrentChannel()->logo_url;
+                        if ($logoUrl && !file_exists(public_path(parse_url($logoUrl, PHP_URL_PATH)))) {
+                            $logoUrl = bagisto_asset('images/logo.svg');
+                        }
+                    @endphp
                     <img
-                        src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
+                        src="{{ $logoUrl ?: bagisto_asset('images/logo.svg') }}"
                         alt="{{ config('app.name') }}"
                         width="131"
                         height="29"
+                        onerror="this.src='{{ bagisto_asset('images/logo.svg') }}'"
                     >
                 </a>
             </div>
