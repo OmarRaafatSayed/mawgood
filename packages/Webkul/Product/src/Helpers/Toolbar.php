@@ -47,13 +47,6 @@ class Toolbar
                 'order'    => 'asc',
                 'position' => 5,
             ],
-            [
-                'title'    => trans('product::app.sort-by.options.expensive-first'),
-                'value'    => 'price-desc',
-                'sort'     => 'price',
-                'order'    => 'desc',
-                'position' => 6,
-            ],
         ]);
     }
 
@@ -64,7 +57,7 @@ class Toolbar
     public function getDefaultOrder(): array
     {
         return $this->getAvailableOrders()
-            ->where('value', core()->getConfigData('catalog.products.storefront.sort_by') ?? 'price-desc')
+            ->where('value', core()->getConfigData('catalog.products.storefront.sort_by') ?? 'price-asc')
             ->firstOrFail();
     }
 
