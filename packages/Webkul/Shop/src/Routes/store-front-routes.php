@@ -73,6 +73,15 @@ Route::get('page/{slug}', [PageController::class, 'view'])
     ->middleware('cache.response');
 
 /**
+ * Categories page.
+ */
+Route::get('categories', function () {
+    $categoryRepo = app('Webkul\\Category\\Repositories\\CategoryRepository');
+    $categories = $categoryRepo->where('status', 1)->get();
+    return view('shop::categories.index', compact('categories'));
+})->name('shop.categories.index');
+
+/**
  * Fallback route.
  */
 Route::fallback(ProductsCategoriesProxyController::class.'@index')
