@@ -50,13 +50,14 @@ class CategoryController extends APIController
      */
     public function tree(): JsonResource
     {
-        $cacheKey = 'category_tree_' . core()->getCurrentChannel()->id . '_' . app()->getLocale();
-        
-        $categories = cache()->remember($cacheKey, 3600, function () {
-            return $this->categoryRepository->getVisibleCategoryTree(
-                core()->getCurrentChannel()->root_category_id
-            );
-        });
+        $categories = $this->categoryRepository
+            ->with(['children' => function($query) {
+                $query->where('status', 1)->orderBy('position');
+            }])
+            ->where('status', 1)
+            ->whereNull('parent_id')
+            ->orderBy('position')
+            ->get();
 
         return CategoryTreeResource::collection($categories);
     }

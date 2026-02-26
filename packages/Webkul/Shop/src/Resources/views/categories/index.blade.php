@@ -41,34 +41,50 @@ body {
 </header>
 
 <main class="flex-1 overflow-y-auto p-6 pb-24">
-@php
-$categoryIcons = [
-    'أزياء' => 'apparel',
-    'إلكترونيات' => 'devices',
-    'جمال' => 'spa',
-    'رياضة' => 'sports_soccer',
-    'كتب' => 'menu_book',
-];
-@endphp
-
-@if(isset($categories) && $categories->count() > 0)
 <div class="grid grid-cols-3 gap-6">
-@foreach($categories as $category)
-<a href="{{ route('shop.categories.view', $category->id) }}" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<!-- إلكترونيات -->
+<a href="/categories/2/products" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
 <div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
-<span class="material-symbols-outlined text-4xl text-accent-gold">{{ $categoryIcons[$category->name] ?? 'category' }}</span>
+<span class="material-symbols-outlined text-4xl text-accent-gold">devices</span>
 </div>
-<span class="text-xs font-bold text-primary text-center">{{ $category->name }}</span>
+<span class="text-xs font-bold text-primary text-center">إلكترونيات</span>
 </a>
-@endforeach
+<!-- أزياء -->
+<a href="/categories/3/products" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-4xl text-accent-gold">apparel</span>
 </div>
-@else
-<div class="flex flex-col items-center justify-center py-20">
-<span class="material-symbols-outlined text-6xl text-gray-300 mb-4">category</span>
-<h3 class="text-lg font-bold text-primary mb-2">لا توجد تصنيفات</h3>
-<p class="text-sm text-gray-500">لم يتم إضافة أي تصنيفات بعد</p>
+<span class="text-xs font-bold text-primary text-center">أزياء</span>
+</a>
+<!-- جمال -->
+<a href="/categories/5/products" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-4xl text-accent-gold">spa</span>
 </div>
-@endif
+<span class="text-xs font-bold text-primary text-center">جمال</span>
+</a>
+<!-- رياضة -->
+<a href="/categories/6/products" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-4xl text-accent-gold">sports_soccer</span>
+</div>
+<span class="text-xs font-bold text-primary text-center">رياضة</span>
+</a>
+<!-- كتب -->
+<a href="/categories/7/products" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-4xl text-accent-gold">menu_book</span>
+</div>
+<span class="text-xs font-bold text-primary text-center">كتب</span>
+</a>
+<!-- الاثاث المنزلي -->
+<a href="/categories/9/products" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-4xl text-accent-gold">chair</span>
+</div>
+<span class="text-xs font-bold text-primary text-center">الاثاث المنزلي</span>
+</a>
+</div>
 </main>
 </div>
 </x-shop::layouts>

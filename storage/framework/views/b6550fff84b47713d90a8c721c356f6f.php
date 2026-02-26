@@ -51,40 +51,47 @@ body {
 
 <main class="flex-1 overflow-y-auto p-6 pb-24">
 <div class="grid grid-cols-3 gap-6">
-<!-- Category Item 1 -->
-<a href="<?php echo e(route('shop.search.index')); ?>" class="flex flex-col items-center gap-2">
-<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
-<span class="material-symbols-outlined text-4xl text-accent-gold">apparel</span>
-</div>
-<span class="text-xs font-bold text-primary text-center">أزياء</span>
-</a>
-<!-- Category Item 2 -->
-<a href="<?php echo e(route('shop.search.index')); ?>" class="flex flex-col items-center gap-2">
-<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
+<!-- إلكترونيات -->
+<a href="/categories/2/products?id=2" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
 <span class="material-symbols-outlined text-4xl text-accent-gold">devices</span>
 </div>
 <span class="text-xs font-bold text-primary text-center">إلكترونيات</span>
 </a>
-<!-- Category Item 3 -->
-<a href="<?php echo e(route('shop.search.index')); ?>" class="flex flex-col items-center gap-2">
-<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
+<!-- أزياء -->
+<a href="/categories/3/products?id=3" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-4xl text-accent-gold">apparel</span>
+</div>
+<span class="text-xs font-bold text-primary text-center">أزياء</span>
+</a>
+<!-- جمال -->
+<a href="/categories/5/products?id=5" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
 <span class="material-symbols-outlined text-4xl text-accent-gold">spa</span>
 </div>
 <span class="text-xs font-bold text-primary text-center">جمال</span>
 </a>
-<!-- Category Item 4 -->
-<a href="<?php echo e(route('shop.search.index')); ?>" class="flex flex-col items-center gap-2">
-<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
+<!-- رياضة -->
+<a href="/categories/6/products?id=6" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
 <span class="material-symbols-outlined text-4xl text-accent-gold">sports_soccer</span>
 </div>
 <span class="text-xs font-bold text-primary text-center">رياضة</span>
 </a>
-<!-- Category Item 5 -->
-<a href="<?php echo e(route('shop.search.index')); ?>" class="flex flex-col items-center gap-2">
-<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
+<!-- كتب -->
+<a href="/categories/7/products?id=7" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
 <span class="material-symbols-outlined text-4xl text-accent-gold">menu_book</span>
 </div>
 <span class="text-xs font-bold text-primary text-center">كتب</span>
+</a>
+<!-- الاثاث المنزلي -->
+<a href="/categories/9/products?id=9" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-4xl text-accent-gold">chair</span>
+</div>
+<span class="text-xs font-bold text-primary text-center">الاثاث المنزلي</span>
 </a>
 </div>
 </main>

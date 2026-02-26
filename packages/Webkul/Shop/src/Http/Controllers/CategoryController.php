@@ -17,11 +17,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = $this->categoryRepository
-            ->where('status', 1)
-            ->whereNull('parent_id')
-            ->orderBy('position')
-            ->get();
+        $categories = collect([
+            (object)['id' => 2, 'name' => 'إلكترونيات'],
+            (object)['id' => 3, 'name' => 'أزياء'],
+            (object)['id' => 5, 'name' => 'جمال'],
+            (object)['id' => 6, 'name' => 'رياضة'],
+            (object)['id' => 7, 'name' => 'كتب'],
+            (object)['id' => 9, 'name' => 'الاثاث المنزلي'],
+        ]);
 
         return view('shop::categories.index', compact('categories'));
     }
@@ -31,16 +34,16 @@ class CategoryController extends Controller
      */
     public function view($id)
     {
-        $category = $this->categoryRepository->findOrFail($id);
+        $category = $this->categoryRepository
+            ->with(['children' => function($query) {
+                $query->where('status', 1)->orderBy('position');
+            }])
+            ->findOrFail($id);
 
         if ($category->status != 1) {
             abort(404);
         }
 
-        // Get sub-categories
-        $subCategories = $category->children()->where('status', 1)->get();
-
-        // Get products for this category
         $products = $this->productRepository
             ->whereHas('categories', function ($query) use ($id) {
                 $query->where('category_id', $id);

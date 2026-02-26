@@ -3,7 +3,7 @@
 <html dir="rtl" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ماوجود - حرف يدوية</title>
+<title>ماوجود - <span id="categoryName">حرف يدوية</span></title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Tajawal:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -62,7 +62,7 @@
 <span class="material-symbols-outlined text-primary text-[24px]">arrow_forward</span>
 </button>
 <div class="text-center">
-<h1 class="text-lg font-bold leading-tight tracking-tight text-primary">حرف يدوية</h1>
+<h1 class="text-lg font-bold leading-tight tracking-tight text-primary" id="categoryTitle">حرف يدوية</h1>
 </div>
 <button class="flex items-center justify-center size-10 rounded-full hover:bg-primary/5 transition-colors">
 <span class="material-symbols-outlined text-primary text-[24px]">tune</span>
@@ -213,4 +213,12 @@
 <div class="w-32 h-1 bg-black/20 rounded-full"></div>
 </div>
 </div>
-</body></html>
+</body>
+<script>
+// قراءة اسم الفئة من الرابط
+const urlParams = new URLSearchParams(window.location.search);
+const category = urlParams.get('category') || 'حرف يدوية';
+document.getElementById('categoryTitle').textContent = category;
+document.title = 'ماوجود - ' + category;
+</script>
+</html>

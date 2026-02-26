@@ -40,7 +40,7 @@ body {
 <main class="flex-1 overflow-y-auto p-6 pb-24">
 @if($category->children && $category->children->count() > 0)
 <!-- Sub-categories Grid -->
-<div class="mb-6">
+<div class="mb-8">
 <h2 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
 <span class="w-1 h-6 bg-accent-gold rounded-full"></span>
 التصنيفات الفرعية
@@ -59,15 +59,15 @@ body {
 @endif
 
 <!-- Products Section -->
+@if($products && $products->count() > 0)
 <div>
 <h2 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
 <span class="w-1 h-6 bg-accent-gold rounded-full"></span>
 المنتجات
 </h2>
-@if($products && $products->count() > 0)
 <div class="grid grid-cols-2 gap-4">
 @foreach($products as $product)
-<a href="{{ route('shop.product_or_category.index', $product->url_key) }}" class="bg-white rounded-lg p-3 shadow-sm border border-primary/5 flex flex-col">
+<a href="{{ route('shop.product_or_category.index', $product->url_key) }}" class="bg-white rounded-lg p-3 shadow-sm border border-primary/5 flex flex-col hover:shadow-md transition-shadow">
 <div class="relative aspect-square rounded-md overflow-hidden bg-background-light mb-3">
 @if($product->base_image)
 <img alt="{{ $product->name }}" class="w-full h-full object-cover" src="{{ $product->base_image->url }}"/>
@@ -84,14 +84,20 @@ body {
 </a>
 @endforeach
 </div>
-@else
+
+@if($products->hasPages())
+<div class="mt-6">
+{{ $products->links() }}
+</div>
+@endif
+</div>
+@elseif(!$category->children || $category->children->count() == 0)
 <div class="flex flex-col items-center justify-center py-20">
 <span class="material-symbols-outlined text-6xl text-gray-300 mb-4">shopping_bag</span>
 <h3 class="text-lg font-bold text-primary mb-2">لا توجد منتجات</h3>
 <p class="text-sm text-gray-500">لم يتم إضافة منتجات في هذا التصنيف بعد</p>
 </div>
 @endif
-</div>
 </main>
 </div>
 </x-shop::layouts>

@@ -282,7 +282,13 @@ class CategoryController extends Controller
      */
     public function tree(): JsonResource
     {
-        $categories = $this->categoryRepository->getVisibleCategoryTree(core()->getRequestedChannel()->root_category_id);
+        $categories = \Webkul\Category\Models\Category::where('status', 1)
+            ->whereNull('parent_id')
+            ->where('id', '!=', 1)
+            ->with(['children' => function($query) {
+                $query->where('status', 1);
+            }])
+            ->get();
 
         return CategoryTreeResource::collection($categories);
     }

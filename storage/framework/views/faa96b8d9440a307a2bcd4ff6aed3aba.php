@@ -317,7 +317,7 @@ function toggleMenu() {
 </div>
 </body>
 
-<?php if (! $__env->hasRenderedOnce('e06e4cb2-caa7-4269-b28f-36cae3528182')): $__env->markAsRenderedOnce('e06e4cb2-caa7-4269-b28f-36cae3528182');
+<?php if (! $__env->hasRenderedOnce('12c0b0a6-903b-415e-afbb-9c91acbb06bc')): $__env->markAsRenderedOnce('12c0b0a6-903b-415e-afbb-9c91acbb06bc');
 $__env->startPush('scripts'); ?>
 <script type="text/x-template" id="v-search-template">
 <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
