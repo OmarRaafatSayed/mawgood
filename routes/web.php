@@ -111,5 +111,17 @@ Route::prefix('blog')->name('blog.')->group(function () {
 // Categories Route
 Route::get('/categories', [\Webkul\Shop\Http\Controllers\API\CategoryController::class, 'showAll'])->name('shop.categories.index');
 
+// Category Products API Routes
+Route::prefix('api/categories')->group(function () {
+    Route::get('/{id}/products', [App\Http\Controllers\CategoryProductController::class, 'index']);
+    Route::get('/{id}/sub-categories', [App\Http\Controllers\CategoryProductController::class, 'getSubCategories']);
+});
+Route::get('api/products', [App\Http\Controllers\CategoryProductController::class, 'filterBySubCategory']);
+
+// Category Products View
+Route::get('/categories/{id}/products', function($id) {
+    return view('categories.products');
+});
+
 // Test Blog System
 require __DIR__.'/test-blog.php';

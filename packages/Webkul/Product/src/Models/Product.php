@@ -565,7 +565,7 @@ class Product extends Model implements ProductContract
      */
     public function scopeActive($query)
     {
-        return $query->where('status', 1);
+        return $query->where('products.status', 1);
     }
 
     /**
@@ -573,7 +573,8 @@ class Product extends Model implements ProductContract
      */
     public function scopeVisibleInFrontend($query)
     {
-        return $query->where('visible_individually', 1);
+        // visibility column in products table, not visible_individually
+        return $query->where('products.visibility', 1);
     }
 
     /**
@@ -582,8 +583,8 @@ class Product extends Model implements ProductContract
     public function scopeApproved($query)
     {
         return $query->where(function($q) {
-            $q->whereNull('vendor_id')
-              ->orWhere('approved_by_admin', 1);
+            $q->whereNull('products.vendor_id')
+              ->orWhere('products.approved_by_admin', 1);
         });
     }
 
@@ -593,9 +594,12 @@ class Product extends Model implements ProductContract
     public function scopeForShop($query)
     {
         return $query
-            ->active()
-            ->visibleInFrontend()
-            ->approved();
+            ->where('products.status', 1)
+            ->where('products.visibility', 1)
+            ->where(function($q) {
+                $q->whereNull('products.vendor_id')
+                  ->orWhere('products.approved_by_admin', 1);
+            });
     }
 
     /**
