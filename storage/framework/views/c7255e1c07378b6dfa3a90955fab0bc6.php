@@ -7,7 +7,7 @@
     ></span>
 </v-mini-cart>
 
-<?php if (! $__env->hasRenderedOnce('fad6eb2e-d865-40b9-8311-0ec531c89566')): $__env->markAsRenderedOnce('fad6eb2e-d865-40b9-8311-0ec531c89566');
+<?php if (! $__env->hasRenderedOnce('d6c5c2f2-38fc-4c73-bc08-6c9c5c7753b5')): $__env->markAsRenderedOnce('d6c5c2f2-38fc-4c73-bc08-6c9c5c7753b5');
 $__env->startPush('scripts'); ?>
     <script
         type="text/x-template"

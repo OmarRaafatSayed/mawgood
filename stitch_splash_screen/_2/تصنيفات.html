@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>موجود - التصنيفات</title>
+<!-- Google Fonts: Cairo for Arabic, Roboto for English -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&amp;family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            nileBlue: '#003366',
+            mawgoodGold: '#D4A017',
+          },
+          fontFamily: {
+            arabic: ['Cairo', 'sans-serif'],
+            english: ['Roboto', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-styling">
+    body {
+      background-color: #f8fafc;
+      font-family: 'Cairo', 'Roboto', sans-serif;
+    }
+    .iphone-frame {
+      width: 393px;
+      height: 852px;
+      border: 8px solid #1a1a1a;
+      border-radius: 50px;
+      overflow: hidden;
+      position: relative;
+      margin: 20px auto;
+      background: white;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    .dynamic-island {
+      width: 120px;
+      height: 35px;
+      background: black;
+      border-radius: 20px;
+      margin: 0 auto;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .category-card-shadow {
+      box-shadow: 0 10px 15px -3px rgba(0, 51, 102, 0.1), 0 4px 6px -2px rgba(0, 51, 102, 0.05);
+    }
+    .category-overlay {
+      background: linear-gradient(to top, rgba(0, 51, 102, 0.9) 0%, rgba(0, 51, 102, 0.4) 40%, rgba(0, 51, 102, 0) 100%);
+    }
+    .active-nav-glow {
+      filter: drop-shadow(0 0 6px rgba(212, 160, 23, 0.4));
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+<!-- BEGIN: Device Frame -->
+<div class="iphone-frame flex flex-col">
+<div class="dynamic-island"></div>
+<!-- BEGIN: Header -->
+<header class="pt-12 pb-4 px-6 flex items-center justify-between border-b border-gray-100 bg-white sticky top-0 z-40" data-purpose="main-header">
+<button aria-label="Back" class="text-nileBlue order-last"><svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg></button>
+<div class="text-center">
+<h1 class="text-nileBlue font-bold text-xl font-arabic">التصنيفات</h1>
+</div>
+<button aria-label="Search" class="text-nileBlue order-first">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: Main Content -->
+<main class="flex-1 overflow-y-auto hide-scrollbar p-6 bg-gray-50" data-purpose="category-grid">
+<div class="grid grid-cols-1 gap-5 pb-24">
+<!-- Category 1: Handicrafts -->
+<div class="relative h-48 w-full rounded-[24px] overflow-hidden category-card-shadow border border-white/20 group transition-all active:scale-[0.97] hover:shadow-lg">
+<img alt="Handicrafts" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiJhIjVe8dsehqKSvLiiRc7eTIJcr8dXylmTz0OMkLoPOc1A8u6o2d0ibRYEsuePIv6P_3_LaiZCPYBqYLy4xnlMEdR9bPeI3OBDVyHNkXSdYD5N7nQT6Di_YitmRX0ZlioD4ylKL7atA8LobZ0w5lFULdvYoT6xX9w6Ao9MLGuzErFr6DdGiTPs8ndKJTznXZqg8u6ueaa6OctUMvdekI57sA4up94TPX8P2k4RKAqQKiXB-rXSNkjK9kYacC7GxRWOMxp-4R28Y"/>
+<div class="category-overlay absolute inset-0 flex flex-col justify-end p-6">
+<h2 class="text-white font-bold text-2xl font-arabic tracking-wide">حرف يدوية</h2>
+</div>
+</div>
+<!-- Category 2: Fashion -->
+<div class="relative h-48 w-full rounded-[24px] overflow-hidden category-card-shadow border border-white/20 group transition-all active:scale-[0.97] hover:shadow-lg">
+<img alt="Fashion" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkajRJHhDxRs7XtxQBn59DUrmSahLWrB3W7wNGsXNjtx3x_GFoXG32ij4A9EdhHHwP2KgxA4Ia1jcUfkXS1Hagold20r4LLN5SReST8lrxiWZp21a-JyWkIQ5Y4uaKnC-jv6nXoYB_uV3x6lWjX4jdcul8BsuNBtKsieFiLH4E_hhW7u06_-6DgMozOBR9eWzBJpYGfjBXC6o8rsjgCkMY9TuGlSeeMmC06PswV8BY2qyvFaDJGVeSnZcAi8u9srp3JTwR1KWgvsQ"/>
+<div class="category-overlay absolute inset-0 flex flex-col justify-end p-6">
+<h2 class="text-white font-bold text-2xl font-arabic tracking-wide">أزياء</h2>
+</div>
+</div>
+<!-- Category 3: Home Decor -->
+<div class="relative h-48 w-full rounded-[24px] overflow-hidden category-card-shadow border border-white/20 group transition-all active:scale-[0.97] hover:shadow-lg">
+<img alt="Home Decor" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHU-p1Ok8CJHRgSNr1DFxOlc-7auGLAOucHl7Xnlif5rjzYutDLvhTfA__kQKs7AoeQHj1ye1Jnlpx79zoaCG0mijvauuMnN8dVXRLcZqY-YDWS7Gbxo3IhNTxkYLRG9GTkwAJ0FXMpffThUebsqetcqTTusy0n_q0gIPrRcyFkjtuOHvPKQW6J1QDPtvRcfIDCxEgbUedVKCD2p-M81k7W-PvrJJz0vVpT_eJVsuiTJ7KfnSZ8O-VhYKnJSPU78Tt2wWrLWoc5cM"/>
+<div class="category-overlay absolute inset-0 flex flex-col justify-end p-6">
+<h2 class="text-white font-bold text-2xl font-arabic tracking-wide">ديكور منزلي</h2>
+</div>
+</div>
+<!-- Category 4: Food & Dates -->
+<div class="relative h-48 w-full rounded-[24px] overflow-hidden category-card-shadow border border-white/20 group transition-all active:scale-[0.97] hover:shadow-lg">
+<img alt="Food &amp; Dates" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxfXz1mHyRDWZdyDYzZo99xvesQ55cfXbU8oZxMRXCkhILWNnsZCjYPt4bmqL8M2oxvBaabCbL_iIXY32H6vgLeOxgsRXfVgW_GBiPF6F13OaEH-1nO4G5PjRtOhdiKYLFi21i2ir6RKGhe8lsA5zJQeMQ1WNLxInHej-b3vHS36X9ENv5wNl3sfEio6iJMlDVBlluWmnGR6dyKyOsWkPQbnD-Im-US8XQDyuowtp-LQddzHoRRhnB037YaLuxTvkZygis2YUDHCE"/>
+<div class="category-overlay absolute inset-0 flex flex-col justify-end p-6">
+<h2 class="text-white font-bold text-2xl font-arabic tracking-wide">تمور وأغذية</h2>
+</div>
+</div>
+</div>
+</main>
+<!-- END: Main Content -->
+<!-- BEGIN: Bottom Navigation -->
+<nav class="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 flex justify-between items-center px-8 pt-4 pb-8 z-50 shadow-[0_-4px_10px_rgba(0,0,0,0.03)]" data-purpose="bottom-navigation">
+<!-- Home -->
+<a class="flex flex-col items-center gap-1 group" href="#">
+<svg class="h-6 w-6 text-gray-400 group-hover:text-nileBlue transition-colors" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] text-gray-400 font-medium">الرئيسية</span>
+</a>
+<!-- Shopping (Active) -->
+<a class="flex flex-col items-center gap-1" href="#">
+<div class="active-nav-glow">
+<svg class="h-6 w-6 text-mawgoodGold" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .315.113.367.27l2.23 6.69a.75.75 0 00.712.51h11.564a.75.75 0 00.712-.51l2.23-6.69a.375.375 0 01.367-.27h1.386a.75.75 0 000-1.5H2.25z"></path>
+<path d="M7.5 18.75a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 18.75a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"></path>
+</svg>
+</div>
+<span class="text-[10px] text-mawgoodGold font-bold">التسوق</span>
+</a>
+<!-- Jobs -->
+<a class="flex flex-col items-center gap-1 group" href="#">
+<svg class="h-6 w-6 text-gray-400 group-hover:text-nileBlue transition-colors" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] text-gray-400 font-medium">وظائف</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center gap-1 group" href="#">
+<svg class="h-6 w-6 text-gray-400 group-hover:text-nileBlue transition-colors" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] text-gray-400 font-medium">حسابي</span>
+</a>
+</nav>
+<!-- END: Bottom Navigation -->
+</div>
+<!-- END: Device Frame -->
+</body></html>

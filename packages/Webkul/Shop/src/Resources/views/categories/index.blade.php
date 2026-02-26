@@ -41,43 +41,34 @@ body {
 </header>
 
 <main class="flex-1 overflow-y-auto p-6 pb-24">
+@php
+$categoryIcons = [
+    'أزياء' => 'apparel',
+    'إلكترونيات' => 'devices',
+    'جمال' => 'spa',
+    'رياضة' => 'sports_soccer',
+    'كتب' => 'menu_book',
+];
+@endphp
+
+@if(isset($categories) && $categories->count() > 0)
 <div class="grid grid-cols-3 gap-6">
-<!-- Category Item 1 -->
-<a href="{{ route('shop.search.index') }}" class="flex flex-col items-center gap-2">
-<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
-<span class="material-symbols-outlined text-4xl text-accent-gold">apparel</span>
+@foreach($categories as $category)
+<a href="{{ route('shop.categories.view', $category->id) }}" class="flex flex-col items-center gap-2 transition-transform active:scale-95">
+<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-4xl text-accent-gold">{{ $categoryIcons[$category->name] ?? 'category' }}</span>
 </div>
-<span class="text-xs font-bold text-primary text-center">أزياء</span>
+<span class="text-xs font-bold text-primary text-center">{{ $category->name }}</span>
 </a>
-<!-- Category Item 2 -->
-<a href="{{ route('shop.search.index') }}" class="flex flex-col items-center gap-2">
-<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
-<span class="material-symbols-outlined text-4xl text-accent-gold">devices</span>
+@endforeach
 </div>
-<span class="text-xs font-bold text-primary text-center">إلكترونيات</span>
-</a>
-<!-- Category Item 3 -->
-<a href="{{ route('shop.search.index') }}" class="flex flex-col items-center gap-2">
-<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
-<span class="material-symbols-outlined text-4xl text-accent-gold">spa</span>
+@else
+<div class="flex flex-col items-center justify-center py-20">
+<span class="material-symbols-outlined text-6xl text-gray-300 mb-4">category</span>
+<h3 class="text-lg font-bold text-primary mb-2">لا توجد تصنيفات</h3>
+<p class="text-sm text-gray-500">لم يتم إضافة أي تصنيفات بعد</p>
 </div>
-<span class="text-xs font-bold text-primary text-center">جمال</span>
-</a>
-<!-- Category Item 4 -->
-<a href="{{ route('shop.search.index') }}" class="flex flex-col items-center gap-2">
-<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
-<span class="material-symbols-outlined text-4xl text-accent-gold">sports_soccer</span>
-</div>
-<span class="text-xs font-bold text-primary text-center">رياضة</span>
-</a>
-<!-- Category Item 5 -->
-<a href="{{ route('shop.search.index') }}" class="flex flex-col items-center gap-2">
-<div class="size-20 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
-<span class="material-symbols-outlined text-4xl text-accent-gold">menu_book</span>
-</div>
-<span class="text-xs font-bold text-primary text-center">كتب</span>
-</a>
-</div>
+@endif
 </main>
 </div>
 </x-shop::layouts>

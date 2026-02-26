@@ -128,4 +128,16 @@ class CategoryController extends APIController
             'max_price' => core()->convertPrice($maxPrice),
         ]);
     }
+
+    /**
+     * Show all categories page.
+     */
+    public function showAll()
+    {
+        $categories = $this->categoryRepository->getVisibleCategoryTree(
+            core()->getCurrentChannel()->root_category_id
+        );
+
+        return view('shop::categories.index', compact('categories'));
+    }
 }

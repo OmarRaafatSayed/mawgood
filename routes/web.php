@@ -108,5 +108,8 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('/{slug}', [BlogController::class, 'show'])->name('show')->where('slug', '.*');
 });
 
+// Categories Route
+Route::get('/categories', [\Webkul\Shop\Http\Controllers\API\CategoryController::class, 'showAll'])->name('shop.categories.index');
+
 // Test Blog System
 require __DIR__.'/test-blog.php';
