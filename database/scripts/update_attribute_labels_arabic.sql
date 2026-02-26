@@ -1,0 +1,26 @@
+-- تحديث أسماء الحقول للعربية
+UPDATE attributes SET admin_name = 'رمز المنتج (SKU)' WHERE code = 'sku';
+UPDATE attributes SET admin_name = 'اسم المنتج' WHERE code = 'name';
+UPDATE attributes SET admin_name = 'وصف مختصر' WHERE code = 'short_description';
+UPDATE attributes SET admin_name = 'الوصف الكامل' WHERE code = 'description';
+UPDATE attributes SET admin_name = 'السعر الأساسي' WHERE code = 'price';
+UPDATE attributes SET admin_name = 'التكلفة' WHERE code = 'cost';
+UPDATE attributes SET admin_name = 'السعر الخاص (التخفيض)' WHERE code = 'special_price';
+UPDATE attributes SET admin_name = 'بداية السعر الخاص' WHERE code = 'special_price_from';
+UPDATE attributes SET admin_name = 'نهاية السعر الخاص' WHERE code = 'special_price_to';
+UPDATE attributes SET admin_name = 'الوزن (كجم)' WHERE code = 'weight';
+UPDATE attributes SET admin_name = 'رابط المنتج (URL)' WHERE code = 'url_key';
+UPDATE attributes SET admin_name = 'الفئة الضريبية' WHERE code = 'tax_category_id';
+UPDATE attributes SET admin_name = 'اللون' WHERE code = 'color';
+UPDATE attributes SET admin_name = 'المقاس' WHERE code = 'size';
+UPDATE attributes SET admin_name = 'العلامة التجارية' WHERE code = 'brand';
+UPDATE attributes SET admin_name = 'رقم المنتج' WHERE code = 'product_number';
+UPDATE attributes SET admin_name = 'إدارة المخزون' WHERE code = 'manage_stock';
+UPDATE attributes SET admin_name = 'عنوان SEO' WHERE code = 'meta_title';
+UPDATE attributes SET admin_name = 'كلمات مفتاحية SEO' WHERE code = 'meta_keywords';
+UPDATE attributes SET admin_name = 'وصف SEO' WHERE code = 'meta_description';
+UPDATE attributes SET admin_name = 'منتج جديد' WHERE code = 'new';
+UPDATE attributes SET admin_name = 'منتج مميز' WHERE code = 'featured';
+UPDATE attributes SET admin_name = 'ظاهر في المتجر' WHERE code = 'visible_individually';
+UPDATE attributes SET admin_name = 'الحالة (نشط/غير نشط)' WHERE code = 'status';
+UPDATE attributes SET admin_name = 'السماح بالشراء كضيف' WHERE code = 'guest_checkout';

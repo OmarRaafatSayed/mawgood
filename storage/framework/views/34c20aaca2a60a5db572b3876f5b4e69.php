@@ -487,7 +487,7 @@
     <?php echo view_render_event('bagisto.admin.catalog.products.list.after'); ?>
 
 
-    <?php if (! $__env->hasRenderedOnce('7875d392-8b80-44f9-8983-f77341b6ef57')): $__env->markAsRenderedOnce('7875d392-8b80-44f9-8983-f77341b6ef57');
+    <?php if (! $__env->hasRenderedOnce('1bae5ba4-53bd-4318-a439-bca462aa54e3')): $__env->markAsRenderedOnce('1bae5ba4-53bd-4318-a439-bca462aa54e3');
 $__env->startPush('scripts'); ?>
         <script
             type="text/x-template"
@@ -744,15 +744,16 @@ $__env->startPush('scripts'); ?>
 <?php $component->withAttributes([]); ?>
                                         <?php if (isset($component)) { $__componentOriginal8378211f70f8c39b16d47cecdac9c7c8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal8378211f70f8c39b16d47cecdac9c7c8 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'admin::components.form.control-group.label','data' => ['class' => 'required']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'admin::components.form.control-group.label','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('admin::form.control-group.label'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['class' => 'required']); ?>
+<?php $component->withAttributes([]); ?>
                                             <?php echo app('translator')->get('admin::app.catalog.products.index.create.sku'); ?>
+                                            <span class="text-xs text-gray-500">(اختياري - سيتم التوليد تلقائياً)</span>
                                          <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal8378211f70f8c39b16d47cecdac9c7c8)): ?>
@@ -766,14 +767,14 @@ $__env->startPush('scripts'); ?>
 
                                         <?php if (isset($component)) { $__componentOriginal53af403f6b2179a3039d488b8ab2a267 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal53af403f6b2179a3039d488b8ab2a267 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'admin::components.form.control-group.control','data' => ['type' => 'text','name' => 'sku',':rules' => '{ required: true, regex: /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/ }','label' => trans('admin::app.catalog.products.index.create.sku')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'admin::components.form.control-group.control','data' => ['type' => 'text','name' => 'sku',':rules' => '{ regex: /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/ }','label' => trans('admin::app.catalog.products.index.create.sku'),'placeholder' => 'سيتم التوليد تلقائياً إذا تُرك فارغاً']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('admin::form.control-group.control'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['type' => 'text','name' => 'sku',':rules' => '{ required: true, regex: /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/ }','label' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(trans('admin::app.catalog.products.index.create.sku'))]); ?>
+<?php $component->withAttributes(['type' => 'text','name' => 'sku',':rules' => '{ regex: /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/ }','label' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(trans('admin::app.catalog.products.index.create.sku')),'placeholder' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute('سيتم التوليد تلقائياً إذا تُرك فارغاً')]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal53af403f6b2179a3039d488b8ab2a267)): ?>
