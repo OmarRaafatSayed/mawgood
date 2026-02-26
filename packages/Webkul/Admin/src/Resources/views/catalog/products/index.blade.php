@@ -494,15 +494,17 @@
 
                                     <!-- SKU -->
                                     <x-admin::form.control-group>
-                                        <x-admin::form.control-group.label class="required">
+                                        <x-admin::form.control-group.label>
                                             @lang('admin::app.catalog.products.index.create.sku')
+                                            <span class="text-xs text-gray-500">(اختياري - سيتم التوليد تلقائياً)</span>
                                         </x-admin::form.control-group.label>
 
                                         <x-admin::form.control-group.control
                                             type="text"
                                             name="sku"
-                                            ::rules="{ required: true, regex: /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/ }"
+                                            ::rules="{ regex: /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/ }"
                                             :label="trans('admin::app.catalog.products.index.create.sku')"
+                                            :placeholder="'سيتم التوليد تلقائياً إذا تُرك فارغاً'"
                                         />
 
                                         <x-admin::form.control-group.error control-name="sku" />

@@ -92,17 +92,30 @@ class ProductController extends Controller
         $this->validate(request(), [
             'type'                => 'required',
             'attribute_family_id' => 'required',
-            'sku'                 => ['required', 'unique:products,sku', new Slug],
+            'sku'                 => ['nullable', new Slug],
             'super_attributes'    => 'array|min:1',
             'super_attributes.*'  => 'array|min:1',
         ]);
 
+        // Auto-generate SKU if not provided
+        $data = request()->only([
+            'type',
+            'attribute_family_id',
+            'sku',
+            'super_attributes',
+            'family',
+        ]);
+        
+        if (empty($data['sku'])) {
+            $data['sku'] = 'PROD-' . strtoupper(uniqid());
+        }
+
         if (
-            ProductType::hasVariants(request()->input('type'))
+            ProductType::hasVariants($data['type'])
             && ! request()->has('super_attributes')
         ) {
             $configurableFamily = $this->attributeFamilyRepository
-                ->find(request()->input('attribute_family_id'));
+                ->find($data['attribute_family_id']);
 
             return new JsonResponse([
                 'data' => [
@@ -113,13 +126,7 @@ class ProductController extends Controller
 
         Event::dispatch('catalog.product.create.before');
 
-        $product = $this->productRepository->create(request()->only([
-            'type',
-            'attribute_family_id',
-            'sku',
-            'super_attributes',
-            'family',
-        ]));
+        $product = $this->productRepository->create($data);
 
         Event::dispatch('catalog.product.create.after', $product);
 
