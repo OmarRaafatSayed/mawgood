@@ -217,8 +217,12 @@ function buyNow() {
             color: selectedColor,
             size: selectedSize
         })
-    }).then(() => {
-        window.location.href = '/checkout/onepage';
+    }).then(response => {
+        if (response.ok) {
+            window.location.href = '/checkout/cart';
+        } else {
+            alert('حدث خطأ');
+        }
     }).catch(() => {
         alert('حدث خطأ');
     });
