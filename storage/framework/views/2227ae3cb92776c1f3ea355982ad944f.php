@@ -205,7 +205,7 @@ function selectSize(btn) {
 }
 
 function buyNow() {
-    fetch('/checkout/cart/add/<?php echo e($product->id); ?>', {
+    fetch('/api/checkout/cart', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -213,9 +213,7 @@ function buyNow() {
         },
         body: JSON.stringify({
             product_id: <?php echo e($product->id); ?>,
-            quantity: 1,
-            color: selectedColor,
-            size: selectedSize
+            quantity: 1
         })
     }).then(response => {
         if (response.ok) {

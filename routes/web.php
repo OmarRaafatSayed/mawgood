@@ -123,6 +123,11 @@ Route::get('/categories/{id}/products', function($id) {
     return view('categories.products');
 });
 
+// Checkout Cart
+Route::get('/checkout/cart', function() {
+    return view('checkout.cart');
+})->name('shop.checkout.cart.index');
+
 // Product Detail Page
 Route::get('/product/{id}', function($id) {
     $product = \Webkul\Product\Models\Product::with(['images', 'inventories', 'categories'])
