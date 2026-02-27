@@ -147,15 +147,15 @@ $relatedImage = \DB::table('product_images')->where('product_id', $related->prod
 </main>
 
 <!-- Buy Button -->
-<div class="fixed bottom-0 w-full max-w-[393px] bg-white border-t p-4 z-50">
+<div class="fixed bottom-20 left-0 right-0 w-full max-w-[393px] mx-auto bg-white border-t p-4 z-50">
 <button onclick="buyNow()" class="w-full bg-primary text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform">
 <span class="material-symbols-outlined">shopping_bag</span>
 <span>اشتري الآن</span>
 </button>
 </div>
 
-<!-- Footer -->
-<nav class="fixed bottom-16 w-full max-w-[393px] bg-white border-t flex items-center justify-around py-3 z-40">
+<!-- Footer Nav -->
+<nav class="fixed bottom-0 left-0 right-0 w-full max-w-[393px] mx-auto bg-white border-t flex items-center justify-around py-3 z-50">
 <a class="flex flex-col items-center gap-1 text-gray-400" href="/">
 <span class="material-symbols-outlined">home</span>
 <span class="text-[10px] font-bold">الرئيسية</span>
