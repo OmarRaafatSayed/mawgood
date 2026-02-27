@@ -1,4 +1,4 @@
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -47,33 +47,43 @@ body {
   min-height: max(884px, 100dvh);
 }
 </style>
-@endPush
+<?php $__env->stopPush(); ?>
 
-<x-shop::layouts :has-header="false" :has-feature="false" :has-footer="false">
-<x-slot:title>موجود - السوق</x-slot>
+<?php if (isset($component)) { $__componentOriginal2643b7d197f48caff2f606750db81304 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal2643b7d197f48caff2f606750db81304 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'shop::components.layouts.index','data' => ['hasHeader' => false,'hasFeature' => false,'hasFooter' => false]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('shop::layouts'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['has-header' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(false),'has-feature' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(false),'has-footer' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(false)]); ?>
+ <?php $__env->slot('title', null, []); ?> موجود - السوق <?php $__env->endSlot(); ?>
 
 <body class="bg-background-light text-[#101418] antialiased">
 <div class="relative mx-auto w-full max-w-md lg:max-w-7xl min-h-screen flex flex-col bg-background-light pb-20">
 <div class="fixed inset-0 egyptian-pattern pointer-events-none"></div>
 <header class="sticky top-0 z-50 flex items-center justify-between bg-white/90 backdrop-blur-md px-4 lg:px-8 h-16 border-b border-primary/5">
 <div class="flex items-center gap-3">
-<a href="{{ route('shop.customer.session.index') }}" class="size-9 rounded-full border-2 border-accent-gold p-0.5 hover:border-primary transition-colors">
-@if(auth()->guard('customer')->check())
-<img alt="User Profile" class="w-full h-full object-cover rounded-full" src="{{ auth()->guard('customer')->user()->image_url ?? asset('images/placeholder.png') }}"/>
-@else
-<img alt="User Profile" class="w-full h-full object-cover rounded-full" src="{{ asset('images/placeholder.png') }}"/>
-@endif
+<a href="<?php echo e(route('shop.customer.session.index')); ?>" class="size-9 rounded-full border-2 border-accent-gold p-0.5 hover:border-primary transition-colors">
+<?php if(auth()->guard('customer')->check()): ?>
+<img alt="User Profile" class="w-full h-full object-cover rounded-full" src="<?php echo e(auth()->guard('customer')->user()->image_url ?? asset('images/placeholder.png')); ?>"/>
+<?php else: ?>
+<img alt="User Profile" class="w-full h-full object-cover rounded-full" src="<?php echo e(asset('images/placeholder.png')); ?>"/>
+<?php endif; ?>
 </a>
 <button onclick="toggleSearch()" class="p-2 text-primary hover:bg-primary/5 rounded-full transition-colors" title="البحث">
 <span class="material-symbols-outlined -scale-x-100">search</span>
 </button>
-<a href="?locale={{ app()->getLocale() === 'ar' ? 'en' : 'ar' }}" class="px-2 py-1 text-primary font-bold text-xs hover:bg-primary/5 rounded transition-colors" title="تبديل اللغة">
-{{ app()->getLocale() === 'ar' ? 'EN' : 'ع' }}
+<a href="?locale=<?php echo e(app()->getLocale() === 'ar' ? 'en' : 'ar'); ?>" class="px-2 py-1 text-primary font-bold text-xs hover:bg-primary/5 rounded transition-colors" title="تبديل اللغة">
+<?php echo e(app()->getLocale() === 'ar' ? 'EN' : 'ع'); ?>
+
 </a>
 </div>
 <div class="flex items-center gap-2">
-<a href="{{ route('shop.home.index') }}" class="flex items-center">
-<img src="{{ asset('images/logo_white.svg') }}" alt="موجود" class="h-10 w-auto"/>
+<a href="<?php echo e(route('shop.home.index')); ?>" class="flex items-center">
+<img src="<?php echo e(asset('images/logo_white.svg')); ?>" alt="موجود" class="h-10 w-auto"/>
 </a>
 <button onclick="toggleMenu()" class="p-2 text-primary hover:bg-primary/5 rounded-full transition-colors" title="القائمة">
 <span class="material-symbols-outlined">menu</span>
@@ -84,7 +94,7 @@ body {
 <!-- Search Modal -->
 <div id="searchModal" onclick="toggleSearch()" class="fixed inset-0 bg-black/50 z-[60] hidden items-start justify-center pt-20">
 <div onclick="event.stopPropagation()" class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 p-4">
-<form action="{{ route('shop.search.index') }}" method="GET" class="flex gap-2">
+<form action="<?php echo e(route('shop.search.index')); ?>" method="GET" class="flex gap-2">
 <input type="text" name="query" placeholder="ابحث عن منتجات..." class="flex-1 px-4 py-2 border border-primary/20 rounded-lg focus:outline-none focus:border-primary" autofocus/>
 <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">بحث</button>
 </form>
@@ -103,31 +113,31 @@ body {
 </div>
 </div>
 <nav class="p-4">
-<a href="{{ route('shop.home.index') }}" class="flex items-center gap-3 p-3 hover:bg-primary/5 rounded-lg mb-2">
+<a href="<?php echo e(route('shop.home.index')); ?>" class="flex items-center gap-3 p-3 hover:bg-primary/5 rounded-lg mb-2">
 <span class="material-symbols-outlined text-primary">home</span>
 <span class="font-medium">الرئيسية</span>
 </a>
-<a href="{{ route('shop.search.index') }}" class="flex items-center gap-3 p-3 hover:bg-primary/5 rounded-lg mb-2">
+<a href="<?php echo e(route('shop.search.index')); ?>" class="flex items-center gap-3 p-3 hover:bg-primary/5 rounded-lg mb-2">
 <span class="material-symbols-outlined text-primary">shopping_bag</span>
 <span class="font-medium">المنتجات</span>
 </a>
-<a href="{{ route('jobs.index') }}" class="flex items-center gap-3 p-3 hover:bg-primary/5 rounded-lg mb-2">
+<a href="<?php echo e(route('jobs.index')); ?>" class="flex items-center gap-3 p-3 hover:bg-primary/5 rounded-lg mb-2">
 <span class="material-symbols-outlined text-primary">work</span>
 <span class="font-medium">الوظائف</span>
 </a>
-<a href="{{ route('shop.customer.session.index') }}" class="flex items-center gap-3 p-3 hover:bg-primary/5 rounded-lg mb-2">
+<a href="<?php echo e(route('shop.customer.session.index')); ?>" class="flex items-center gap-3 p-3 hover:bg-primary/5 rounded-lg mb-2">
 <span class="material-symbols-outlined text-primary">person</span>
 <span class="font-medium">حسابي</span>
 </a>
-@if(auth()->guard('customer')->check())
-<form method="POST" action="{{ route('shop.customer.session.destroy') }}" class="mt-4">
-@csrf
+<?php if(auth()->guard('customer')->check()): ?>
+<form method="POST" action="<?php echo e(route('shop.customer.session.destroy')); ?>" class="mt-4">
+<?php echo csrf_field(); ?>
 <button type="submit" class="w-full flex items-center gap-3 p-3 hover:bg-red-50 text-red-600 rounded-lg">
 <span class="material-symbols-outlined">logout</span>
 <span class="font-medium">تسجيل الخروج</span>
 </button>
 </form>
-@endif
+<?php endif; ?>
 </nav>
 </div>
 </div>
@@ -177,40 +187,40 @@ function toggleMenu() {
 <h3 class="text-lg lg:text-xl font-bold text-primary flex items-center gap-2">
 <span class="w-1 h-6 bg-accent-gold rounded-full"></span> الفئات
 </h3>
-<a href="{{ route('shop.categories.index') }}" class="text-accent-gold text-sm font-semibold">عرض الكل</a>
+<a href="<?php echo e(route('shop.categories.index')); ?>" class="text-accent-gold text-sm font-semibold">عرض الكل</a>
 </div>
 <div class="flex overflow-x-auto hide-scrollbar gap-6 pb-2">
-<a href="{{ route('shop.search.index', ['category' => 'fashion']) }}" class="flex flex-col items-center gap-2 flex-shrink-0">
+<a href="<?php echo e(route('shop.search.index', ['category' => 'fashion'])); ?>" class="flex flex-col items-center gap-2 flex-shrink-0">
 <div class="size-16 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
 <span class="material-symbols-outlined text-3xl text-accent-gold">apparel</span>
 </div>
 <span class="text-xs font-bold text-primary">أزياء</span>
 </a>
-<a href="{{ route('shop.search.index', ['category' => 'food']) }}" class="flex flex-col items-center gap-2 flex-shrink-0">
+<a href="<?php echo e(route('shop.search.index', ['category' => 'food'])); ?>" class="flex flex-col items-center gap-2 flex-shrink-0">
 <div class="size-16 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
 <span class="material-symbols-outlined text-3xl text-accent-gold">restaurant</span>
 </div>
 <span class="text-xs font-bold text-primary">مأكولات</span>
 </a>
-<a href="{{ route('shop.search.index', ['category' => 'handicrafts']) }}" class="flex flex-col items-center gap-2 flex-shrink-0">
+<a href="<?php echo e(route('shop.search.index', ['category' => 'handicrafts'])); ?>" class="flex flex-col items-center gap-2 flex-shrink-0">
 <div class="size-16 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
 <span class="material-symbols-outlined text-3xl text-accent-gold">brush</span>
 </div>
 <span class="text-xs font-bold text-primary">حرف يدوية</span>
 </a>
-<a href="{{ route('shop.search.index', ['category' => 'electronics']) }}" class="flex flex-col items-center gap-2 flex-shrink-0">
+<a href="<?php echo e(route('shop.search.index', ['category' => 'electronics'])); ?>" class="flex flex-col items-center gap-2 flex-shrink-0">
 <div class="size-16 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
 <span class="material-symbols-outlined text-3xl text-accent-gold">devices</span>
 </div>
 <span class="text-xs font-bold text-primary">إلكترونيات</span>
 </a>
-<a href="{{ route('shop.search.index', ['category' => 'furniture']) }}" class="flex flex-col items-center gap-2 flex-shrink-0">
+<a href="<?php echo e(route('shop.search.index', ['category' => 'furniture'])); ?>" class="flex flex-col items-center gap-2 flex-shrink-0">
 <div class="size-16 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
 <span class="material-symbols-outlined text-3xl text-accent-gold">chair</span>
 </div>
 <span class="text-xs font-bold text-primary">أثاث</span>
 </a>
-<a href="{{ route('shop.search.index', ['category' => 'beauty']) }}" class="flex flex-col items-center gap-2 flex-shrink-0">
+<a href="<?php echo e(route('shop.search.index', ['category' => 'beauty'])); ?>" class="flex flex-col items-center gap-2 flex-shrink-0">
 <div class="size-16 rounded-2xl bg-white shadow-sm border flex items-center justify-center text-primary border-accent-gold">
 <span class="material-symbols-outlined text-3xl text-accent-gold">spa</span>
 </div>
@@ -281,15 +291,57 @@ function toggleMenu() {
 </div>
 </div>
 </main>
-@include('components.navbar')
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md lg:max-w-full bg-white border-t border-primary/5 flex items-center justify-around lg:justify-center lg:gap-12 h-20 px-4 z-50">
+<a class="flex flex-col items-center gap-1 text-gray-400" href="<?php echo e(route('shop.customer.session.index')); ?>">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">حسابي</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400" href="<?php echo e(route('jobs.index')); ?>">
+<span class="material-symbols-outlined">work</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">وظائف</span>
+</a>
+<div class="relative -top-6">
+<button class="size-14 bg-primary text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center transition-transform active:scale-90 border-4 border-white">
+<span class="material-symbols-outlined text-2xl">shopping_cart</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-accent-gold" href="<?php echo e(route('shop.search.index')); ?>">
+<span class="material-symbols-outlined fill-1">shopping_bag</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">تسوق</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400" href="<?php echo e(route('shop.home.index')); ?>">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">الرئيسية</span>
+</a>
+</nav>
 </div>
 </body>
 
-@pushOnce('scripts')
+<?php if (! $__env->hasRenderedOnce('665677a5-37e7-4502-b748-d7890eb92cb8')): $__env->markAsRenderedOnce('665677a5-37e7-4502-b748-d7890eb92cb8');
+$__env->startPush('scripts'); ?>
 <script type="text/x-template" id="v-search-template">
 <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 <template v-if="isLoading">
-<x-shop::shimmer.products.cards.grid count="12" />
+<?php if (isset($component)) { $__componentOriginal63d85b8bc2d72394bd433a79cbb59384 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal63d85b8bc2d72394bd433a79cbb59384 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'shop::components.shimmer.products.cards.grid','data' => ['count' => '12']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('shop::shimmer.products.cards.grid'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['count' => '12']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal63d85b8bc2d72394bd433a79cbb59384)): ?>
+<?php $attributes = $__attributesOriginal63d85b8bc2d72394bd433a79cbb59384; ?>
+<?php unset($__attributesOriginal63d85b8bc2d72394bd433a79cbb59384); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal63d85b8bc2d72394bd433a79cbb59384)): ?>
+<?php $component = $__componentOriginal63d85b8bc2d72394bd433a79cbb59384; ?>
+<?php unset($__componentOriginal63d85b8bc2d72394bd433a79cbb59384); ?>
+<?php endif; ?>
 </template>
 <template v-else-if="products.length">
 <div v-for="product in products" :key="product.id" class="bg-white rounded-lg p-3 shadow-sm border border-primary/5 flex flex-col">
@@ -299,13 +351,13 @@ function toggleMenu() {
 <span class="material-symbols-outlined text-xl">favorite</span>
 </button>
 </div>
-<h4 class="text-sm font-semibold line-clamp-1">@{{ product.name }}</h4>
+<h4 class="text-sm font-semibold line-clamp-1">{{ product.name }}</h4>
 <div class="flex items-center gap-1 mt-1">
 <span class="material-symbols-outlined text-accent-gold text-xs fill-1">star</span>
 <span class="text-[10px] text-gray-500">٤.٨ (١.٢ ألف تقييم)</span>
 </div>
 <div class="mt-auto flex items-center justify-between pt-2">
-<span class="text-primary font-bold text-sm">@{{ product.min_price }} جنيه</span>
+<span class="text-primary font-bold text-sm">{{ product.min_price }} جنيه</span>
 <button @click="addToCart(product)" class="size-8 bg-primary text-white rounded-lg flex items-center justify-center transition-transform active:scale-90">
 <span class="material-symbols-outlined text-xl">add</span>
 </button>
@@ -350,7 +402,7 @@ app.component('v-search', {
                 });
         },
         addToCart(product) {
-            this.$axios.post('{{ route("shop.api.checkout.cart.store") }}', {
+            this.$axios.post('<?php echo e(route("shop.api.checkout.cart.store")); ?>', {
                 product_id: product.id,
                 quantity: 1
             })
@@ -364,5 +416,15 @@ app.component('v-search', {
     }
 });
 </script>
-@endPushOnce
-</x-shop::layouts>
+<?php $__env->stopPush(); endif; ?>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal2643b7d197f48caff2f606750db81304)): ?>
+<?php $attributes = $__attributesOriginal2643b7d197f48caff2f606750db81304; ?>
+<?php unset($__attributesOriginal2643b7d197f48caff2f606750db81304); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal2643b7d197f48caff2f606750db81304)): ?>
+<?php $component = $__componentOriginal2643b7d197f48caff2f606750db81304; ?>
+<?php unset($__componentOriginal2643b7d197f48caff2f606750db81304); ?>
+<?php endif; ?>
+<?php /**PATH C:\Users\EXPRESS\Downloads\coding\mawgood\mawgood\packages\Webkul\Shop\src/resources/views/search/index.blade.php ENDPATH**/ ?>

@@ -49,28 +49,7 @@ body { font-family: 'Manrope', 'Tajawal', sans-serif; }
 </div>
 </main>
 
-<nav class="fixed bottom-0 w-full max-w-[393px] bg-white border-t flex items-center justify-around py-3 z-50">
-<a class="flex flex-col items-center gap-1 text-gray-400" href="/">
-<span class="material-symbols-outlined">home</span>
-<span class="text-[10px] font-bold">الرئيسية</span>
-</a>
-<a class="flex flex-col items-center gap-1 text-primary" href="/categories">
-<span class="material-symbols-outlined fill-current">grid_view</span>
-<span class="text-[10px] font-bold">الأقسام</span>
-</a>
-<div class="relative -top-4 size-14 rounded-full bg-primary text-white shadow-lg border-4 border-white flex items-center justify-center">
-<span class="material-symbols-outlined text-[28px]">shopping_cart</span>
-<span class="absolute -top-1 -right-1 bg-red-500 text-[10px] font-bold px-1.5 py-0.5 rounded-full ring-2 ring-white" id="cartBadge">0</span>
-</div>
-<a class="flex flex-col items-center gap-1 text-gray-400" href="#">
-<span class="material-symbols-outlined">favorite</span>
-<span class="text-[10px] font-bold">المفضلة</span>
-</a>
-<a class="flex flex-col items-center gap-1 text-gray-400" href="#">
-<span class="material-symbols-outlined">person</span>
-<span class="text-[10px] font-bold">حسابي</span>
-</a>
-</nav>
+<?php echo $__env->make('components.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </div>
 
 <script>
@@ -135,7 +114,7 @@ function renderProducts(products) {
     grid.innerHTML = products.map(p => `
         <a href="/product/${p.id}" class="flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
             <div class="relative aspect-[4/5] bg-slate-50">
-                <img src="${p.images?.[0]?.url || '/images/placeholder.png'}" class="w-full h-full object-cover" alt="${p.name}"/>
+                <img src="${p.base_image?.small_image_url || '/images/placeholder.png'}" class="w-full h-full object-cover" alt="${p.name}"/>
                 <button onclick="event.preventDefault(); toggleWishlist(${p.id})" class="absolute top-2 right-2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm">
                     <span class="material-symbols-outlined text-[20px] text-slate-400">favorite</span>
                 </button>

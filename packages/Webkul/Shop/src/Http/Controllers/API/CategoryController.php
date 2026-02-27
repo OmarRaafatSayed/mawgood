@@ -135,10 +135,6 @@ class CategoryController extends APIController
      */
     public function showAll()
     {
-        $categories = $this->categoryRepository->getVisibleCategoryTree(
-            core()->getCurrentChannel()->root_category_id
-        );
-
-        return view('shop::categories.index', compact('categories'));
+        return view('categories.index-new');
     }
 }

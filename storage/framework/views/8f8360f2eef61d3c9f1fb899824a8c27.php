@@ -116,16 +116,23 @@
                 <?php break; ?>
             <?php case ($customization::PRODUCT_CAROUSEL): ?>
                 <!-- Product Carousel -->
+                <?php
+                    try {
+                        $productCarouselSrc = route('shop.api.products.index', $data['filters'] ?? []);
+                    } catch (\Exception $e) {
+                        $productCarouselSrc = '#';
+                    }
+                ?>
                 <?php if (isset($component)) { $__componentOriginalc7b94830d947988d2b7058066254da2b = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc7b94830d947988d2b7058066254da2b = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'shop::components.products.carousel','data' => ['title' => $data['title'] ?? '','src' => route('shop.api.products.index', $data['filters'] ?? []),'navigationLink' => route('shop.search.index', $data['filters'] ?? []),'ariaLabel' => ''.e(trans('shop::app.home.index.product-carousel')).'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'shop::components.products.carousel','data' => ['title' => $data['title'] ?? '','src' => $productCarouselSrc,'navigationLink' => route('shop.search.index', $data['filters'] ?? []),'ariaLabel' => ''.e(trans('shop::app.home.index.product-carousel')).'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('shop::products.carousel'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data['title'] ?? ''),'src' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('shop.api.products.index', $data['filters'] ?? [])),'navigation-link' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('shop.search.index', $data['filters'] ?? [])),'aria-label' => ''.e(trans('shop::app.home.index.product-carousel')).'']); ?>
+<?php $component->withAttributes(['title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data['title'] ?? ''),'src' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($productCarouselSrc),'navigation-link' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('shop.search.index', $data['filters'] ?? [])),'aria-label' => ''.e(trans('shop::app.home.index.product-carousel')).'']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalc7b94830d947988d2b7058066254da2b)): ?>

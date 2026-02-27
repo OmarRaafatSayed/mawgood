@@ -14,17 +14,12 @@ class CategoryProductController extends Controller
 
     public function index($id)
     {
-        \Log::info('Category Products Request', ['category_id' => $id]);
-        
         $category = $this->categoryRepository->with('children')->findOrFail($id);
         $categoryIds = $category->children->pluck('id')->push($id);
-        
-        \Log::info('Category IDs', ['ids' => $categoryIds->toArray()]);
         
         $locale = app()->getLocale();
         $channel = core()->getCurrentChannel()->code;
         
-        // Query product_flat directly for better performance and correct filtering
         $products = \DB::table('product_flat')
             ->join('product_categories', 'product_flat.product_id', '=', 'product_categories.product_id')
             ->join('products', 'product_flat.product_id', '=', 'products.id')
@@ -33,17 +28,10 @@ class CategoryProductController extends Controller
             ->where('product_flat.channel', $channel)
             ->where('product_flat.status', 1)
             ->where('product_flat.visible_individually', 1)
-            ->where(function($q) {
-                $q->whereNull('products.vendor_id')
-                  ->orWhere('products.approved_by_admin', 1);
-            })
             ->select('product_flat.*')
             ->distinct()
             ->get();
-        
-        \Log::info('Products Found', ['count' => $products->count()]);
 
-        // Get images for products
         $productIds = $products->pluck('product_id');
         $images = \DB::table('product_images')
             ->whereIn('product_id', $productIds)
@@ -51,7 +39,6 @@ class CategoryProductController extends Controller
             ->get()
             ->groupBy('product_id');
         
-        // Get inventory for products
         $inventories = \DB::table('product_inventories')
             ->whereIn('product_id', $productIds)
             ->get()
@@ -85,24 +72,17 @@ class CategoryProductController extends Controller
         $locale = app()->getLocale();
         $channel = core()->getCurrentChannel()->code;
         
-        // Query product_flat directly
         $products = \DB::table('product_flat')
             ->join('product_categories', 'product_flat.product_id', '=', 'product_categories.product_id')
-            ->join('products', 'product_flat.product_id', '=', 'products.id')
             ->where('product_categories.category_id', $subCategoryId)
             ->where('product_flat.locale', $locale)
             ->where('product_flat.channel', $channel)
             ->where('product_flat.status', 1)
             ->where('product_flat.visible_individually', 1)
-            ->where(function($q) {
-                $q->whereNull('products.vendor_id')
-                  ->orWhere('products.approved_by_admin', 1);
-            })
             ->select('product_flat.*')
             ->distinct()
             ->get();
 
-        // Get images and inventory
         $productIds = $products->pluck('product_id');
         $images = \DB::table('product_images')
             ->whereIn('product_id', $productIds)

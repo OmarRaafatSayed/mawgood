@@ -7,6 +7,11 @@ use App\Http\Controllers\JobApplicationController;
 
 require __DIR__.'/test-view.php';
 
+// Home Page
+Route::get('/', function() {
+    return view('home');
+})->name('shop.home.index');
+
 // Role Selection
 Route::middleware(['customer'])->group(function () {
     Route::get('/select-role', [RoleSelectionController::class, 'index'])->name('role.select');
@@ -120,7 +125,7 @@ Route::get('api/products', [App\Http\Controllers\CategoryProductController::clas
 
 // Category Products View
 Route::get('/categories/{id}/products', function($id) {
-    return view('categories.products');
+    return view('categories.products-new');
 });
 
 // Checkout Cart
@@ -130,68 +135,69 @@ Route::get('/checkout/cart', function() {
 
 // Product Detail Page
 Route::get('/product/{id}', function($id) {
-    $product = \Webkul\Product\Models\Product::with(['images', 'inventories', 'categories'])
-        ->where('id', $id)
-        ->firstOrFail();
-    
-    // Get product flat data
-    $flat = \DB::table('product_flat')
-        ->where('product_id', $id)
-        ->where('locale', app()->getLocale())
-        ->where('channel', 'default')
-        ->first();
-    
-    // Get colors and sizes
-    $colors = \DB::table('product_attribute_values')
-        ->where('product_id', $id)
-        ->where('attribute_id', 23)
-        ->first();
-    
-    $sizes = \DB::table('product_attribute_values')
-        ->where('product_id', $id)
-        ->where('attribute_id', 24)
-        ->first();
-    
-    $colorOptions = [];
-    $sizeOptions = [];
-    
-    if ($colors && $colors->text_value) {
-        $colorIds = explode(',', $colors->text_value);
-        $colorOptions = \DB::table('attribute_options')
-            ->whereIn('id', $colorIds)
-            ->get(['id', 'admin_name']);
+    try {
+        $product = \Webkul\Product\Models\Product::with(['images', 'inventories', 'categories'])
+            ->where('id', $id)
+            ->firstOrFail();
+        
+        $flat = \DB::table('product_flat')
+            ->where('product_id', $id)
+            ->where('locale', app()->getLocale())
+            ->where('channel', 'default')
+            ->first();
+        
+        $colors = \DB::table('product_attribute_values')
+            ->where('product_id', $id)
+            ->where('attribute_id', 23)
+            ->first();
+        
+        $sizes = \DB::table('product_attribute_values')
+            ->where('product_id', $id)
+            ->where('attribute_id', 24)
+            ->first();
+        
+        $colorOptions = [];
+        $sizeOptions = [];
+        
+        if ($colors && $colors->text_value) {
+            $colorIds = explode(',', $colors->text_value);
+            $colorOptions = \DB::table('attribute_options')
+                ->whereIn('id', $colorIds)
+                ->get(['id', 'admin_name']);
+        }
+        
+        if ($sizes && $sizes->text_value) {
+            $sizeIds = explode(',', $sizes->text_value);
+            $sizeOptions = \DB::table('attribute_options')
+                ->whereIn('id', $sizeIds)
+                ->get(['id', 'admin_name']);
+        }
+        
+        $relatedProducts = [];
+        if ($product->categories->count()) {
+            $categoryId = $product->categories->first()->id;
+            $relatedProducts = \DB::table('product_flat')
+                ->join('product_categories', 'product_flat.product_id', '=', 'product_categories.product_id')
+                ->join('products', 'product_flat.product_id', '=', 'products.id')
+                ->where('product_categories.category_id', $categoryId)
+                ->where('product_flat.product_id', '!=', $id)
+                ->where('product_flat.locale', app()->getLocale())
+                ->where('product_flat.channel', 'default')
+                ->where('product_flat.status', 1)
+                ->where('product_flat.visible_individually', 1)
+                ->where(function($q) {
+                    $q->whereNull('products.vendor_id')
+                      ->orWhere('products.approved_by_admin', 1);
+                })
+                ->select('product_flat.*')
+                ->limit(6)
+                ->get();
+        }
+        
+        return view('product.detail', compact('product', 'flat', 'colorOptions', 'sizeOptions', 'relatedProducts'));
+    } catch (\Exception $e) {
+        abort(404);
     }
-    
-    if ($sizes && $sizes->text_value) {
-        $sizeIds = explode(',', $sizes->text_value);
-        $sizeOptions = \DB::table('attribute_options')
-            ->whereIn('id', $sizeIds)
-            ->get(['id', 'admin_name']);
-    }
-    
-    // Get related products from same category
-    $relatedProducts = [];
-    if ($product->categories->count()) {
-        $categoryId = $product->categories->first()->id;
-        $relatedProducts = \DB::table('product_flat')
-            ->join('product_categories', 'product_flat.product_id', '=', 'product_categories.product_id')
-            ->join('products', 'product_flat.product_id', '=', 'products.id')
-            ->where('product_categories.category_id', $categoryId)
-            ->where('product_flat.product_id', '!=', $id)
-            ->where('product_flat.locale', app()->getLocale())
-            ->where('product_flat.channel', 'default')
-            ->where('product_flat.status', 1)
-            ->where('product_flat.visible_individually', 1)
-            ->where(function($q) {
-                $q->whereNull('products.vendor_id')
-                  ->orWhere('products.approved_by_admin', 1);
-            })
-            ->select('product_flat.*')
-            ->limit(6)
-            ->get();
-    }
-    
-    return view('product.detail', compact('product', 'flat', 'colorOptions', 'sizeOptions', 'relatedProducts'));
 })->name('product.detail');
 
 // Test Blog System

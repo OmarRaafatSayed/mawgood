@@ -74,9 +74,16 @@
                 @break
             @case ($customization::PRODUCT_CAROUSEL)
                 <!-- Product Carousel -->
+                @php
+                    try {
+                        $productCarouselSrc = route('shop.api.products.index', $data['filters'] ?? []);
+                    } catch (\Exception $e) {
+                        $productCarouselSrc = '#';
+                    }
+                @endphp
                 <x-shop::products.carousel
                     :title="$data['title'] ?? ''"
-                    :src="route('shop.api.products.index', $data['filters'] ?? [])"
+                    :src="$productCarouselSrc"
                     :navigation-link="route('shop.search.index', $data['filters'] ?? [])"
                     aria-label="{{ trans('shop::app.home.index.product-carousel') }}"
                 />
