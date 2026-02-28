@@ -1,126 +1,42 @@
-<!-- SEO Meta Content -->
-@push('meta')
-    <meta name="description" content="@lang('shop::app.customers.forgot-password.title')"/>
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نسيت كلمة المرور - موجود</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script>tailwind.config = {theme: {extend: {colors: {"primary": "#FF6B00"}}}}</script>
+<style>body { font-family: 'Tajawal', sans-serif; }</style>
+</head>
+<body class="bg-gray-50">
+@include('components.desktop-navbar')
 
-    <meta name="keywords" content="@lang('shop::app.customers.forgot-password.title')"/>
-@endPush
+<main class="max-w-md mx-auto px-4 py-12 pb-24">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<div class="text-center mb-8">
+<div class="size-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-primary">lock_reset</span>
+</div>
+<h1 class="text-2xl font-bold text-gray-800 mb-2">نسيت كلمة المرور؟</h1>
+<p class="text-gray-600 text-sm">أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين</p>
+</div>
 
-<x-shop::layouts
-    :has-header="false"
-    :has-feature="false"
-    :has-footer="false"
->
-    <!-- Page Title -->
-    <x-slot:title>
-        @lang('shop::app.customers.forgot-password.title')
-    </x-slot>
+<x-shop::form :action="route('shop.customers.forgot_password.store')">
+<x-shop::form.control-group>
+<x-shop::form.control-group.label class="required text-sm font-medium">البريد الإلكتروني</x-shop::form.control-group.label>
+<x-shop::form.control-group.control type="email" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none w-full" name="email" rules="required|email" placeholder="email@example.com"/>
+<x-shop::form.control-group.error control-name="email" />
+</x-shop::form.control-group>
 
-    <div class="container mt-20 max-1180:px-5 max-md:mt-12">
-        {!! view_render_event('bagisto.shop.customers.forget_password.logo.before') !!}
+<button type="submit" class="w-full mt-6 py-3 bg-gradient-to-r from-primary to-orange-600 text-white font-bold rounded-xl hover:shadow-lg transition-all">إرسال رابط إعادة التعيين</button>
+</x-shop::form>
 
-        <!-- Company Logo -->
-        <div class="flex items-center gap-x-14 max-[1180px]:gap-x-9">
-            <a
-                href="{{ route('shop.home.index') }}"
-                class="m-[0_auto_20px_auto]"
-                aria-label="Mawgood"
-            >
-                <img
-                    src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
-                    alt="{{ config('app.name') }}"
-                    width="131"
-                    height="29"
-                >
-            </a>
-        </div>
+<p class="mt-6 text-center text-sm text-gray-600">تذكرت كلمة المرور؟ <a href="{{ route('shop.customer.session.index') }}" class="text-primary font-medium hover:underline">تسجيل الدخول</a></p>
+</div>
+</main>
 
-        {!! view_render_event('bagisto.shop.customers.forget_password.logo.after') !!}
-
-        <!-- Form Container -->
-        <div
-            class="m-auto w-full max-w-[870px] rounded-xl border border-zinc-200 p-16 px-[90px] max-md:px-8 max-md:py-8 max-sm:border-none max-sm:p-0"
-        >
-            <h1 class="font-dmserif text-4xl max-md:text-3xl max-sm:text-xl">
-                @lang('shop::app.customers.forgot-password.title')
-            </h1>
-
-            <p class="mt-4 text-xl text-zinc-500 max-sm:mt-0 max-sm:text-sm">
-                @lang('shop::app.customers.forgot-password.forgot-password-text')
-            </p>
-
-            {!! view_render_event('bagisto.shop.customers.forget_password.before') !!}
-
-            <div class="mt-14 rounded max-sm:mt-8">
-                <x-shop::form :action="route('shop.customers.forgot_password.store')">
-                    {!! view_render_event('bagisto.shop.customers.forget_password_form_controls.before') !!}
-
-                    <!-- Email -->
-                    <x-shop::form.control-group class="max-sm:mb-1.5">
-                        <x-shop::form.control-group.label class="required">
-                            @lang('shop::app.customers.login-form.email')
-                        </x-shop::form.control-group.label>
-
-                        <x-shop::form.control-group.control
-                            type="email"
-                            class="px-6 py-4 max-sm:py-1.5"
-                            name="email"
-                            rules="required|email"
-                            value=""
-                            :label="trans('shop::app.customers.login-form.email')"
-                            placeholder="email@example.com"
-                            :aria-label="trans('shop::app.customers.login-form.email')"
-                            aria-required="true"
-                        />
-
-                        <x-shop::form.control-group.error control-name="email" />
-                    </x-shop::form.control-group>
-
-                    {!! view_render_event('bagisto.shop.customers.forget_password_form_controls.email.after') !!}
-
-                    <!-- Captcha -->
-                    @if (core()->getConfigData('customer.captcha.credentials.status'))
-                        <x-shop::form.control-group class="mt-5">
-                            {!! \Webkul\Customer\Facades\Captcha::render() !!}
-
-                            <x-shop::form.control-group.error control-name="g-recaptcha-response" />
-                        </x-shop::form.control-group>
-                    @endif
-
-                    <!-- Submit Button -->
-                    <div class="mt-8 flex flex-wrap items-center gap-9 max-sm:mt-0 max-sm:justify-center max-sm:text-center">
-                        <button
-                            class="primary-button m-0 mx-auto block w-full max-w-[374px] rounded-2xl px-11 py-4 text-center text-base max-md:max-w-full max-md:rounded-lg max-md:py-3 max-sm:py-1.5 max-sm:text-sm ltr:ml-0 rtl:mr-0"
-                            type="submit"
-                        >
-                            @lang('shop::app.customers.forgot-password.submit')
-                        </button>
-                    </div>
-
-                    <p class="mt-5 font-medium text-zinc-500 max-sm:text-center max-sm:text-sm">
-                        @lang('shop::app.customers.forgot-password.back')
-
-                        <a class="text-navyBlue"
-                            href="{{ route('shop.customer.session.index') }}"
-                        >
-                            @lang('shop::app.customers.forgot-password.sign-in-button')
-                        </a>
-                    </p>
-
-                    {!! view_render_event('bagisto.shop.customers.forget_password_form_controls.after') !!}
-
-                </x-shop::form>
-            </div>
-
-            {!! view_render_event('bagisto.shop.customers.forget_password.after') !!}
-
-        </div>
-
-        <p class="mb-4 mt-8 text-center text-xs text-zinc-500">
-            @lang('shop::app.customers.forgot-password.footer', ['current_year'=> date('Y') ])
-        </p>
-    </div>
-
-    @push('scripts')
-        {!! \Webkul\Customer\Facades\Captcha::renderJS() !!}
-    @endpush
-</x-shop::layouts>
+@include('components.footer')
+@include('components.navbar')
+</body>
+</html>

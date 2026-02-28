@@ -1,172 +1,61 @@
-<x-shop::layouts.account>
-    <!-- Page Title -->
-    <x-slot:title>
-        @lang('shop::app.customers.account.addresses.index.add-address')
-    </x-slot>
-    
-    <!-- Breadcrumbs -->
-    @if ((core()->getConfigData('general.general.breadcrumbs.shop')))
-        @section('breadcrumbs')
-            <x-shop::breadcrumbs name="addresses" />
-        @endSection
-    @endif
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>عناويني - موجود</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>tailwind.config = {theme: {extend: {colors: {"primary": "#FF6B00"}}}}</script>
+<style>body { font-family: 'Tajawal', sans-serif; }</style>
+</head>
+<body class="bg-gray-50">
+@include('components.desktop-navbar')
 
-    <div class="max-md:hidden">
-        <x-shop::layouts.account.navigation />
-    </div>
+<main class="max-w-7xl mx-auto px-4 py-8 pb-24">
+<div class="mb-6 flex items-center justify-between">
+<h1 class="text-3xl font-bold text-gray-800">عناويني</h1>
+<a href="{{ route('shop.customers.account.addresses.create') }}" class="px-6 py-3 bg-gradient-to-r from-primary to-orange-600 text-white font-bold rounded-xl hover:shadow-lg transition-all">إضافة عنوان جديد</a>
+</div>
 
-    <div class="flex-auto mx-4">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                <!-- Back Button -->
-                <a
-                    class="grid md:hidden"
-                    href="{{ route('shop.customers.account.index') }}"
-                >
-                    <span class="text-2xl icon-arrow-left rtl:icon-arrow-right"></span>
-                </a>
-    
-                <h2 class="text-2xl font-medium max-md:text-xl max-sm:text-base ltr:ml-2.5 md:ltr:ml-0 rtl:mr-2.5 md:rtl:mr-0">
-                    @lang('shop::app.customers.account.addresses.index.title')
-                </h2>
-            </div>
+@if($addresses->count())
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+@foreach($addresses as $address)
+<div class="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl text-primary">location_on</span>
+</div>
+@if($address->default_address)
+<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">افتراضي</span>
+@endif
+</div>
+<h3 class="font-bold text-gray-800 mb-2">{{ $address->first_name }} {{ $address->last_name }}</h3>
+<p class="text-sm text-gray-600 mb-1">{{ $address->address }}</p>
+<p class="text-sm text-gray-600 mb-1">{{ $address->city }}, {{ $address->state }} {{ $address->postcode }}</p>
+<p class="text-sm text-gray-600 mb-4">{{ $address->phone }}</p>
+<div class="flex gap-2">
+<a href="{{ route('shop.customers.account.addresses.edit', $address->id) }}" class="flex-1 py-2 text-center border-2 border-primary text-primary font-medium rounded-lg hover:bg-primary/5 transition-all">تعديل</a>
+<form action="{{ route('shop.customers.account.addresses.delete', $address->id) }}" method="POST" class="flex-1">
+@csrf
+@method('DELETE')
+<button type="submit" class="w-full py-2 border-2 border-red-500 text-red-500 font-medium rounded-lg hover:bg-red-50 transition-all">حذف</button>
+</form>
+</div>
+</div>
+@endforeach
+</div>
+@else
+<div class="bg-white rounded-2xl shadow-sm p-12 text-center">
+<span class="material-symbols-outlined text-6xl text-gray-300 mb-4">location_off</span>
+<p class="text-gray-600 mb-4">لا توجد عناوين محفوظة</p>
+<a href="{{ route('shop.customers.account.addresses.create') }}" class="inline-block px-6 py-3 bg-primary text-white font-bold rounded-xl hover:shadow-lg transition-all">إضافة عنوان</a>
+</div>
+@endif
+</main>
 
-            <a
-                href="{{ route('shop.customers.account.addresses.create') }}"
-                class="secondary-button border-zinc-200 px-5 py-3 font-normal max-md:rounded-lg max-md:py-2 max-sm:py-1.5 max-sm:text-sm"
-            >
-                @lang('shop::app.customers.account.addresses.index.add-address') 
-            </a>
-        </div>
-
-        @if (! $addresses->isEmpty())
-            <!-- Address Information -->
-
-            {!! view_render_event('bagisto.shop.customers.account.addresses.list.before', ['addresses' => $addresses]) !!}
-
-            <div class="mt-[60px] grid grid-cols-2 gap-5 max-1060:grid-cols-[1fr] max-md:mt-5">
-                @foreach ($addresses as $address)
-                    <div class="p-5 border rounded-xl border-zinc-200 max-md:flex-wrap">
-                        <div class="flex justify-between">
-                            <p class="text-base font-medium" v-pre>
-                                {{ $address->first_name }} {{ $address->last_name }}
-
-                                @if ($address->company_name)
-                                    ({{ $address->company_name }})
-                                @endif
-                            </p>
-
-                            <div class="flex gap-4 max-sm:gap-2.5">
-                                @if ($address->default_address)
-                                    <div class="label-pending block h-fit w-max px-2.5 py-1 max-md:px-1.5">
-                                        @lang('shop::app.customers.account.addresses.index.default-address') 
-                                    </div>
-                                @endif
-
-                                <!-- Dropdown Actions -->
-                                <x-shop::dropdown position="bottom-{{ core()->getCurrentLocale()->direction === 'ltr' ? 'right' : 'left' }}">
-                                    <x-slot:toggle>
-                                        <button 
-                                            class="icon-more cursor-pointer rounded-md px-1.5 py-1 text-2xl text-zinc-500 transition-all hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black max-md:p-0" 
-                                            aria-label="More Options"
-                                        >
-                                        </button>
-                                    </x-slot>
-
-                                    <x-slot:menu class="!py-1 max-sm:!py-0">
-                                        <x-shop::dropdown.menu.item>
-                                            <a href="{{ route('shop.customers.account.addresses.edit', $address->id) }}">
-                                                <p class="w-full">
-                                                    @lang('shop::app.customers.account.addresses.index.edit')
-                                                </p>
-                                            </a>    
-                                        </x-shop::dropdown.menu.item>
-
-                                        <x-shop::dropdown.menu.item>
-                                            <form
-                                                method="POST"
-                                                ref="addressDelete"
-                                                action="{{ route('shop.customers.account.addresses.delete', $address->id) }}"
-                                            >
-                                                @method('DELETE')
-                                                @csrf
-                                            </form>
-
-                                            <a 
-                                                href="javascript:void(0);"                                                
-                                                @click="$emitter.emit('open-confirm-modal', {
-                                                    agree: () => {
-                                                        $refs['addressDelete'].submit()
-                                                    }
-                                                })"
-                                            >
-                                                <p class="w-full">
-                                                    @lang('shop::app.customers.account.addresses.index.delete')
-                                                </p>
-                                            </a>
-                                        </x-shop::dropdown.menu.item>
-
-                                        @if (! $address->default_address)
-                                            <x-shop::dropdown.menu.item>
-                                                <form
-                                                    method="POST"
-                                                    ref="setAsDefault"
-                                                    action="{{ route('shop.customers.account.addresses.update.default', $address->id) }}"
-                                                >
-                                                    @method('PATCH')
-                                                    @csrf
-
-                                                </form>
-
-                                                <a 
-                                                    href="javascript:void(0);"                                                
-                                                    @click="$emitter.emit('open-confirm-modal', {
-                                                        agree: () => {
-                                                            $refs['setAsDefault'].submit()
-                                                        }
-                                                    })"
-                                                >
-                                                    <button>
-                                                        @lang('shop::app.customers.account.addresses.index.set-as-default')
-                                                    </button>
-                                                </a>
-                                            </x-shop::dropdown.menu.item>
-                                        @endif
-                                    </x-slot>
-                                </x-shop::dropdown>
-                            </div>
-                        </div>
-
-                        <p class="mt-6 text-zinc-500 max-md:mt-5 max-md:text-sm" v-pre>
-                            {{ $address->address }},
-
-                            {{ $address->city }}, 
-                            {{ $address->state }}, {{ $address->country }}, 
-                            {{ $address->postcode }}
-                        </p>
-                    </div>    
-                @endforeach
-            </div>
-
-            {!! view_render_event('bagisto.shop.customers.account.addresses.list.after', ['addresses' => $addresses]) !!}
-
-        @else
-            <!-- Address Empty Page -->
-            <div class="grid items-center w-full py-32 m-auto text-center place-content-center justify-items-center">
-                <img 
-                    class="max-md:h-[100px] max-md:w-[100px]"
-                    src="{{ bagisto_asset('images/no-address.png') }}" 
-                    alt="Empty Address" 
-                    title=""
-                >
-                
-                <p
-                    class="text-xl max-md:text-sm"
-                    role="heading"
-                >
-                    @lang('shop::app.customers.account.addresses.index.empty-address')
-                </p>
-            </div>    
-        @endif
-    </div>
-</x-shop::layouts.account>
+@include('components.footer')
+@include('components.navbar')
+</body>
+</html>

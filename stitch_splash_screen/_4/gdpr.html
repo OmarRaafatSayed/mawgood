@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>خصوصية البيانات - Mawgood</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                "primary": "#003366",
+                "accent-gold": "#FF6D00",
+                "background-light": "#f8f9fa",
+            },
+            fontFamily: {
+                "display": ["Tajawal", "sans-serif"]
+            }
+        }
+    }
+}
+</script>
+<style>
+body { font-family: 'Tajawal', sans-serif; background-color: #f8f9fa; }
+</style>
+</head>
+<body class="bg-background-light">
+<div class="relative mx-auto max-w-md min-h-screen flex flex-col bg-background-light pb-20">
+<header class="sticky top-0 z-50 flex items-center justify-between bg-white/90 backdrop-blur-md px-4 h-16 border-b border-primary/5">
+<a href="profile.html" class="p-2 text-primary">
+<span class="material-symbols-outlined">arrow_forward</span>
+</a>
+<h1 class="text-primary text-lg font-bold">خصوصية البيانات</h1>
+<button class="p-2 text-primary">
+<span class="material-symbols-outlined">info</span>
+</button>
+</header>
+
+<main class="flex-1 px-4 py-6 space-y-4">
+<div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-blue-600">shield</span>
+<div>
+<h3 class="font-bold text-primary mb-1">حماية بياناتك</h3>
+<p class="text-sm text-gray-600">نحن ملتزمون بحماية خصوصيتك وفقاً للوائح GDPR</p>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm border border-primary/5 divide-y divide-primary/5">
+<button class="w-full p-4 flex items-center justify-between text-right">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-accent-gold">download</span>
+<div>
+<h4 class="font-bold text-primary">تحميل بياناتي</h4>
+<p class="text-xs text-gray-500">احصل على نسخة من بياناتك</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-400">chevron_left</span>
+</button>
+
+<button class="w-full p-4 flex items-center justify-between text-right">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-accent-gold">edit</span>
+<div>
+<h4 class="font-bold text-primary">تعديل بياناتي</h4>
+<p class="text-xs text-gray-500">تحديث معلوماتك الشخصية</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-400">chevron_left</span>
+</button>
+
+<button class="w-full p-4 flex items-center justify-between text-right">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-red-500">delete_forever</span>
+<div>
+<h4 class="font-bold text-red-500">حذف حسابي</h4>
+<p class="text-xs text-gray-500">حذف جميع بياناتك نهائياً</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-400">chevron_left</span>
+</button>
+</div>
+
+<div class="bg-white rounded-lg p-4 shadow-sm border border-primary/5">
+<h3 class="font-bold text-primary mb-3">البيانات المخزنة</h3>
+<div class="space-y-2 text-sm">
+<div class="flex justify-between py-2 border-b border-primary/5">
+<span class="text-gray-600">المعلومات الشخصية</span>
+<span class="font-semibold text-primary">٥ حقول</span>
+</div>
+<div class="flex justify-between py-2 border-b border-primary/5">
+<span class="text-gray-600">سجل الطلبات</span>
+<span class="font-semibold text-primary">١٢ طلب</span>
+</div>
+<div class="flex justify-between py-2 border-b border-primary/5">
+<span class="text-gray-600">العناوين المحفوظة</span>
+<span class="font-semibold text-primary">٢ عنوان</span>
+</div>
+<div class="flex justify-between py-2">
+<span class="text-gray-600">سجل التصفح</span>
+<span class="font-semibold text-primary">٤٥ صفحة</span>
+</div>
+</div>
+</div>
+
+<button class="w-full py-4 bg-primary text-white font-bold rounded-lg">
+تحميل تقرير البيانات الكامل
+</button>
+</main>
+
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t border-primary/5 flex items-center justify-around h-20 px-4 z-50">
+<a class="flex flex-col items-center gap-1 text-accent-gold" href="profile.html">
+<span class="material-symbols-outlined fill-1">person</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">حسابي</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400" href="#">
+<span class="material-symbols-outlined">work</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">وظائف</span>
+</a>
+<div class="relative -top-6">
+<button class="size-14 bg-primary text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center transition-transform active:scale-90 border-4 border-white">
+<span class="material-symbols-outlined text-2xl">shopping_cart</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-gray-400" href="../_3/السوق.html">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">تسوق</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">الرئيسية</span>
+</a>
+</nav>
+</div>
+</body>
+</html>

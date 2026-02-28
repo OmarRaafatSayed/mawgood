@@ -1,155 +1,51 @@
-<!-- SEO Meta Content -->
-@push('meta')
-    <meta
-        name="description"
-        content="@lang('shop::app.customers.reset-password.title')"
-    />
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>إعادة تعيين كلمة المرور - موجود</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script>tailwind.config = {theme: {extend: {colors: {"primary": "#FF6B00"}}}}</script>
+<style>body { font-family: 'Tajawal', sans-serif; }</style>
+</head>
+<body class="bg-gray-50">
+@include('components.desktop-navbar')
 
-    <meta
-        name="keywords"
-        content="@lang('shop::app.customers.reset-password.title')"
-    />
-@endPush
+<main class="max-w-md mx-auto px-4 py-12 pb-24">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<div class="text-center mb-8">
+<h1 class="text-2xl font-bold text-gray-800 mb-2">إعادة تعيين كلمة المرور</h1>
+<p class="text-gray-600 text-sm">أدخل كلمة المرور الجديدة</p>
+</div>
 
-<x-shop::layouts
-    :has-header="false"
-    :has-feature="false"
-    :has-footer="false"
->
-    <!-- Page Title -->
-    <x-slot:title>
-        @lang('shop::app.customers.reset-password.title')
-    </x-slot>
+<x-shop::form :action="route('shop.customers.reset_password.store')">
+<input type="hidden" name="token" value="{{ $token }}"/>
 
-    <div class="container mt-20 max-1180:px-5 max-md:mt-12">
-        {!! view_render_event('bagisto.shop.customers.reset_password.logo.before') !!}
-        
-        <!-- Company Logo -->
-        <div class="flex items-center gap-x-14 max-[1180px]:gap-x-9">
-            <a
-                href="{{ route('shop.home.index') }}"
-                class="m-[0_auto_20px_auto]"
-                aria-label="Mawgood"
-            >
-                <img
-                    src="{{ core()->getCurrentChannel()->logo_url ?? bagisto_asset('images/logo.svg') }}"
-                    alt="{{ config('app.name') }}"
-                    width="131"
-                    height="29"
-                >
-            </a>
-        </div>
+<x-shop::form.control-group>
+<x-shop::form.control-group.label class="required text-sm font-medium">البريد الإلكتروني</x-shop::form.control-group.label>
+<x-shop::form.control-group.control type="email" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none w-full" name="email" rules="required|email" :value="request('email')" placeholder="email@example.com"/>
+<x-shop::form.control-group.error control-name="email" />
+</x-shop::form.control-group>
 
-        {!! view_render_event('bagisto.shop.customers.reset_password.logo.after') !!}
+<x-shop::form.control-group class="mt-4">
+<x-shop::form.control-group.label class="required text-sm font-medium">كلمة المرور الجديدة</x-shop::form.control-group.label>
+<x-shop::form.control-group.control type="password" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none w-full" name="password" rules="required|min:6" ref="password" placeholder="••••••••"/>
+<x-shop::form.control-group.error control-name="password" />
+</x-shop::form.control-group>
 
-        <!-- Form Container -->
-        <div class="m-auto w-full max-w-[870px] rounded-xl border border-zinc-200 p-16 px-[90px] max-md:px-8 max-md:py-8 max-sm:border-none max-sm:p-0">
-            <h1 class="font-dmserif text-4xl max-md:text-3xl max-sm:text-xl">
-                @lang('shop::app.customers.reset-password.title')
-            </h1>
+<x-shop::form.control-group class="mt-4">
+<x-shop::form.control-group.label class="required text-sm font-medium">تأكيد كلمة المرور</x-shop::form.control-group.label>
+<x-shop::form.control-group.control type="password" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none w-full" name="password_confirmation" rules="confirmed:@password" placeholder="••••••••"/>
+<x-shop::form.control-group.error control-name="password_confirmation" />
+</x-shop::form.control-group>
 
-            {!! view_render_event('bagisto.shop.customers.reset_password.before') !!}
+<button type="submit" class="w-full mt-6 py-3 bg-gradient-to-r from-primary to-orange-600 text-white font-bold rounded-xl hover:shadow-lg transition-all">إعادة تعيين كلمة المرور</button>
+</x-shop::form>
+</div>
+</main>
 
-            <div class="mt-14 rounded max-sm:mt-8">
-                <!-- Form Container-->
-                <x-shop::form :action="route('shop.customers.reset_password.store')" >
-                    <x-shop::form.control-group.control
-                        type="hidden"
-                        name="token"
-                        :value="$token"
-                    />
-
-                    {!! view_render_event('bagisto.shop.customers.reset_password_form_controls.before') !!}
-
-                    <!-- Email -->
-                    <x-shop::form.control-group>
-                        <x-shop::form.control-group.label class="required">
-                            @lang('shop::app.customers.reset-password.email')
-                        </x-shop::form.control-group.label>
-
-                        <x-shop::form.control-group.control
-                            type="email"
-                            class="px-6 py-4 max-md:py-3 max-sm:py-1.5"
-                            id="email"
-                            name="email"
-                            rules="required|email"
-                            :value="old('email')"
-                            :label="trans('shop::app.customers.reset-password.email')"
-                            placeholder="email@example.com"
-                            :aria-label="trans('shop::app.customers.reset-password.email')"
-                            aria-required="true"
-                        />
-
-                        <x-shop::form.control-group.error control-name="email" />
-                    </x-shop::form.control-group>
-
-                    <!-- Password -->
-                    <x-shop::form.control-group class="mb-6">
-                        <x-shop::form.control-group.label class="required">
-                            @lang('shop::app.customers.reset-password.password')
-                        </x-shop::form.control-group.label>
-
-                        <x-shop::form.control-group.control
-                            type="password"
-                            class="px-6 py-4 max-md:py-3 max-sm:py-1.5"
-                            name="password"
-                            rules="required|min:6"
-                            value=""
-                            :label="trans('shop::app.customers.reset-password.password')"
-                            :placeholder="trans('shop::app.customers.reset-password.password')"
-                            ref="password"
-                            :aria-label="trans('shop::app.customers.reset-password.password')"
-                            aria-required="true"
-                        />
-
-                        <x-shop::form.control-group.error control-name="password" />
-                    </x-shop::form.control-group>
-
-                    <!-- Confirm Password -->
-                    <x-shop::form.control-group class="mb-6">
-                        <x-shop::form.control-group.label>
-                            @lang('shop::app.customers.reset-password.confirm-password')
-                        </x-shop::form.control-group.label>
-
-                        <x-shop::form.control-group.control
-                            type="password"
-                            class="px-6 py-4 max-md:py-3 max-sm:py-1.5"
-                            name="password_confirmation"
-                            rules="confirmed:@password"
-                            value=""
-                            :label="trans('shop::app.customers.reset-password.confirm-password')"
-                            :placeholder="trans('shop::app.customers.reset-password.confirm-password')"
-                            :aria-label="trans('shop::app.customers.reset-password.confirm-password')"
-                            aria-required="true"
-                        />
-
-                        <x-shop::form.control-group.error control-name="password" />
-                    </x-shop::form.control-group>
-
-                    {!! view_render_event('bagisto.shop.customers.reset_password_form_controls.after') !!}
-
-                    {!! view_render_event('bagisto.shop.customers.reset_password.submit_button.before') !!}
-
-                    <!-- Submit Button -->
-                    <div class="mt-8 flex flex-wrap items-center gap-9 max-sm:justify-center max-sm:text-center">
-                        <button
-                            class="primary-button m-0 mx-auto block w-full max-w-[374px] rounded-2xl px-11 py-4 text-center text-base max-md:rounded-lg max-md:py-3 max-sm:py-1.5 ltr:ml-0 rtl:mr-0"
-                            type="submit"
-                        >
-                            @lang('shop::app.customers.reset-password.submit-btn-title')
-                        </button>
-                    </div>
-
-                    {!! view_render_event('bagisto.shop.customers.reset_password.submit_button.after') !!}
-                </x-shop::form>
-            </div>
-
-            {!! view_render_event('bagisto.shop.customers.reset_password.after') !!}
-
-        </div>
-
-        <p class="mb-4 mt-8 text-center text-xs text-zinc-500">
-            @lang('shop::app.customers.reset-password.footer', ['current_year'=> date('Y') ])
-        </p>
-    </div>
-</x-shop::layouts>
+@include('components.footer')
+@include('components.navbar')
+</body>
+</html>

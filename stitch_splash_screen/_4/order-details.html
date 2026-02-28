@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>تفاصيل الطلب - Mawgood</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                "primary": "#003366",
+                "accent-gold": "#FF6D00",
+                "background-light": "#f8f9fa",
+            },
+            fontFamily: {
+                "display": ["Tajawal", "sans-serif"]
+            }
+        }
+    }
+}
+</script>
+<style>
+body { font-family: 'Tajawal', sans-serif; background-color: #f8f9fa; }
+</style>
+</head>
+<body class="bg-background-light">
+<div class="relative mx-auto max-w-md min-h-screen flex flex-col bg-background-light pb-20">
+<header class="sticky top-0 z-50 flex items-center justify-between bg-white/90 backdrop-blur-md px-4 h-16 border-b border-primary/5">
+<a href="profile.html" class="p-2 text-primary">
+<span class="material-symbols-outlined">arrow_forward</span>
+</a>
+<h1 class="text-primary text-lg font-bold">تفاصيل الطلب</h1>
+<button class="p-2 text-primary">
+<span class="material-symbols-outlined">share</span>
+</button>
+</header>
+
+<main class="flex-1 px-4 py-6 space-y-4">
+<div class="bg-white rounded-lg p-4 shadow-sm border border-primary/5">
+<div class="flex items-center justify-between mb-4">
+<div>
+<p class="text-xs text-gray-500">رقم الطلب</p>
+<p class="text-lg font-bold text-primary">#12345</p>
+</div>
+<span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">تم التوصيل</span>
+</div>
+<div class="grid grid-cols-2 gap-4 text-sm">
+<div>
+<p class="text-gray-500">تاريخ الطلب</p>
+<p class="font-semibold text-primary">١٥ يناير ٢٠٢٤</p>
+</div>
+<div>
+<p class="text-gray-500">الإجمالي</p>
+<p class="font-semibold text-primary">٢,٤٥٠ جنيه</p>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg p-4 shadow-sm border border-primary/5">
+<h3 class="font-bold text-primary mb-3">المنتجات</h3>
+<div class="space-y-3">
+<div class="flex gap-3">
+<div class="size-16 rounded-lg bg-background-light overflow-hidden">
+<img alt="Product" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnCGfh517oM9aZnEiSoGwyZSFmi1q6kcG8qrF3b5ghqYXCdzSjyMNyek1F1OPNXQ9VcskQfpiayYP3UpPrMMYaS13pxTpH5rDTjbW8TGzkNke9QoQSXZhNj5ELH8ngY7Fbrhfpda_-5JNUD6LLx1YULp7OFdFgFwa8u2MfW7VC4hmsis99CKz1A4CfMR0FY-YpVnRQygWdt0MRqdAKIKj5BTtVvWHJeppA-b7rnsW9ayO7_XZFv-gibRw4tcaeoNnlmmAbqilJedo"/>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-semibold text-primary">سماعات لاسلكية فوق الأذن</h4>
+<p class="text-xs text-gray-500">الكمية: ١</p>
+<p class="text-sm font-bold text-accent-gold mt-1">٢,٤٥٠ جنيه</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg p-4 shadow-sm border border-primary/5">
+<h3 class="font-bold text-primary mb-3">عنوان التوصيل</h3>
+<p class="text-sm text-gray-600 leading-relaxed">
+أحمد محمد<br/>
+٢٣ شارع التحرير، المعادي<br/>
+القاهرة، مصر<br/>
++20 123 456 7890
+</p>
+</div>
+
+<div class="bg-white rounded-lg p-4 shadow-sm border border-primary/5">
+<h3 class="font-bold text-primary mb-3">ملخص الدفع</h3>
+<div class="space-y-2 text-sm">
+<div class="flex justify-between">
+<span class="text-gray-600">المجموع الفرعي</span>
+<span class="font-semibold">٢,٤٥٠ جنيه</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">الشحن</span>
+<span class="font-semibold">٥٠ جنيه</span>
+</div>
+<div class="flex justify-between pt-2 border-t border-primary/10">
+<span class="font-bold text-primary">الإجمالي</span>
+<span class="font-bold text-primary">٢,٥٠٠ جنيه</span>
+</div>
+</div>
+</div>
+
+<button class="w-full py-4 bg-primary text-white font-bold rounded-lg">
+إعادة الطلب
+</button>
+</main>
+</div>
+</body>
+</html>

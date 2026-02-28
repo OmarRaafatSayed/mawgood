@@ -16,7 +16,7 @@ use App\Http\Controllers\Vendor\OnboardingController;
 // Vendor Onboarding Routes (accessible to authenticated customers)
 Route::group([
     'prefix' => 'vendor',
-    'middleware' => ['customer', 'vendor.onboarding'],
+    'middleware' => ['web', 'vendor.onboarding'],
     'as' => 'vendor.onboarding.'
 ], function () {
     Route::get('/apply', [OnboardingController::class, 'showForm'])->name('form');

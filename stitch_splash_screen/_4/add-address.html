@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>إضافة عنوان - Mawgood</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                "primary": "#003366",
+                "accent-gold": "#FF6D00",
+                "background-light": "#f8f9fa",
+            },
+            fontFamily: {
+                "display": ["Tajawal", "sans-serif"]
+            }
+        }
+    }
+}
+</script>
+<style>
+body { font-family: 'Tajawal', sans-serif; background-color: #f8f9fa; }
+</style>
+</head>
+<body class="bg-background-light">
+<div class="relative mx-auto max-w-md min-h-screen flex flex-col bg-background-light">
+<header class="sticky top-0 z-50 flex items-center justify-between bg-white/90 backdrop-blur-md px-4 h-16 border-b border-primary/5">
+<a href="/addresses.html" class="p-2 text-primary">
+<span class="material-symbols-outlined">arrow_forward</span>
+</a>
+<h1 class="text-primary text-lg font-bold">إضافة عنوان جديد</h1>
+<div class="w-10"></div>
+</header>
+
+<main class="flex-1 px-4 py-6">
+<form class="space-y-4">
+<div>
+<label class="block text-sm font-bold text-primary mb-2">نوع العنوان</label>
+<div class="flex gap-3">
+<button type="button" class="flex-1 py-3 bg-primary text-white font-bold rounded-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">home</span>
+منزل
+</button>
+<button type="button" class="flex-1 py-3 bg-white text-primary font-bold rounded-lg border border-primary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">work</span>
+عمل
+</button>
+<button type="button" class="flex-1 py-3 bg-white text-primary font-bold rounded-lg border border-primary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">location_on</span>
+آخر
+</button>
+</div>
+</div>
+
+<div>
+<label class="block text-sm font-bold text-primary mb-2">الاسم الكامل</label>
+<input type="text" class="w-full px-4 py-3 rounded-lg border border-primary/20 focus:border-accent-gold focus:outline-none" placeholder="أدخل الاسم الكامل"/>
+</div>
+
+<div>
+<label class="block text-sm font-bold text-primary mb-2">رقم الهاتف</label>
+<input type="tel" class="w-full px-4 py-3 rounded-lg border border-primary/20 focus:border-accent-gold focus:outline-none" placeholder="+20 123 456 7890"/>
+</div>
+
+<div>
+<label class="block text-sm font-bold text-primary mb-2">عنوان الشارع</label>
+<input type="text" class="w-full px-4 py-3 rounded-lg border border-primary/20 focus:border-accent-gold focus:outline-none" placeholder="رقم المبنى، اسم الشارع"/>
+</div>
+
+<div>
+<label class="block text-sm font-bold text-primary mb-2">المدينة</label>
+<select class="w-full px-4 py-3 rounded-lg border border-primary/20 focus:border-accent-gold focus:outline-none">
+<option>اختر المدينة</option>
+<option>القاهرة</option>
+<option>الجيزة</option>
+<option>الإسكندرية</option>
+</select>
+</div>
+
+<div>
+<label class="block text-sm font-bold text-primary mb-2">المنطقة</label>
+<select class="w-full px-4 py-3 rounded-lg border border-primary/20 focus:border-accent-gold focus:outline-none">
+<option>اختر المنطقة</option>
+<option>المعادي</option>
+<option>وسط البلد</option>
+<option>مدينة نصر</option>
+</select>
+</div>
+
+<div class="flex items-center gap-3 p-4 bg-white rounded-lg border border-primary/5">
+<input type="checkbox" id="default" class="size-5 accent-accent-gold"/>
+<label for="default" class="text-sm font-semibold text-primary">تعيين كعنوان افتراضي</label>
+</div>
+
+<button type="submit" class="w-full py-4 bg-primary text-white font-bold rounded-lg mt-6">
+حفظ العنوان
+</button>
+</form>
+</main>
+</div>
+</body>
+</html>

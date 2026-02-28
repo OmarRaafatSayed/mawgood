@@ -12,6 +12,9 @@ Route::get('/', function() {
     return view('home');
 })->name('shop.home.index');
 
+// Jobs API
+Route::get('/api/jobs', [App\Http\Controllers\API\JobController::class, 'index']);
+
 // Role Selection
 Route::middleware(['customer'])->group(function () {
     Route::get('/select-role', [RoleSelectionController::class, 'index'])->name('role.select');
@@ -113,9 +116,6 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::get('/{slug}', [BlogController::class, 'show'])->name('show')->where('slug', '.*');
 });
 
-// Categories Route
-Route::get('/categories', [\Webkul\Shop\Http\Controllers\API\CategoryController::class, 'showAll'])->name('shop.categories.index');
-
 // Category Products API Routes
 Route::prefix('api/categories')->group(function () {
     Route::get('/{id}/products', [App\Http\Controllers\CategoryProductController::class, 'index']);
@@ -123,14 +123,19 @@ Route::prefix('api/categories')->group(function () {
 });
 Route::get('api/products', [App\Http\Controllers\CategoryProductController::class, 'filterBySubCategory']);
 
+// Categories Route - show root category products
+Route::get('/categories', function() {
+    return view('categories.products');
+})->name('shop.categories.index');
+
 // Category Products View
 Route::get('/categories/{id}/products', function($id) {
-    return view('categories.products-new');
+    return view('categories.products');
 });
 
 // Checkout Cart
 Route::get('/checkout/cart', function() {
-    return view('checkout.cart');
+    return view('checkout.cart-new');
 })->name('shop.checkout.cart.index');
 
 // Product Detail Page
@@ -194,7 +199,7 @@ Route::get('/product/{id}', function($id) {
                 ->get();
         }
         
-        return view('product.detail', compact('product', 'flat', 'colorOptions', 'sizeOptions', 'relatedProducts'));
+        return view('product.detail-new', compact('product', 'flat', 'colorOptions', 'sizeOptions', 'relatedProducts'));
     } catch (\Exception $e) {
         abort(404);
     }

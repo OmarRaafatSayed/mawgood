@@ -3,7 +3,7 @@
 <span class="material-symbols-outlined text-2xl <?php echo e(request()->is('/') ? 'fill-current' : ''); ?>">home</span>
 <span class="text-[10px] font-bold">الرئيسية</span>
 </a>
-<a class="flex flex-col items-center gap-1 text-gray-400" href="#">
+<a class="flex flex-col items-center gap-1 text-gray-400" href="/wishlist">
 <span class="material-symbols-outlined text-2xl">favorite</span>
 <span class="text-[10px] font-bold">المفضلة</span>
 </a>
@@ -17,7 +17,7 @@
 <span class="material-symbols-outlined text-2xl <?php echo e(request()->is('categories*') ? 'fill-current' : ''); ?>">grid_view</span>
 <span class="text-[10px] font-bold">الأقسام</span>
 </a>
-<a class="flex flex-col items-center gap-1 text-gray-400" href="#">
+<a class="flex flex-col items-center gap-1 text-gray-400" href="/customer/account">
 <span class="material-symbols-outlined text-2xl">person</span>
 <span class="text-[10px] font-bold">حسابي</span>
 </a>
