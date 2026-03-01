@@ -4,3 +4,8 @@
 !home.blade.php
 !components/
 !jobs/
+!categories/
+!checkout/
+!product/
+!vendor/
+!admin/
