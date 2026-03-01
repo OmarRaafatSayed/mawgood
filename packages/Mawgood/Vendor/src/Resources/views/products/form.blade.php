@@ -191,7 +191,7 @@
                             @foreach($product->images as $image)
                                 <div class="col-md-2 mb-2" data-image-id="{{ $image->id }}">
                                     <div class="position-relative">
-                                        <img src="{{ asset('storage/' . $image->path) }}" class="img-thumbnail" alt="Product Image" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27200%27%3E%3Crect fill=%27%23ddd%27 width=%27200%27 height=%27200%27/%3E%3Ctext fill=%27%23999%27 x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27%3ENo Image%3C/text%3E%3C/svg%3E';">
+                                        <img src="{{ asset('storage/' . $image->path) }}" class="img-thumbnail" alt="Product Image" loading="lazy" style="max-height: 150px; object-fit: cover;">
                                         <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="removeImage({{ $image->id }})">
                                             <i class="fas fa-times"></i>
                                         </button>
