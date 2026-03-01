@@ -39,9 +39,11 @@ tailwind.config = {
 <!-- Images -->
 <div class="relative aspect-square bg-gray-100">
 @if($product->images->count())
-<img src="{{ asset('storage/' . $product->images->first()->path) }}" class="w-full h-full object-cover" alt="{{ $flat->name }}"/>
+<img src="{{ asset('storage/' . $product->images->first()->path) }}" class="w-full h-full object-cover" alt="{{ $flat->name }}" loading="lazy"/>
 @else
-<img src="/images/placeholder.png" class="w-full h-full object-cover" alt="صورة المنتج"/>
+<div class="w-full h-full flex items-center justify-center bg-gray-200">
+<span class="material-symbols-outlined text-gray-400 text-6xl">image</span>
+</div>
 @endif
 </div>
 
@@ -126,9 +128,11 @@ tailwind.config = {
 $relatedImage = \DB::table('product_images')->where('product_id', $related->product_id)->first();
 @endphp
 @if($relatedImage)
-<img src="{{ asset('storage/' . $relatedImage->path) }}" class="w-full h-full object-cover" alt="{{ $related->name }}"/>
+<img src="{{ asset('storage/' . $relatedImage->path) }}" class="w-full h-full object-cover" alt="{{ $related->name }}" loading="lazy"/>
 @else
-<img src="/images/placeholder.png" class="w-full h-full object-cover" alt="{{ $related->name }}"/>
+<div class="w-full h-full flex items-center justify-center bg-gray-200">
+<span class="material-symbols-outlined text-gray-400 text-4xl">image</span>
+</div>
 @endif
 </div>
 <div class="p-2">

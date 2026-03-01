@@ -320,7 +320,9 @@ function renderProducts(products) {
     grid.innerHTML = products.map(p => `
         <a href="/product/${p.id}" class="flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
             <div class="relative aspect-[4/5] bg-slate-50">
-                <img src="${p.base_image?.small_image_url || p.images?.[0]?.url || '/images/placeholder.png'}" class="w-full h-full object-cover" alt="${p.name}" onerror="this.src='/images/placeholder.png'"/>
+                ${p.base_image?.small_image_url || p.images?.[0]?.url 
+                    ? `<img src="${p.base_image?.small_image_url || p.images?.[0]?.url}" class="w-full h-full object-cover" alt="${p.name}" loading="lazy"/>` 
+                    : `<div class="w-full h-full flex items-center justify-center bg-gray-200"><span class="material-symbols-outlined text-gray-400 text-5xl">image</span></div>`}
                 <button onclick="event.preventDefault(); toggleWishlist(${p.id})" class="absolute top-2 right-2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm">
                     <span class="material-symbols-outlined text-[20px] text-slate-400">favorite</span>
                 </button>
