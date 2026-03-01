@@ -15,6 +15,12 @@ class OnboardingController extends Controller
 {
     public function showForm()
     {
+        // Check if user is logged in
+        if (!Auth::guard('customer')->check()) {
+            return redirect()->route('shop.customer.session.index')
+                ->with('info', 'يرجى تسجيل الدخول أولاً للتقديم كتاجر');
+        }
+        
         $customer = Auth::guard('customer')->user();
         
         $vendor = Vendor::where('customer_id', $customer->id)->first();

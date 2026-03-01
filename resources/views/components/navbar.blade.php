@@ -7,11 +7,11 @@
 <span class="material-symbols-outlined text-2xl">favorite</span>
 <span class="text-[10px] font-bold">المفضلة</span>
 </a>
-<a class="relative -top-4" href="/checkout/cart">
-<div class="size-14 bg-primary rounded-full shadow-lg shadow-primary/30 flex items-center justify-center border-4 border-white">
-<span class="material-symbols-outlined text-white text-2xl">shopping_cart</span>
-<span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full size-5 items-center justify-center">0</span>
+<a class="relative -top-4" href="/vendor/apply">
+<div class="size-14 bg-gradient-to-br from-primary to-orange-600 rounded-full shadow-lg shadow-primary/40 flex items-center justify-center border-4 border-white">
+<span class="material-symbols-outlined text-white text-2xl font-bold">storefront</span>
 </div>
+<span class="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-primary whitespace-nowrap">أصبح تاجر</span>
 </a>
 <a class="flex flex-col items-center gap-1 {{ request()->is('categories*') ? 'text-primary' : 'text-gray-400' }}" href="/categories">
 <span class="material-symbols-outlined text-2xl {{ request()->is('categories*') ? 'fill-current' : '' }}">grid_view</span>
@@ -22,6 +22,13 @@
 <span class="text-[10px] font-bold">حسابي</span>
 </a>
 </nav>
+
+<a href="/checkout/cart" class="fixed bottom-20 left-4 z-40 lg:hidden">
+<div class="relative size-14 bg-primary rounded-full shadow-lg shadow-primary/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-2xl">shopping_cart</span>
+<span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full size-5 items-center justify-center">0</span>
+</div>
+</a>
 
 <script>
 window.updateCartBadge = function() {
