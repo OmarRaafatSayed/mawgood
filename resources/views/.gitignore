@@ -1,3 +1,6 @@
 *
 !.gitignore
 !account-type/
+!home.blade.php
+!components/
+!jobs/
