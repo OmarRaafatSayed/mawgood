@@ -138,6 +138,11 @@ Route::get('/checkout/cart', function() {
     return view('checkout.cart-new');
 })->name('shop.checkout.cart.index');
 
+// Wishlist
+Route::get('/wishlist', [Webkul\Shop\Http\Controllers\Customer\Account\WishlistController::class, 'index'])
+    ->middleware('customer')
+    ->name('shop.customers.account.wishlist.index');
+
 // Product Detail Page
 Route::get('/product/{id}', function($id) {
     try {
