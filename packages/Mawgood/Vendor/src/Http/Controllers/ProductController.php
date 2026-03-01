@@ -150,6 +150,14 @@ class ProductController extends Controller
                 }
             }
             
+            // Attach categories
+            if ($request->has('categories')) {
+                $categoryIds = array_filter($request->input('categories', []));
+                if (!empty($categoryIds)) {
+                    $product->categories()->sync($categoryIds);
+                }
+            }
+            
             return redirect()->route('vendor.products.index')
                 ->with('success', 'تم إضافة المنتج بنجاح وسيتم مراجعته من قبل الإدارة');
         } catch (\Exception $e) {
@@ -277,6 +285,14 @@ class ProductController extends Controller
                 foreach ($request->file('videos') as $video) {
                     $path = $video->store('product/' . $product->id, 'public');
                     $product->videos()->create(['path' => $path]);
+                }
+            }
+            
+            // Update categories
+            if ($request->has('categories')) {
+                $categoryIds = array_filter($request->input('categories', []));
+                if (!empty($categoryIds)) {
+                    $product->categories()->sync($categoryIds);
                 }
             }
             

@@ -51,6 +51,27 @@
                     @enderror
                 </div>
                 
+                <!-- Category -->
+                <div class="col-12 mb-3">
+                    <label class="form-label required">{!! '<i class="fas fa-folder me-1"></i>الفئة' !!}</label>
+                    <select name="categories[]" class="form-control @error('categories') is-invalid @enderror" required>
+                        <option value="">-- اختر الفئة --</option>
+                        @php
+                            $categories = \Webkul\Category\Models\Category::where('status', 1)->orderBy('position')->get();
+                            $selectedCategoryIds = $product->id ? $product->categories->pluck('id')->toArray() : [];
+                        @endphp
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ in_array($category->id, old('categories', $selectedCategoryIds)) ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <small class="text-muted">اختر الفئة المناسبة لظهور المنتج في الموقع</small>
+                    @error('categories')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                
                 <!-- Price -->
                 <div class="col-12 col-md-6 mb-3">
                     <label class="form-label required">{!! 'السعر (جنيه مصري)' !!}</label>
