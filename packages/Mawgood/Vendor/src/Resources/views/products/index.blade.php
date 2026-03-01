@@ -47,17 +47,17 @@
                     @forelse($products ?? [] as $product)
                     <tr>
                         <td data-label="الصورة">
-                            @php
-                                $imageUrl = $product->image_url ?? asset('images/placeholder.png');
-                                if ($product->images->first() && !file_exists(public_path('storage/' . $product->images->first()->path))) {
-                                    $imageUrl = asset('images/placeholder.png');
-                                }
-                            @endphp
-                            <img src="{{ $imageUrl }}" 
-                                 alt="{{ $product->name }}" 
-                                 class="rounded" 
-                                 style="width: 50px; height: 50px; object-fit: cover;"
-                                 onerror="this.src='{{ asset('images/placeholder.png') }}'">
+                            @if($product->images->count())
+                                <img src="{{ asset('storage/' . $product->images->first()->path) }}" 
+                                     alt="{{ $product->name }}" 
+                                     class="rounded" 
+                                     style="width: 50px; height: 50px; object-fit: cover;"
+                                     loading="lazy">
+                            @else
+                                <div class="rounded bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-image text-muted"></i>
+                                </div>
+                            @endif
                         </td>
                         <td data-label="اسم المنتج">
                             <strong>{{ $product->name ?? 'منتج' }}</strong>
